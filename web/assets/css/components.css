@@ -1,0 +1,79 @@
+/* components.css — komponen dasar (design.md bagian 5, 11, 12). Dipakai bersama Tailwind CDN. */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--font-sans);font-size:14px;line-height:1.5}
+h1,h2{font-family:var(--font-serif);font-weight:600;margin:0}
+:focus-visible{outline:2px solid var(--marsala);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* Tombol: semua CTA pill */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:.875rem 1.75rem;
+  border-radius:9999px;border:1px solid transparent;font:500 14px/1 var(--font-sans);cursor:pointer;
+  transition:transform .5s var(--ease),background-color .25s,color .25s,border-color .25s}
+.btn:hover:not(:disabled){transform:translateY(-2px)}
+.btn:disabled,.btn[aria-disabled="true"]{background:#DCD4C9;color:#9A8F82;border-color:transparent;cursor:not-allowed}
+.btn-primary{background:var(--ink);color:var(--cream)} .btn-primary:hover:not(:disabled){background:var(--marsala)}
+.btn-accent{background:var(--marsala);color:var(--cream)} .btn-accent:hover:not(:disabled){background:var(--marsala-dark)}
+.btn-secondary{background:transparent;color:var(--ink);border-color:var(--ink)} .btn-secondary:hover:not(:disabled){background:var(--ink);color:var(--cream)}
+.btn-ghost{background:transparent;color:var(--marsala);text-decoration:underline;text-underline-offset:4px;padding-inline:.5rem}
+.btn-danger{background:var(--error);color:var(--cream)}
+.btn-sm{min-height:36px;padding:.5rem 1rem;font-size:12px}
+.btn .spinner{width:14px;height:14px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Form */
+.field{display:grid;gap:6px}
+.label{font-size:12px;font-weight:500} .label .req{color:var(--marsala)}
+.input{width:100%;border-radius:12px;border:1px solid var(--sand);background:var(--paper);padding:.75rem .875rem;
+  font:400 16px/1.4 var(--font-sans);color:var(--ink);min-height:44px} /* 16px: cegah auto-zoom iOS */
+.input::placeholder{color:var(--mocha)}
+.input:focus{outline:none;border-color:var(--marsala);box-shadow:var(--shadow-focus)}
+.input[aria-invalid="true"]{border-color:var(--error)}
+.field-error{color:var(--error);font-size:12px}
+
+/* Kartu */
+.card{background:var(--paper);border:1px solid var(--sand);border-radius:16px;box-shadow:var(--shadow-sm);padding:1.25rem}
+
+/* Badge status (pill + titik 6px) */
+.badge{display:inline-flex;align-items:center;gap:6px;border-radius:9999px;padding:.25rem .75rem;font-size:12px;font-weight:500;white-space:nowrap}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+
+/* Skeleton */
+.skeleton{background:rgba(235,224,211,.6);border-radius:8px;animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.5}}
+
+/* Toast (aria-live polite) */
+.toast-region{position:fixed;z-index:100;top:16px;left:50%;transform:translateX(-50%);display:grid;gap:8px;width:min(92vw,360px);pointer-events:none}
+@media(min-width:768px){.toast-region{left:auto;right:16px;transform:none}}
+.toast{pointer-events:auto;border-radius:12px;background:var(--ink);color:var(--cream);padding:.75rem 1rem;box-shadow:var(--shadow-lg);
+  display:flex;gap:10px;align-items:flex-start;animation:toast-in .25s var(--ease)}
+.toast[data-kind="success"]{border-left:4px solid var(--success)} .toast[data-kind="error"]{border-left:4px solid var(--error)}
+.toast[data-kind="warning"]{border-left:4px solid var(--warning)} .toast[data-kind="info"]{border-left:4px solid var(--info)}
+@keyframes toast-in{from{opacity:0;transform:translateY(-8px)}}
+
+/* Modal (desktop) / bottom sheet (mobile) */
+.overlay{position:fixed;inset:0;z-index:90;background:rgba(43,33,28,.6);display:flex;align-items:flex-end;justify-content:center}
+.dialog{background:var(--cream);width:100%;max-height:90vh;overflow:auto;border-radius:24px 24px 0 0;padding:1.5rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom));
+  animation:sheet-in .25s var(--ease);position:relative}
+.dialog::before{content:"";display:block;width:32px;height:4px;border-radius:4px;background:var(--sand);margin:0 auto 1rem}
+@media(min-width:768px){
+  .overlay{align-items:center}
+  .dialog{max-width:48rem;border-radius:24px;padding:2rem}.dialog::before{display:none}
+}
+.dialog-close{position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:50%;border:1px solid var(--sand);background:var(--paper);cursor:pointer}
+@keyframes sheet-in{from{opacity:0;transform:translateY(16px)}}
+body.scroll-lock{overflow:hidden}
+
+/* Tabel admin -> kartu di mobile (design.md 3.3) */
+.only-mobile{display:block} .only-desktop{display:none}
+@media(min-width:768px){.only-mobile{display:none}.only-desktop{display:revert}}
+
+/* Bottom nav (safe area) */
+.bottom-nav{position:fixed;inset-inline:0;bottom:0;z-index:50;background:rgba(246,240,231,.95);backdrop-filter:blur(8px);
+  border-top:1px solid rgba(43,33,28,.08);padding-bottom:env(safe-area-inset-bottom);display:grid;grid-template-columns:repeat(4,1fr)}
+@media(min-width:768px){.bottom-nav{display:none}}
+.bottom-nav a{display:grid;place-items:center;gap:2px;padding:.5rem 0;min-height:56px;font-size:11px;color:rgba(43,33,28,.6);text-decoration:none}
+.bottom-nav a[aria-current="page"]{color:var(--marsala);font-weight:600}
+
+/* Placeholder gambar (pola .ph landing) */
+.ph{background:linear-gradient(135deg,#E8DCCD,#D8C6B5);display:grid;place-items:center;color:rgba(43,33,28,.5);font-size:12px}

@@ -1,0 +1,13 @@
+/* tokens.css — design.md bagian 2 & 13.2. Satu sumber token untuk semua halaman. */
+:root{
+  --cream:#F6F0E7; --paper:#FBF8F3; --sand:#EBE0D3; --mocha:#A98B7C;
+  --marsala:#7B4A4A; --marsala-dark:#653B3B; --olive:#6B6A47; --ink:#2B211C;
+  --success:#4E6E58; --warning:#B8863A; --error:#9E3D3D; --info:#4F6B7D;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --shadow-sm:0 2px 8px rgba(43,33,28,.04);
+  --shadow-md:0 8px 24px rgba(43,33,28,.06);
+  --shadow-lg:0 16px 36px rgba(43,33,28,.08);
+  --shadow-focus:0 0 0 3px rgba(123,74,74,.18);
+  --font-serif:"Cormorant Garamond",Georgia,serif;
+  --font-sans:Jost,system-ui,sans-serif;
+}

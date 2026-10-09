@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex">
+  <title>Fondasi Hijabii — halaman uji Fase 0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../assets/js/tailwind-config.js"></script>
+  <link rel="stylesheet" href="../assets/css/tokens.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+</head>
+<body class="pb-24 md:pb-0">
+<main class="mx-auto max-w-3xl px-4 py-8 grid gap-6">
+  <header>
+    <p class="text-[11px] font-semibold uppercase tracking-[.22em] text-marsala">HIJABII · Fase 0</p>
+    <h1 class="text-[28px]">Halaman uji fondasi</h1>
+    <p class="text-ink/70">Selesai bila: login berhasil, <code>settings</code> terbaca, dan semua komponen tampil memakai token desain.</p>
+  </header>
+
+  <section class="card" id="sb-card" aria-labelledby="sb-h">
+    <h2 id="sb-h" class="text-[22px] mb-2">1. Uji Supabase</h2>
+    <p id="sb-config" class="text-ink/70 mb-3"></p>
+    <div id="sb-settings" class="mb-4"></div>
+    <form id="login-form" class="grid gap-3" novalidate>
+      <div class="field"><label class="label" for="email">Email <span class="req">*</span></label>
+        <input class="input" id="email" type="email" autocomplete="username" placeholder="email@contoh.com"></div>
+      <div class="field"><label class="label" for="password">Password <span class="req">*</span></label>
+        <input class="input" id="password" type="password" autocomplete="current-password"></div>
+      <div class="flex gap-2 flex-wrap">
+        <button class="btn btn-primary" type="submit" id="btn-login">Masuk</button>
+        <button class="btn btn-secondary" type="button" id="btn-logout" hidden>Keluar</button>
+      </div>
+    </form>
+    <div id="sb-profile" class="mt-4 text-ink/80"></div>
+  </section>
+
+  <section class="card" aria-labelledby="c-h">
+    <h2 id="c-h" class="text-[22px] mb-3">2. Palet token</h2>
+    <div class="grid grid-cols-4 sm:grid-cols-6 gap-3 text-[11px]" id="palette"></div>
+  </section>
+
+  <section class="card grid gap-3" aria-labelledby="b-h">
+    <h2 id="b-h" class="text-[22px]">3. Tombol &amp; form</h2>
+    <div class="flex gap-2 flex-wrap">
+      <button class="btn btn-primary">Primer</button><button class="btn btn-accent">Aksen</button>
+      <button class="btn btn-secondary">Sekunder</button><button class="btn btn-ghost">Ghost</button>
+      <button class="btn btn-danger">Bahaya</button><button class="btn" disabled>Disabled</button>
+      <button class="btn btn-primary btn-sm">Kecil</button>
+    </div>
+    <div class="field"><label class="label" for="ex1">Input normal</label><input class="input" id="ex1" placeholder="Placeholder"></div>
+    <div class="field"><label class="label" for="ex2">Input error</label><input class="input" id="ex2" aria-invalid="true" value="salah"><span class="field-error">Pesan error di bawah field</span></div>
+  </section>
+
+  <section class="card grid gap-3" aria-labelledby="s-h">
+    <h2 id="s-h" class="text-[22px]">4. Badge status (slug dari enum database)</h2>
+    <div class="flex gap-2 flex-wrap" id="badges"></div>
+    <div class="flex gap-2 flex-wrap" id="pay"></div>
+  </section>
+
+  <section class="card grid gap-3" aria-labelledby="u-h">
+    <h2 id="u-h" class="text-[22px]">5. Toast, dialog, skeleton</h2>
+    <div class="flex gap-2 flex-wrap">
+      <button class="btn btn-secondary btn-sm" data-toast="success">Toast sukses</button>
+      <button class="btn btn-secondary btn-sm" data-toast="error">Toast error</button>
+      <button class="btn btn-secondary btn-sm" id="btn-dialog">Dialog / sheet</button>
+      <button class="btn btn-secondary btn-sm" id="btn-loading">Tombol loading</button>
+    </div>
+    <div id="skel" class="grid gap-2"></div>
+    <div class="grid grid-cols-2 gap-3 max-w-xs" id="ph"></div>
+  </section>
+
+  <section class="card" aria-labelledby="f-h">
+    <h2 id="f-h" class="text-[22px] mb-2">6. Format</h2>
+    <ul id="fmt" class="grid gap-1"></ul>
+  </section>
+</main>
+
+<nav class="bottom-nav" aria-label="Contoh bottom nav">
+  <a href="#" aria-current="page">Home</a><a href="#">Keranjang</a><a href="#">Pesanan</a><a href="#">Akun</a>
+</nav>
+
+<script type="module">
+  import { CONFIG, isConfigured } from '../assets/js/config.js';
+  import { supabase } from '../assets/js/supabase.js';
+  import { signIn, signOut, getProfile } from '../assets/js/auth.js';
+  import { ORDER_STATUS, PAYMENT_STATUS, ROLE } from '../assets/js/labels.js';
+  import { statusBadge, paymentChip, toast, openDialog, skeleton, withLoading, placeholder } from '../assets/js/ui.js';
+  import { rupiah, dateTimeWIB, relativeTime, countdown } from '../assets/js/format.js';
+  const $ = (s) => document.querySelector(s);
+
+  // --- komponen statis ---
+  const tokens = { cream:'#F6F0E7', paper:'#FBF8F3', sand:'#EBE0D3', mocha:'#A98B7C', marsala:'#7B4A4A', olive:'#6B6A47', ink:'#2B211C',
+    success:'#4E6E58', warning:'#B8863A', error:'#9E3D3D', info:'#4F6B7D' };
+  $('#palette').innerHTML = Object.entries(tokens).map(([n,h]) =>
+    `<div><div style="background:${h};height:44px;border-radius:12px;border:1px solid var(--sand)"></div><div class="mt-1 font-medium">${n}</div><div class="text-ink/60">${h}</div></div>`).join('');
+  $('#badges').innerHTML = Object.keys(ORDER_STATUS).map(statusBadge).join('');
+  $('#pay').innerHTML = Object.keys(PAYMENT_STATUS).map(paymentChip).join('');
+  $('#skel').innerHTML = skeleton(16,'70%') + skeleton(16,'45%') + skeleton(64);
+  $('#ph').innerHTML = placeholder('pasmina-tancel-utama') + placeholder('warna-mocha');
+  const soon = new Date(Date.now() + 23.5*3600e3).toISOString();
+  $('#fmt').innerHTML = [`rupiah(42000) → ${rupiah(42000)}`, `dateTimeWIB(now) → ${dateTimeWIB(new Date().toISOString())}`,
+    `relativeTime(+2 jam) → ${relativeTime(new Date(Date.now()+2*3600e3).toISOString())}`, `countdown(+23,5 jam) → ${countdown(soon)}`]
+    .map(t => `<li class="text-ink/80"><code>${t}</code></li>`).join('');
+
+  document.querySelectorAll('[data-toast]').forEach(b => b.addEventListener('click', () => toast(`Toast ${b.dataset.toast}`, b.dataset.toast)));
+  $('#btn-dialog').addEventListener('click', () => openDialog({ title:'Contoh dialog',
+    html:'<p class="text-ink/80 mb-4">Desktop: modal. Mobile: bottom sheet. Esc atau klik latar untuk menutup.</p><button class="btn btn-accent">Aksi</button>' }));
+  $('#btn-loading').addEventListener('click', (e) => withLoading(e.currentTarget, () => new Promise(r => setTimeout(r, 1500))));
+
+  // --- uji Supabase ---
+  async function refresh() {
+    if (!supabase) {
+      $('#sb-config').innerHTML = 'Belum dikonfigurasi. Isi <code>SUPABASE_URL</code> dan <code>SUPABASE_ANON_KEY</code> di <code>web/assets/js/config.js</code>.';
+      return;
+    }
+    $('#sb-config').textContent = `Terhubung ke ${CONFIG.SUPABASE_URL}`;
+    $('#sb-settings').innerHTML = skeleton(16,'60%');
+    const { data, error } = await supabase.from('settings').select('admin_whatsapp, bank_name, default_timeout_hours, origin_area_id').single();
+    $('#sb-settings').innerHTML = error
+      ? `<p class="field-error">Gagal membaca settings: ${error.message}</p>`
+      : `<p><strong>settings terbaca ✓</strong> — WA admin ${data.admin_whatsapp}, bank ${data.bank_name}, time-out ${data.default_timeout_hours} jam, asal kirim ${data.origin_area_id ?? '(belum diisi)'}</p>`;
+    const p = await getProfile().catch(() => null);
+    $('#sb-profile').innerHTML = p ? `Masuk sebagai <strong>${p.full_name || p.email}</strong> · ${ROLE[p.role]} · ${p.is_active ? 'aktif' : 'nonaktif'}` : 'Belum masuk.';
+    $('#btn-logout').hidden = !p;
+  }
+  $('#login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!supabase) return toast('Isi config.js dulu', 'warning');
+    const { error } = await withLoading($('#btn-login'), () => signIn($('#email').value.trim(), $('#password').value));
+    if (error) toast('Email atau password salah', 'error'); else { toast('Berhasil masuk', 'success'); refresh(); }
+  });
+  $('#btn-logout').addEventListener('click', async () => { await signOut(); toast('Sudah keluar', 'info'); refresh(); });
+  refresh();
+</script>
+</body>
+</html>
