@@ -6,7 +6,7 @@ export class HttpError extends Error {
   constructor(public status: number, public code: string, message: string) { super(message); }
 }
 
-const URL_ = Deno.env.get('https://rcuizokrpkvsuskrysjs.supabase.co')!;
+const URL_ = Deno.env.get('SUPABASE_URL')!;
 const ANON = Deno.env.get('SUPABASE_ANON_KEY')!;
 const SERVICE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
@@ -20,7 +20,7 @@ export async function requireRole(req: Request, allowed: Role[]) {
   const jwt = req.headers.get('Authorization')?.replace('Bearer ', '');
   if (!jwt) throw new HttpError(401, 'unauthenticated', 'Silakan masuk lagi.');
   const userClient = createClient(URL_, ANON, {
-    global: { headers: { Authorization: `Bearer ${jwt}` } },
+    global: { headers: { Authorization: 'Bearer ' + jwt } },
     auth: { persistSession: false },
   });
   const { data: { user } } = await userClient.auth.getUser();
@@ -32,4 +32,3 @@ export async function requireRole(req: Request, allowed: Role[]) {
     throw new HttpError(403, 'forbidden', 'Kamu tidak punya akses untuk aksi ini.');
   return { user, profile: p as { id: string; role: Role }, admin };
 }
-'@ | Set-Content -Encoding UTF8 C:\xampp\htdocs\HIjabii\supabase\functions\_shared\auth.ts
