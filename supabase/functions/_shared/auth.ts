@@ -7,7 +7,7 @@ export class HttpError extends Error {
   constructor(public status: number, public code: string, message: string) { super(message); }
 }
 
-const URL_ = Deno.env.get('SUPABASE_URL')!;
+const URL_ = Deno.env.get('https://rcuizokrpkvsuskrysjs.supabase.co')!;
 const ANON = Deno.env.get('SUPABASE_ANON_KEY')!;
 const SERVICE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
