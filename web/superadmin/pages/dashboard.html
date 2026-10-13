@@ -1,0 +1,28 @@
+<header class="sa-page-head">
+  <div>
+    <h1 class="sa-h1">Dashboard</h1>
+    <p class="sa-sub" id="dashSub">Ringkasan akun dan aktivitas.</p>
+  </div>
+</header>
+
+<section class="sa-stats" aria-label="Ringkasan akun">
+  <div class="sa-stat"><div class="sa-stat-label">Admin aktif</div><div class="sa-stat-val" id="stAdmin">–</div></div>
+  <div class="sa-stat"><div class="sa-stat-label">User aktif</div><div class="sa-stat-val" id="stUser">–</div></div>
+  <div class="sa-stat"><div class="sa-stat-label">Akun nonaktif</div><div class="sa-stat-val" id="stOff">–</div></div>
+</section>
+
+<div class="sa-grid2">
+  <section class="sa-card" aria-label="Aktivitas terbaru">
+    <h2>Aktivitas terbaru</h2>
+    <div id="recent" aria-live="polite"></div>
+    <p style="margin:12px 0 0"><a href="#/log" class="sa-muted">Lihat semua log →</a></p>
+  </section>
+  <section class="sa-card" aria-label="Aksi cepat">
+    <h2>Aksi cepat</h2>
+    <div class="sa-quick">
+      <a href="#/admin">Kelola Admin <span aria-hidden="true">→</span></a>
+      <a href="#/user">Kelola User <span aria-hidden="true">→</span></a>
+      <a href="#/log">Log Aktivitas <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,16 @@
+<header class="sa-page-head">
+  <div>
+    <h1 class="sa-h1">Kelola User</h1>
+    <p class="sa-sub">Akun pelanggan. Hanya nama, email, dan status yang ditampilkan.</p>
+  </div>
+</header>
+<section class="sa-card" aria-label="Daftar user">
+  <div class="sa-toolbar">
+    <input class="input sa-search" id="q" type="search" placeholder="Cari nama atau email" aria-label="Cari user" autocomplete="off">
+    <select class="input" id="status" aria-label="Filter status">
+      <option value="">Semua status</option><option value="active">Aktif</option><option value="inactive">Nonaktif</option>
+    </select>
+  </div>
+  <div id="list" aria-live="polite"></div>
+  <div class="sa-pager" id="pager"></div>
+</section>

@@ -1,0 +1,213 @@
+﻿<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Masuk — Hijabii by Intan</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Jost:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/css/tokens.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<style>
+  :root{--login-brown:#4A3A2E}
+
+  body{min-height:100svh;display:grid;place-items:center;background:var(--cream);padding:1.5rem}
+
+  /* ===== Shell: 2 kolom (desktop) ===== */
+  .login-shell{
+    width:min(100%,1040px);min-height:620px;
+    display:grid;grid-template-columns:1fr 1fr;
+    background:var(--paper);border:1px solid var(--sand);border-radius:24px;
+    overflow:hidden;box-shadow:var(--shadow-md)
+  }
+
+  /* ===== Panel gambar ===== */
+  .hero{
+    position:relative;min-height:100%;
+    background:url('../assets/img/hero-02.png') 68% center/cover no-repeat;
+  }
+  .hero::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(to top,rgba(60,44,34,.55) 0%,rgba(60,44,34,0) 45%);
+  }
+  .hero-logo,.hero-copy{position:absolute;left:2rem;z-index:1}
+  .hero-logo{
+    top:2rem;font-family:var(--font-serif);font-size:26px;letter-spacing:.14em;
+    color:var(--ink);text-transform:uppercase
+  }
+  .hero-copy{bottom:2rem;right:2rem;color:#fff}
+  .hero-copy h2{font-family:var(--font-serif);font-weight:400;font-size:30px;line-height:1.2}
+  .hero-copy p{font-size:13px;margin-top:.5rem;opacity:.92}
+
+  /* ===== Panel form ===== */
+  .login-card{display:flex;flex-direction:column;justify-content:center;padding:3rem 3.5rem}
+  .brand{margin-bottom:2rem}
+  .brand .wordmark{
+    font-family:var(--font-serif);font-weight:400;font-size:34px;letter-spacing:.14em;
+    color:var(--ink);text-transform:uppercase;margin-bottom:1.5rem
+  }
+  .brand h1{font-family:var(--font-serif);font-weight:600;font-size:26px;color:var(--ink)}
+  .brand p{color:var(--mocha);font-size:14px;margin-top:6px}
+
+  .form-stack{display:grid;gap:1rem}
+
+  /* input dengan ikon */
+  .input-wrap{position:relative}
+  .input-wrap svg{
+    position:absolute;left:14px;top:50%;transform:translateY(-50%);
+    width:18px;height:18px;stroke:var(--mocha);fill:none;stroke-width:1.5;
+    stroke-linecap:round;stroke-linejoin:round;pointer-events:none
+  }
+  .input-wrap .input{padding-left:44px;width:100%}
+
+  .forgot{text-align:right;margin-top:-6px}
+  .forgot a{font-size:12px;color:var(--marsala);text-decoration:none}
+  .forgot a:hover{text-decoration:underline}
+
+  #submitBtn{
+    width:100%;margin-top:.5rem;background:var(--login-brown);border-color:var(--login-brown);color:#fff
+  }
+  #submitBtn:hover{filter:brightness(1.12)}
+
+  .reason-banner{border-radius:12px;padding:.75rem 1rem;font-size:13px;margin-bottom:1rem;display:none}
+  .reason-banner.show{display:block}
+  .reason-banner[data-kind="error"]{background:#FDF0F0;color:var(--error);border:1px solid #F5C6C6}
+  .reason-banner[data-kind="info"]{background:#EDF4F7;color:var(--info);border:1px solid #C1D9E5}
+
+  /* ===== Mobile: gambar jadi background full-screen, kartu form di tengah ===== */
+  @media (max-width:768px){
+    body{padding:0;display:block;background:transparent}
+    .login-shell{
+      position:relative;width:100%;min-height:100svh;
+      display:flex;flex-direction:column;justify-content:center;
+      background:transparent;border:0;border-radius:0;box-shadow:none;overflow:visible
+    }
+    .hero{
+      position:fixed;inset:0;z-index:0;min-height:0;height:auto;
+      background-position:62% top
+    }
+    .hero::after{background:linear-gradient(to top,rgba(60,44,34,.25) 0%,rgba(60,44,34,0) 55%)}
+    .hero-logo,.hero-copy{display:none}
+
+    .login-card{
+      position:relative;z-index:1;justify-content:flex-start;
+      margin:1rem;
+      padding:1.75rem 1.5rem;border-radius:24px;
+      background:color-mix(in srgb,var(--paper) 88%,transparent);
+      -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+      border:1px solid rgba(255,255,255,.55);box-shadow:var(--shadow-md)
+    }
+    .brand{margin-bottom:1.25rem}
+    .brand .wordmark{text-align:center;font-size:26px;margin-bottom:1.25rem}
+    .brand h1{font-size:22px}
+  }
+</style>
+</head>
+<body>
+<div class="login-shell">
+
+  <!-- Panel gambar -->
+  <aside class="hero" aria-hidden="true">
+    <div class="hero-logo">Hijabii</div>
+    <div class="hero-copy">
+      <h2>Pretty with hijab,<br>pretty with Hijabii.</h2>
+      <p>Hijab nyaman, berkualitas, dan terjangkau untuk setiap langkahmu.</p>
+    </div>
+  </aside>
+
+  <!-- Panel form -->
+  <div class="login-card">
+    <div class="brand">
+      <div class="wordmark">Hijabii</div>
+      <h1>Selamat Datang Kembali</h1>
+      <p id="subtitle">Masuk ke akun Anda untuk melanjutkan</p>
+    </div>
+
+    <div class="reason-banner" id="banner" role="alert"></div>
+
+    <form class="form-stack" id="loginForm" novalidate>
+      <div class="field">
+        <label class="label" for="email">Email <span class="req">*</span></label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+          <input class="input" type="email" id="email" name="email" autocomplete="email" required
+            placeholder="nama@email.com">
+        </div>
+        <span class="field-error" id="emailErr"></span>
+      </div>
+      <div class="field">
+        <label class="label" for="password">Password <span class="req">*</span></label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+          <input class="input" type="password" id="password" name="password" autocomplete="current-password" required
+            placeholder="••••••••">
+        </div>
+        <span class="field-error" id="passErr"></span>
+      </div>
+      <div class="forgot"><a href="lupa-password.html">Lupa password?</a></div>
+      <button class="btn btn-primary" type="submit" id="submitBtn">
+        Masuk
+      </button>
+    </form>
+  </div>
+
+</div>
+
+<script type="module">
+import { supabase } from '../assets/js/supabase.js';
+import { requireAuth, signIn } from '../assets/js/auth.js';
+import { ROUTES, roleHome } from '../assets/js/routes.js';
+import { withLoading, toast } from '../assets/js/ui.js';
+
+// Cek sudah login
+(async () => {
+  const p = await requireAuth({ redirect: false });
+  if (p) location.replace(roleHome(p.role));
+})();
+
+// Tampilkan pesan dari URL ?reason=
+const params = new URLSearchParams(location.search);
+const banner = document.getElementById('banner');
+const reasons = {
+  nonaktif:  { kind:'error', msg:'Akun Anda telah dinonaktifkan. Hubungi admin.' },
+  logout:    { kind:'info',  msg:'Anda berhasil keluar.' },
+  reset_ok:  { kind:'info',  msg:'Password berhasil diubah. Silakan masuk kembali.' },
+};
+const r = reasons[params.get('reason')];
+if (r) { banner.textContent = r.msg; banner.dataset.kind = r.kind; banner.classList.add('show'); }
+
+// Form submit
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  document.getElementById('emailErr').textContent = '';
+  document.getElementById('passErr').textContent = '';
+
+  if (!email) { document.getElementById('emailErr').textContent = 'Email wajib diisi.'; return; }
+  if (!password) { document.getElementById('passErr').textContent = 'Password wajib diisi.'; return; }
+
+  const btn = document.getElementById('submitBtn');
+  await withLoading(btn, async () => {
+    const { error } = await signIn(email, password);
+    if (error) {
+      const msg = /invalid|credentials/i.test(error.message)
+        ? 'Email atau password salah.'
+        : /banned/i.test(error.message)
+        ? 'Akun Anda telah dinonaktifkan. Hubungi admin.'
+        : 'Gagal masuk. Coba lagi.';
+      banner.textContent = msg; banner.dataset.kind = 'error'; banner.classList.add('show');
+      return;
+    }
+    // Ambil profil dan arahkan
+    const { data: profile } = await supabase.from('profiles')
+      .select('role, must_change_password').eq('id', (await supabase.auth.getUser()).data.user.id).single();
+    if (profile?.must_change_password) { location.replace(ROUTES.changePassword); return; }
+    const next = params.get('next');
+    location.replace(next && next.startsWith('/') ? next : roleHome(profile?.role ?? 'customer'));
+  }, 'Masuk…');
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<header class="sa-page-head">
+  <div>
+    <h1 class="sa-h1">Kelola Admin</h1>
+    <p class="sa-sub">Atur akun admin yang mengelola toko.</p>
+  </div>
+  <button type="button" class="btn btn-primary" id="btnCreate">+ Tambah Admin</button>
+</header>
+<section class="sa-card" aria-label="Daftar admin">
+  <div class="sa-toolbar">
+    <input class="input sa-search" id="q" type="search" placeholder="Cari nama atau email" aria-label="Cari admin" autocomplete="off">
+    <select class="input" id="status" aria-label="Filter status">
+      <option value="">Semua status</option><option value="active">Aktif</option><option value="inactive">Nonaktif</option>
+    </select>
+  </div>
+  <div id="list" aria-live="polite"></div>
+  <div class="sa-pager" id="pager"></div>
+</section>
