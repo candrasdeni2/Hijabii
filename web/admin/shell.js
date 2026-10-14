@@ -4,8 +4,11 @@
 import { requireAuth, signOut } from "../assets/js/auth.js";
 import { supabase } from "../assets/js/supabase.js";
 import { ROUTES } from "../assets/js/routes.js";
+import { CONFIG } from "../assets/js/config.js";
 import { toast } from "../assets/js/ui.js";
 import { openModal, esc } from "./ad-ui.js";
+import { mountSearch } from "./ad-search.js";
+import { mountNotifications, mountOrdersBadge } from "./ad-notif.js";
 
 const BASE = new URL("./", import.meta.url);
 const PAGES = {
@@ -19,6 +22,7 @@ const view = $("view");
 let profile = null;
 let token = 0;
 let sheet = null;
+let teardown = []; // fungsi pembersih modul live (pencarian, notifikasi, badge)
 
 const fetchRaw = (path) => fetch(new URL(path, BASE), { cache: "no-cache" });
 const fetchText = async (path) => {
@@ -41,9 +45,28 @@ function setActive(name) {
 const skeleton = () => `<div aria-hidden="true"><div class="ad-skel" style="width:40%;height:36px"></div>
   <div class="ad-skel"></div><div class="ad-skel"></div><div class="ad-skel"></div></div>`;
 
-const soonPage = (title) => `
-  <header class="ad-page-head"><div><h1 class="ad-h1">${esc(title)}</h1></div></header>
+const firstName = () => (profile.full_name || "").trim().split(/\s+/)[0] || "Admin";
+
+const soonPage = (title, sub = "") => `
+  <header class="ad-page-head"><div><h1 class="ad-h1">${esc(title)}</h1>${sub ? `<p class="ad-sub">${esc(sub)}</p>` : ""}</div></header>
   <section class="ad-card"><div class="ad-empty">Halaman ini segera hadir.</div></section>`;
+
+const CAL_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>';
+
+/** Tanggal hari ini (WIB) di kanan judul halaman Dashboard. Dipasang shell, jadi berlaku juga untuk pages/dashboard.html nanti
+ *  selama halaman itu memakai <header class="ad-page-head">. */
+function decorateHead(name) {
+  if (name !== DEFAULT_PAGE) return;
+  const head = view.querySelector(".ad-page-head");
+  if (!head || head.querySelector(".ad-date")) return;
+  const now = new Date();
+  const fmt = (o) => new Intl.DateTimeFormat("id-ID", { ...o, timeZone: CONFIG.TIMEZONE }).format(now);
+  const label = fmt({ weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  const short = fmt({ weekday: "short", day: "numeric", month: "short", year: "numeric" }); // layar sempit
+  const iso = new Intl.DateTimeFormat("en-CA", { timeZone: CONFIG.TIMEZONE }).format(now);
+  head.classList.add("has-date");
+  head.insertAdjacentHTML("beforeend", `<div class="ad-date">${CAL_ICON}<time datetime="${iso}" aria-label="${esc(label)}"><span class="ad-date-long">${esc(label)}</span><span class="ad-date-short" aria-hidden="true">${esc(short)}</span></time></div>`);
+}
 
 async function render() {
   const name = routeName();
@@ -64,13 +87,18 @@ async function render() {
   try {
     const res = await fetchRaw(`pages/${name}.html`);
     if (my !== token) return;
-    if (res.status === 404) { view.innerHTML = soonPage(PAGES[name]); return; }
+    if (res.status === 404) {
+      view.innerHTML = soonPage(PAGES[name], name === DEFAULT_PAGE ? `Selamat datang kembali, ${firstName()}!` : "");
+      decorateHead(name);
+      return;
+    }
     if (!res.ok) throw new Error(`pages/${name}.html (${res.status})`);
     const [html, mod] = await Promise.all([res.text(), import(`./pages/${name}.js`)]);
     if (my !== token) return;
     view.innerHTML = html;
     await mod.init({ root: view, profile, isStale: () => my !== token });
     if (my !== token) return;
+    decorateHead(name);
     window.scrollTo(0, 0);
     view.focus({ preventScroll: true });
   } catch (err) {
@@ -111,16 +139,24 @@ async function mountPartials() {
   $("app-sidebar").innerHTML = s;
   $("app-footer").innerHTML = f;
 
-  // Nama depan saja (tanpa email). Kosong -> "Admin".
-  const first = (profile.full_name || "").trim().split(/\s+/)[0];
-  $("hdrAvatar").textContent = (first[0] || "A").toUpperCase();
-  $("hdrGreet").textContent = `Halo, ${first || "Admin"}`;
-  $("btnLogout").addEventListener("click", async () => {
+  // Nama depan saja (tanpa email). Kosong -> "Admin". Blok akun ada dua (topbar mobile, bawah sidebar tablet/desktop).
+  const first = firstName();
+  document.querySelectorAll("[data-ad-avatar]").forEach((el) => { el.textContent = first[0].toUpperCase(); });
+  document.querySelectorAll("[data-ad-name]").forEach((el) => { el.textContent = first; });
+  document.querySelectorAll("[data-logout]").forEach((b) => b.addEventListener("click", async () => {
+    teardown.forEach((fn) => fn());
     await signOut();
     location.replace(`${ROUTES.login}?reason=logout`);
-  });
+  }));
   $("btnMore").addEventListener("click", openMore);
   wireBadge();
+
+  // Fitur live: pencarian global, lonceng notifikasi, badge pesanan. Listener badge harus terpasang dulu (wireBadge).
+  teardown = [
+    mountSearch({ supabase, root: document }),
+    mountNotifications({ supabase, userId: profile.id, root: document }),
+    mountOrdersBadge({ supabase }),
+  ];
 }
 
 (async function boot() {
@@ -137,7 +173,7 @@ async function mountPartials() {
   $("app").hidden = false;
 
   supabase.auth.onAuthStateChange((evt) => {
-    if (evt === "SIGNED_OUT") location.replace(ROUTES.login);
+    if (evt === "SIGNED_OUT") { teardown.forEach((fn) => fn()); location.replace(ROUTES.login); }
   });
   window.addEventListener("hashchange", render);
   if (!location.hash) history.replaceState(null, "", `#/${DEFAULT_PAGE}`);

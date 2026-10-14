@@ -1,0 +1,92 @@
+<header class="ad-page-head">
+  <div>
+    <h1 class="ad-h1">Pengaturan</h1>
+    <p class="ad-sub">Kontak dan info pembayaran tampil ke customer di checkout dan invoice. <span id="setUpdated"></span></p>
+  </div>
+</header>
+
+<div style="display:grid;gap:20px;max-width:48rem">
+
+  <form class="ad-card" id="cardKontak" novalidate>
+    <h2>Kontak &amp; pembayaran</h2>
+    <p class="ad-muted" style="margin:0 0 16px">Tujuan transfer yang dilihat customer saat memilih cara bayar produk.</p>
+    <div style="display:grid;gap:14px">
+      <div class="field"><label class="label" for="fWa">WhatsApp admin <span class="req">*</span></label>
+        <input class="input" id="fWa" name="wa" inputmode="tel" autocomplete="off" style="font-size:16px" placeholder="6281234567890">
+        <span class="field-error" data-err="wa"></span></div>
+
+      <div style="display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+        <div class="field"><label class="label" for="fDanaNo">Nomor DANA</label>
+          <input class="input" id="fDanaNo" name="dana_number" inputmode="numeric" autocomplete="off" style="font-size:16px">
+          <span class="field-error" data-err="dana_number"></span></div>
+        <div class="field"><label class="label" for="fDanaNm">Atas nama DANA</label>
+          <input class="input" id="fDanaNm" name="dana_name" autocomplete="off" maxlength="100" style="font-size:16px">
+          <span class="field-error" data-err="dana_name"></span></div>
+      </div>
+
+      <div style="display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))">
+        <div class="field"><label class="label" for="fBank">Nama bank</label>
+          <input class="input" id="fBank" name="bank_name" autocomplete="off" maxlength="40" style="font-size:16px" placeholder="BSI">
+          <span class="field-error" data-err="bank_name"></span></div>
+        <div class="field"><label class="label" for="fBankNo">Nomor rekening</label>
+          <input class="input" id="fBankNo" name="bank_number" inputmode="numeric" autocomplete="off" style="font-size:16px">
+          <span class="field-error" data-err="bank_number"></span></div>
+        <div class="field"><label class="label" for="fBankHolder">Atas nama rekening</label>
+          <input class="input" id="fBankHolder" name="bank_holder" autocomplete="off" maxlength="100" style="font-size:16px">
+          <span class="field-error" data-err="bank_holder"></span></div>
+      </div>
+      <p class="ad-note ad-note-warn" id="payWarn" hidden>Belum ada metode bayar produk. Isi DANA atau rekening bank supaya customer bisa checkout.</p>
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-top:16px"><button type="submit" class="btn btn-primary" data-save disabled>Simpan</button></div>
+  </form>
+
+  <form class="ad-card" id="cardStok" novalidate>
+    <h2>Stok</h2>
+    <p class="ad-muted" style="margin:0 0 16px">Stok dikunci selama waktu ini sejak pesanan dibuat, lalu pesanan kedaluwarsa otomatis. Waktu bisa diperpanjang per pesanan.</p>
+    <div class="field" style="max-width:20rem"><label class="label" for="fHours">Durasi default time-out (jam) <span class="req">*</span></label>
+      <input class="input" id="fHours" name="hours" inputmode="numeric" autocomplete="off" style="font-size:16px">
+      <span class="field-error" data-err="hours"></span></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px" role="group" aria-label="Pilihan cepat">
+      <button type="button" class="btn btn-secondary btn-sm" data-hours="6">6 jam</button>
+      <button type="button" class="btn btn-secondary btn-sm" data-hours="12">12 jam</button>
+      <button type="button" class="btn btn-secondary btn-sm" data-hours="24">24 jam</button>
+      <button type="button" class="btn btn-secondary btn-sm" data-hours="48">48 jam</button>
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-top:16px"><button type="submit" class="btn btn-primary" data-save disabled>Simpan</button></div>
+  </form>
+
+  <form class="ad-card" id="cardKirim" novalidate>
+    <h2>Pengiriman</h2>
+    <p class="ad-muted" style="margin:0 0 16px">Satu lokasi asal kirim untuk semua produk. Dipakai untuk menghitung ongkir otomatis.</p>
+    <p class="ad-note ad-note-warn" id="originWarn" hidden style="margin-bottom:14px">Asal kirim belum diisi. Cek ongkir tidak bisa dipakai sebelum ini diisi.</p>
+    <div style="display:grid;gap:14px">
+      <div class="field"><span class="label" id="originLabel">Asal kirim <span class="req">*</span></span>
+        <div id="originPicker" role="group" aria-labelledby="originLabel"></div>
+        <span class="field-error" data-err="origin"></span></div>
+      <div class="field"><span class="label" id="courierLabel">Kurir utama</span>
+        <div class="ad-modes" role="radiogroup" aria-labelledby="courierLabel">
+          <label class="ad-mode"><input type="radio" name="courier" value="jnt">
+            <span class="ad-mode-body"><span class="ad-mode-title">J&amp;T Express</span><span class="ad-mode-desc">Terpilih lebih dulu di checkout dan ditandai Rekomendasi.</span></span></label>
+          <label class="ad-mode"><input type="radio" name="courier" value="pos">
+            <span class="ad-mode-body"><span class="ad-mode-title">Pos Indonesia</span><span class="ad-mode-desc">Terpilih lebih dulu di checkout dan ditandai Rekomendasi.</span></span></label>
+          <label class="ad-mode"><input type="radio" name="courier" value="jne">
+            <span class="ad-mode-body"><span class="ad-mode-title">JNE</span><span class="ad-mode-desc">Terpilih lebih dulu di checkout dan ditandai Rekomendasi.</span></span></label>
+        </div>
+        <p class="ad-note" style="margin-top:8px">Customer tetap bisa memilih kurir lain saat checkout.</p>
+        <p class="ad-note ad-note-warn" id="courierWarn" hidden style="margin-top:8px">Kolom kurir utama belum ada di database. Jalankan migrasi <code>006_settings_default_courier.sql</code>.</p>
+        <span class="field-error" data-err="courier"></span></div>
+      <div style="display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+        <div class="field"><label class="label" for="fBuffer">Buffer kemasan (gram)</label>
+          <input class="input" id="fBuffer" name="buffer" inputmode="numeric" autocomplete="off" style="font-size:16px">
+          <span class="field-error" data-err="buffer"></span></div>
+        <div class="field"><label class="label" for="fRound">Pembulatan berat ke atas (gram)</label>
+          <input class="input" id="fRound" name="round" inputmode="numeric" autocomplete="off" style="font-size:16px">
+          <span class="field-error" data-err="round"></span></div>
+      </div>
+      <p class="ad-note" id="weightHint"></p>
+      <p class="ad-note ad-note-warn" id="labelWarn" hidden>Kolom nama area belum ada di database, jadi nama area tidak tersimpan. Jalankan migrasi <code>005_settings_origin_label.sql</code>.</p>
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-top:16px"><button type="submit" class="btn btn-primary" data-save disabled>Simpan</button></div>
+  </form>
+
+</div>

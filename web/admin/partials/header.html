@@ -1,12 +1,40 @@
 <header class="ad-topbar">
   <a class="ad-wordmark ad-only-mobile" href="#/dashboard" aria-label="Hijabii, ke dashboard">HIJABII</a>
-  <p class="ad-greet ad-only-desktop" id="hdrGreet"></p>
+
+  <!-- Tablet/desktop: pencarian global (ad-search.js) -->
+  <div class="ad-gsearch" id="adSearch" role="search">
+    <div class="ad-gsearch-field">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input type="search" class="ad-gsearch-input" id="adSearchInput" placeholder="Cari pesanan atau produk…"
+        autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="adSearchPanel"
+        aria-autocomplete="list" aria-label="Cari pesanan atau produk">
+    </div>
+    <div class="ad-gsearch-panel" id="adSearchPanel" hidden></div>
+  </div>
+
   <div class="ad-topbar-right">
-    <span class="ad-chip" title="Peran akun Anda">ADMIN</span>
-    <span class="ad-avatar" id="hdrAvatar" aria-hidden="true">·</span>
-    <button type="button" class="ad-logout" id="btnLogout" aria-label="Keluar">
+    <!-- Mobile saja: chip ADMIN. Di tablet/desktop peran tampil di bawah sidebar. -->
+    <span class="ad-chip ad-only-mobile" title="Peran akun Anda">ADMIN</span>
+
+    <!-- Semua ukuran layar: lonceng notifikasi (ad-notif.js) -->
+    <div class="ad-bell" id="adBell">
+      <button type="button" class="ad-bell-btn" id="adBellBtn" aria-haspopup="dialog" aria-expanded="false"
+        aria-controls="adBellPanel" aria-label="Notifikasi">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 1112 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9zM10 20a2 2 0 004 0"/></svg>
+        <span class="ad-bell-dot" id="adBellDot" hidden></span>
+      </button>
+      <div class="ad-bell-panel" id="adBellPanel" role="dialog" aria-label="Notifikasi" hidden>
+        <div class="ad-bell-head">
+          <h2>Notifikasi</h2>
+          <button type="button" class="ad-linkbtn" id="adBellReadAll" hidden>Tandai semua dibaca</button>
+        </div>
+        <div class="ad-bell-body" id="adBellBody"></div>
+      </div>
+    </div>
+
+    <!-- Mobile saja: logout. Di tablet/desktop pindah ke bawah sidebar. -->
+    <button type="button" class="ad-logout ad-only-mobile" data-logout aria-label="Keluar">
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H6a2 2 0 00-2 2v12a2 2 0 002 2h3M16 8l4 4-4 4M20 12H9"/></svg>
-      <span class="ad-only-desktop">Keluar</span>
     </button>
   </div>
 </header>

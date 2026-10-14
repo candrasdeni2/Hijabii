@@ -65,7 +65,6 @@ body.ad-lock{overflow:hidden}
   min-height:56px;padding:8px 16px;padding-top:calc(8px + env(safe-area-inset-top,0px));
   background:rgba(246,240,231,.9);backdrop-filter:blur(10px);border-bottom:1px solid rgba(43,33,28,.08)}
 .ad-wordmark{font-family:var(--font-serif);font-weight:600;letter-spacing:.22em;font-size:16px;color:var(--ink);text-decoration:none}
-.ad-greet{margin:0;font-size:14px;color:rgba(43,33,28,.7)}
 .ad-topbar-right{display:flex;align-items:center;gap:10px;margin-left:auto}
 .ad-chip{font-size:10px;font-weight:600;letter-spacing:.05em;border-radius:999px;padding:4px 10px;
   background:rgba(123,74,74,.1);color:var(--marsala)}
@@ -209,3 +208,168 @@ body.ad-lock{overflow:hidden}
   .ad-nav-badge{left:auto;right:4px;top:2px}
 }
 @media(min-width:1024px){.ad-nav-badge{position:static;margin-left:auto}}
+
+/* ---------- Tablet/desktop: pencarian global, lonceng, akun di sidebar, tanggal Dashboard ---------- */
+/* Mobile: pencarian dan blok akun sidebar tersembunyi di bawah 768px. Lonceng dan tanggal tampil di semua ukuran. */
+.ad-gsearch,.ad-account{display:none}
+.ad-linkbtn{background:none;border:0;padding:4px 2px;font:inherit;font-size:13px;font-weight:500;color:var(--marsala);cursor:pointer;
+  text-decoration:underline;text-underline-offset:4px}
+.ad-linkbtn:disabled{opacity:.5;cursor:default}
+
+/* Pencarian */
+.ad-gsearch-field{position:relative}
+.ad-gsearch-field svg{position:absolute;left:16px;top:50%;width:18px;height:18px;margin-top:-9px;fill:none;stroke:rgba(43,33,28,.55);
+  stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.ad-gsearch-input{width:100%;min-height:44px;padding:0 16px 0 44px;border:1px solid transparent;border-radius:999px;
+  background:rgba(235,224,211,.55);color:var(--ink);font:inherit;font-size:14px;transition:background .2s,border-color .2s,box-shadow .2s}
+.ad-gsearch-input::placeholder{color:rgba(43,33,28,.55)}
+.ad-gsearch-input:focus{outline:none;background:var(--paper);border-color:var(--marsala);box-shadow:0 0 0 3px rgba(123,74,74,.18)}
+.ad-gsearch-input::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none}
+@media(pointer:coarse){.ad-gsearch-input{font-size:16px}}
+.ad-gsearch-panel,.ad-bell-panel{position:absolute;top:calc(100% + 8px);background:var(--paper);border:1px solid var(--sand);border-radius:16px;
+  box-shadow:0 16px 36px rgba(43,33,28,.08);z-index:50}
+.ad-gsearch-panel{left:0;right:0;max-height:min(70vh,440px);overflow:auto;padding:8px}
+.ad-gs-msg{padding:16px 12px;font-size:14px;color:rgba(43,33,28,.7);text-align:center;overflow-wrap:anywhere}
+.ad-gs-group{padding:8px 12px 4px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:rgba(43,33,28,.6)}
+.ad-gs-item{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;padding:8px 12px;border-radius:12px;
+  color:var(--ink);text-decoration:none}
+.ad-gs-item:hover,.ad-gs-item[aria-selected="true"]{background:var(--sand)}
+.ad-gs-main{display:grid;gap:1px;min-width:0}
+.ad-gs-title{font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ad-gs-mono{font-family:ui-monospace,Consolas,monospace;font-size:13px}
+.ad-gs-sub{font-size:12px;color:rgba(43,33,28,.7);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Lonceng */
+.ad-bell-btn{position:relative;display:inline-grid;place-items:center;width:44px;height:44px;border-radius:999px;border:1px solid var(--sand);
+  background:var(--paper);color:var(--ink);cursor:pointer;transition:background .25s}
+.ad-bell-btn:hover{background:var(--sand)}
+.ad-bell-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.ad-bell-dot{position:absolute;top:9px;right:10px;width:10px;height:10px;border-radius:999px;background:var(--error,#9E3D3D);border:2px solid var(--paper)}
+.ad-bell{display:block}   /* tanpa position: panel mengacu ke topbar (sticky), jadi melebar penuh di mobile */
+.ad-bell-panel{left:16px;right:16px;overflow:hidden}
+.ad-bell-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px 10px;border-bottom:1px solid var(--sand)}
+.ad-bell-head h2{margin:0;font-family:var(--font-serif);font-size:20px;font-weight:500}
+.ad-bell-body{max-height:min(70vh,420px);overflow:auto}
+.ad-bell-pad{padding:12px 16px 4px}
+.ad-bell-empty{padding:32px 16px;text-align:center;font-size:14px;color:rgba(43,33,28,.7)}
+.ad-bell-list{list-style:none;margin:0;padding:6px}
+.ad-nt-item{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:start;width:100%;padding:10px;border:0;border-radius:12px;
+  background:none;font:inherit;text-align:left;color:var(--ink);text-decoration:none;cursor:pointer}
+.ad-nt-item:hover{background:var(--sand)}
+.ad-nt-item.is-unread{background:rgba(123,74,74,.06)}
+.ad-nt-item.is-unread:hover{background:var(--sand)}
+.ad-nt-ico{display:grid;place-items:center;width:36px;height:36px;border-radius:12px;background:var(--sand);color:var(--ink)}
+.ad-nt-ico svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.ad-nt-body{display:grid;gap:2px;min-width:0}
+.ad-nt-title{font-size:14px;font-weight:600;overflow-wrap:anywhere}
+.ad-nt-text{font-size:13px;color:rgba(43,33,28,.75);overflow-wrap:anywhere}
+.ad-nt-time{font-size:12px;color:rgba(43,33,28,.6)}
+.ad-nt-dot{width:8px;height:8px;margin-top:6px;border-radius:999px;background:var(--error,#9E3D3D)}
+
+/* Tanggal di header Dashboard, sejajar judul di kanan. Layar < 480px memakai format singkat. */
+.ad-date{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;padding-top:8px;font-size:13px;color:rgba(43,33,28,.7);white-space:nowrap}
+.ad-page-head.has-date>div:first-child{flex:1 1 0;min-width:0}   /* judul + sapaan menyusut agar tanggal tetap sejajar judul */
+.ad-date-short{display:none}
+@media(max-width:479px){.ad-date-long{display:none}.ad-date-short{display:inline}}
+.ad-date svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+@media(min-width:768px){
+  .ad-gsearch{display:block;position:relative;flex:1 1 auto;max-width:520px}
+  .ad-bell{position:relative}
+  .ad-bell-panel{left:auto;right:0;width:min(380px,calc(100vw - 32px))}
+
+  /* Akun di bawah sidebar. Rail 64px: avatar + ikon keluar bertumpuk, nama disembunyikan. */
+  .ad-account{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:auto;padding-top:12px;border-top:1px solid var(--sand)}
+  .ad-account-info{display:none}
+}
+@media(min-width:1024px){
+  .ad-account{flex-direction:row;gap:10px;padding:12px 4px 0 6px}
+  .ad-account-info{display:grid;gap:0;flex:1;min-width:0}
+  .ad-account-name{font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ad-account-role{font-size:12px;color:rgba(43,33,28,.6)}
+}
+
+/* ---------- Halaman Admin: tombol urutan naik/turun (Kategori, FAQ) ---------- */
+.ad-order{display:inline-flex;gap:4px;flex:none}
+.ad-order button{display:grid;place-items:center;width:44px;height:44px;border-radius:999px;border:1px solid var(--sand);background:var(--paper);color:var(--ink);cursor:pointer;transition:background .25s}
+.ad-order button:hover:not(:disabled){background:var(--sand)}
+.ad-order button:disabled{opacity:.4;cursor:not-allowed}
+.ad-order svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@media(min-width:768px){.ad-order button{width:32px;height:32px}}
+
+/* ---------- Halaman Produk: daftar, editor, foto, matriks stok ---------- */
+.ad-badge-warn{background:#FDF3E3;color:var(--warning,#B8863A)}
+.ad-thumb{display:block;width:48px;height:60px;border-radius:8px;border:1px solid var(--sand);object-fit:cover;background:var(--sand);flex:none}
+.ad-ph{background:linear-gradient(135deg,#E8DCCD,#D8C6B5)}
+.ad-swatch{background-clip:padding-box}
+.ad-stock-zero{color:var(--error,#9E3D3D);font-weight:600}
+.ad-prod-card{display:flex;gap:12px;align-items:flex-start}
+.ad-prod-info{flex:1;min-width:0;display:grid;gap:2px}
+.ad-back{display:inline-flex;align-items:center;gap:6px;margin-bottom:12px;font-size:14px;color:rgba(43,33,28,.7);text-decoration:none}
+.ad-back:hover{color:var(--ink);text-decoration:underline;text-underline-offset:4px}
+.ad-sec{margin-bottom:20px}
+.ad-sec-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.ad-sec-head h2{margin:0}
+.ad-form{display:grid;gap:14px}
+.ad-form-grid{display:grid;gap:14px}
+@media(min-width:768px){.ad-form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.field .ad-note{display:block;margin-top:4px}
+.ad-warn-text{color:#7A5C00}
+
+.ad-colors{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.ad-color{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center;border:1px solid var(--sand);border-radius:16px;padding:12px;background:var(--cream)}
+.ad-color.ad-size{grid-template-columns:minmax(0,1fr)}
+.ad-color .ad-cell-actions{grid-column:1/-1;justify-content:flex-start}
+.ad-color-info{min-width:0}
+.ad-hexdot{display:inline-block;width:12px;height:12px;border-radius:999px;border:1px solid rgba(43,33,28,.2);vertical-align:middle;margin-left:6px}
+@media(min-width:768px){
+  .ad-color{grid-template-columns:auto minmax(0,1fr) auto}
+  .ad-color.ad-size{grid-template-columns:minmax(0,1fr) auto}
+  .ad-color .ad-cell-actions{grid-column:auto;justify-content:flex-end}
+}
+
+.ad-hex{display:flex;gap:10px;align-items:center}
+.ad-hex input[type="color"]{width:44px;height:44px;padding:2px;border:1px solid var(--sand);border-radius:12px;background:var(--paper);flex:none;cursor:pointer}
+.ad-hex .input{flex:1;min-width:0}
+.ad-photo-main{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap}
+.ad-photo-box{display:grid;place-items:center;width:120px;aspect-ratio:4/5;border-radius:12px;border:1px dashed var(--mocha);background:var(--paper);overflow:hidden;
+  font-size:12px;color:rgba(43,33,28,.6);cursor:pointer;text-align:center}
+.ad-photo-box img{width:100%;height:100%;object-fit:cover}
+.ad-photo-grid{display:flex;flex-wrap:wrap;gap:10px}
+.ad-photo-thumb{position:relative;width:72px;aspect-ratio:4/5;border-radius:10px;overflow:hidden;border:1px solid var(--sand)}
+.ad-photo-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.ad-photo-thumb button{position:absolute;top:4px;right:4px;width:28px;height:28px;border-radius:999px;border:0;background:rgba(43,33,28,.75);color:var(--cream);font-size:18px;line-height:1;cursor:pointer}
+.ad-photo-add{width:72px;aspect-ratio:4/5;border:1px dashed var(--mocha);border-radius:10px;background:var(--paper);font-size:24px;color:var(--ink);cursor:pointer}
+.ad-checks{border:0;padding:0;margin:0;display:grid;gap:8px}
+.ad-checks legend{padding:0;margin-bottom:6px}
+.ad-check{display:flex;gap:10px;align-items:center;min-height:44px;padding:0 12px;border:1px solid var(--sand);border-radius:12px;background:var(--paper);cursor:pointer;font-size:14px}
+.ad-check input{accent-color:var(--marsala);width:18px;height:18px;flex:none}
+progress{accent-color:var(--marsala)}
+
+/* Matriks stok: mobile = satu kartu per warna; tablet/desktop = tabel (baris warna, kolom ukuran) */
+.ad-stk{display:grid;gap:12px}
+.ad-stk-head{display:none}
+.ad-stk-row{display:grid;gap:10px;border:1px solid var(--sand);border-radius:16px;padding:14px;background:var(--cream)}
+.ad-stk-name{font-weight:600;font-size:15px;overflow-wrap:anywhere}
+.ad-stk-cells{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:10px}
+.ad-stk-cell{display:grid;gap:4px}
+.ad-stk-size{font-size:12px;font-weight:600;color:rgba(43,33,28,.7)}
+.ad-stk-cell input{width:100%;min-height:44px;padding:0 8px;text-align:center;border:1px solid var(--sand);border-radius:12px;background:var(--paper);color:var(--ink);font:inherit;font-size:16px}
+.ad-stk-cell input[data-level="low"]{border-color:var(--warning,#B8863A);background:#FDF3E3}
+.ad-stk-cell input[data-level="zero"]{border-color:var(--error,#9E3D3D);background:#FAEDED}
+.ad-stk-cell input.is-dirty{box-shadow:0 0 0 3px rgba(123,74,74,.18)}
+.ad-stk-cell input[aria-invalid="true"]{border-color:var(--error,#9E3D3D)}
+.ad-stk-na{display:grid;place-items:center;min-height:44px;border-radius:12px;font-size:12px;color:rgba(43,33,28,.55);
+  background:repeating-linear-gradient(45deg,rgba(43,33,28,.04),rgba(43,33,28,.04) 6px,transparent 6px,transparent 12px)}
+@media(min-width:768px){
+  .ad-stk{gap:0}
+  .ad-stk-head,.ad-stk-row{display:grid;grid-template-columns:minmax(120px,200px) repeat(var(--n),minmax(72px,1fr));align-items:center;gap:10px}
+  .ad-stk-head{padding:0 0 8px;border-bottom:1px solid var(--sand);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:rgba(43,33,28,.6);text-align:center}
+  .ad-stk-row{border:0;border-bottom:1px solid rgba(235,224,211,.7);border-radius:0;background:none;padding:10px 0}
+  .ad-stk-cells{display:contents}
+  .ad-stk-size,.ad-stk-na-txt{display:none}
+  .ad-stk-na{min-height:44px}
+}
+
+/* Tombol berbentuk tautan (<a class="btn">) tanpa garis bawah */
+a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
