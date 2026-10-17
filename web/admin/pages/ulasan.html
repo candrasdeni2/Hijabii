@@ -1,0 +1,28 @@
+<header class="ad-page-head">
+  <div>
+    <h1 class="ad-h1">Ulasan</h1>
+    <p class="ad-sub">Ulasan customer langsung tampil. Di sini kamu hanya bisa menyembunyikan, menampilkan, atau menghapus. Isi ulasan tidak bisa diubah.</p>
+  </div>
+</header>
+<section class="ad-card" aria-label="Moderasi ulasan">
+  <div class="ad-toolbar">
+    <select class="input" id="fRating" aria-label="Filter rating">
+      <option value="">Semua rating</option>
+      <option value="5">5 bintang</option><option value="4">4 bintang</option><option value="3">3 bintang</option>
+      <option value="2">2 bintang</option><option value="1">1 bintang</option>
+    </select>
+    <select class="input" id="fVisible" aria-label="Filter status tampil">
+      <option value="">Semua status</option>
+      <option value="tampil">Tampil</option>
+      <option value="sembunyi">Disembunyikan</option>
+    </select>
+  </div>
+  <div id="list" aria-live="polite"></div>
+  <div class="ad-pager" id="pager" hidden>
+    <span id="pagerInfo"></span>
+    <div class="ad-pager-btns">
+      <button type="button" class="btn btn-secondary btn-sm" data-act="prev">Sebelumnya</button>
+      <button type="button" class="btn btn-secondary btn-sm" data-act="next">Berikutnya</button>
+    </div>
+  </div>
+</section>

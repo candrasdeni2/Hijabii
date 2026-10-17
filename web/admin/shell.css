@@ -90,7 +90,7 @@ body.ad-lock{overflow:hidden}
 .ad-muted{color:rgba(43,33,28,.7);font-size:14px}
 
 .ad-toolbar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}
-.ad-toolbar .input{min-height:44px;font-size:16px}
+.ad-toolbar .input{min-height:36px;font-size:12px}
 .ad-toolbar .ad-search{flex:1 1 220px}
 .ad-toolbar select.input{flex:0 0 auto;min-width:150px}
 
@@ -311,7 +311,7 @@ body.ad-lock{overflow:hidden}
 .ad-sec-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
 .ad-sec-head h2{margin:0}
 .ad-form{display:grid;gap:14px}
-.ad-form-grid{display:grid;gap:14px}
+.ad-form-grid{display:grid;gap:14px;align-items:start}
 @media(min-width:768px){.ad-form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .field .ad-note{display:block;margin-top:4px}
 .ad-warn-text{color:#7A5C00}
@@ -346,29 +346,38 @@ body.ad-lock{overflow:hidden}
 .ad-check input{accent-color:var(--marsala);width:18px;height:18px;flex:none}
 progress{accent-color:var(--marsala)}
 
-/* Matriks stok: mobile = satu kartu per warna; tablet/desktop = tabel (baris warna, kolom ukuran) */
+/* Matriks stok: mobile = satu kartu per warna, tiap ukuran satu baris (label kiri, isian kanan);
+   tablet/desktop = tabel (baris warna, kolom ukuran). */
 .ad-stk{display:grid;gap:12px}
 .ad-stk-head{display:none}
-.ad-stk-row{display:grid;gap:10px;border:1px solid var(--sand);border-radius:16px;padding:14px;background:var(--cream)}
-.ad-stk-name{font-weight:600;font-size:15px;overflow-wrap:anywhere}
-.ad-stk-cells{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:10px}
-.ad-stk-cell{display:grid;gap:4px}
-.ad-stk-size{font-size:12px;font-weight:600;color:rgba(43,33,28,.7)}
+.ad-stk-row{display:grid;gap:4px;border:1px solid var(--sand);border-radius:16px;padding:14px 14px 10px;background:var(--cream)}
+.ad-stk-name{font-weight:600;font-size:15px;overflow-wrap:anywhere;padding-bottom:8px}
+.ad-stk-cells{display:grid}
+.ad-stk-cell{display:grid;grid-template-columns:minmax(0,1fr) 112px;align-items:center;gap:12px;padding:8px 0;border-top:1px solid rgba(235,224,211,.9)}
+.ad-stk-cell.is-na{display:none}
+.ad-stk-size{font-size:14px;font-weight:500;color:var(--ink)}
 .ad-stk-cell input{width:100%;min-height:44px;padding:0 8px;text-align:center;border:1px solid var(--sand);border-radius:12px;background:var(--paper);color:var(--ink);font:inherit;font-size:16px}
 .ad-stk-cell input[data-level="low"]{border-color:var(--warning,#B8863A);background:#FDF3E3}
 .ad-stk-cell input[data-level="zero"]{border-color:var(--error,#9E3D3D);background:#FAEDED}
 .ad-stk-cell input.is-dirty{box-shadow:0 0 0 3px rgba(123,74,74,.18)}
 .ad-stk-cell input[aria-invalid="true"]{border-color:var(--error,#9E3D3D)}
-.ad-stk-na{display:grid;place-items:center;min-height:44px;border-radius:12px;font-size:12px;color:rgba(43,33,28,.55);
+.ad-stk-nalist{margin-top:2px;padding-top:8px;border-top:1px solid rgba(235,224,211,.9);font-size:12px;color:rgba(43,33,28,.6)}
+.ad-stk-na{display:grid;place-items:center;min-height:44px;border-radius:12px;
   background:repeating-linear-gradient(45deg,rgba(43,33,28,.04),rgba(43,33,28,.04) 6px,transparent 6px,transparent 12px)}
+.ad-stk-save-bottom{display:none}
+@media(max-width:767px){
+  .ad-stk-save-top{display:none}
+  .ad-stk-save-bottom{display:block;width:100%;margin-top:14px}
+}
 @media(min-width:768px){
   .ad-stk{gap:0}
   .ad-stk-head,.ad-stk-row{display:grid;grid-template-columns:minmax(120px,200px) repeat(var(--n),minmax(72px,1fr));align-items:center;gap:10px}
   .ad-stk-head{padding:0 0 8px;border-bottom:1px solid var(--sand);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:rgba(43,33,28,.6);text-align:center}
   .ad-stk-row{border:0;border-bottom:1px solid rgba(235,224,211,.7);border-radius:0;background:none;padding:10px 0}
+  .ad-stk-name{padding-bottom:0}
   .ad-stk-cells{display:contents}
-  .ad-stk-size,.ad-stk-na-txt{display:none}
-  .ad-stk-na{min-height:44px}
+  .ad-stk-cell,.ad-stk-cell.is-na{display:block;padding:0;border:0}
+  .ad-stk-size,.ad-stk-nalist,.ad-stk-na-txt{display:none}
 }
 
 /* Tombol berbentuk tautan (<a class="btn">) tanpa garis bawah */

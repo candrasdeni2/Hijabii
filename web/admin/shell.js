@@ -171,6 +171,7 @@ async function mountPartials() {
   }
   $("boot").hidden = true;
   $("app").hidden = false;
+  
 
   supabase.auth.onAuthStateChange((evt) => {
     if (evt === "SIGNED_OUT") { teardown.forEach((fn) => fn()); location.replace(ROUTES.login); }

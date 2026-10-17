@@ -131,13 +131,15 @@ export async function initEditor({ root, isStale = () => false, productId }) {
       <div id="sizesEl"></div>
     </section>
     <section class="ad-card ad-sec" aria-labelledby="secStock">
-      <div class="ad-sec-head"><h2 id="secStock">Stok</h2><button type="button" class="btn btn-primary btn-sm" data-act="save-stock" id="btnStock" disabled>Simpan stok</button></div>
+      <div class="ad-sec-head"><h2 id="secStock">Stok</h2><button type="button" class="btn btn-primary btn-sm ad-stk-save-top" data-act="save-stock" disabled>Simpan stok</button></div>
       <p class="ad-note" style="margin-bottom:12px">Angka stok adalah stok tersedia (sudah dikurangi stok yang dikunci pesanan aktif). Kuning: tersisa 5 atau kurang. Merah: habis.</p>
       <div id="stockEl"></div>
+      <button type="button" class="btn btn-primary ad-stk-save-bottom" data-act="save-stock" disabled>Simpan stok</button>
     </section>`}`;
 
   const $ = (s) => root.querySelector(s);
-  const colorsEl = $("#colorsEl"), sizesEl = $("#sizesEl"), stockEl = $("#stockEl"), btnStock = $("#btnStock");
+  const colorsEl = $("#colorsEl"), sizesEl = $("#sizesEl"), stockEl = $("#stockEl");
+  const stockBtns = [...root.querySelectorAll('[data-act="save-stock"]')]; // tombol atas (desktop) dan bawah (mobile)
 
   /* ---------- Informasi produk ---------- */
   const activationProblem = () => {
@@ -261,13 +263,16 @@ export async function initEditor({ root, isStale = () => false, productId }) {
             ? `<label class="ad-stk-cell"><span class="ad-stk-size">${esc(s.name)}</span>
                 <input type="number" inputmode="numeric" min="0" max="99999" step="1" value="${v.stock}" data-vid="${esc(v.id)}" data-orig="${v.stock}"
                   data-level="${stockLevel(v.stock)}" aria-label="Stok ${esc(c.name)} ukuran ${esc(s.name)}"></label>`
-            : `<div class="ad-stk-cell is-na"><span class="ad-stk-size">${esc(s.name)}</span><span class="ad-stk-na"><span class="ad-stk-na-txt">tidak tersedia</span></span></div>`;
-        }).join("")}</div></div>`).join("")}</div>`;
+            : `<div class="ad-stk-cell is-na"><span class="ad-stk-size">${esc(s.name)}</span><span class="ad-stk-na" role="img" aria-label="Tidak tersedia"><span class="ad-stk-na-txt">tidak tersedia</span></span></div>`;
+        }).join("")}</div>${(() => {
+          const na = sizes.filter((s) => !vmap.has(`${c.id}|${s.key}`));
+          return na.length ? `<div class="ad-stk-nalist">Tidak tersedia: ${na.map((s) => esc(s.name)).join(", ")}</div>` : "";
+        })()}</div>`).join("")}</div>`;
     syncStockBtn();
   }
 
   const dirtyInputs = () => [...stockEl.querySelectorAll("input[data-vid]")].filter((i) => i.value !== i.dataset.orig);
-  function syncStockBtn() { if (btnStock) btnStock.disabled = dirtyInputs().length === 0; }
+  function syncStockBtn() { const none = dirtyInputs().length === 0; stockBtns.forEach((b) => { b.disabled = none; }); }
 
   stockEl.addEventListener("input", (e) => {
     const i = e.target.closest("input[data-vid]");
@@ -288,9 +293,9 @@ export async function initEditor({ root, isStale = () => false, productId }) {
       if (n === null || n > 99999) { i.setAttribute("aria-invalid", "true"); bad = true; } else items.push({ id: i.dataset.vid, stock: n });
     }
     if (bad) { toast("Stok harus bilangan bulat 0 sampai 99.999.", "error"); return; }
-    setBusy(btnStock, true);
+    stockBtns.forEach((b) => setBusy(b, true));
     const results = await Promise.all(items.map((it) => supabase.from("product_variants").update({ stock: it.stock }).eq("id", it.id)));
-    setBusy(btnStock, false);
+    stockBtns.forEach((b) => setBusy(b, false));
     const failed = results.filter((r) => r.error);
     if (failed.length) { console.error(failed[0].error); toast(`${failed.length} stok gagal disimpan.`, "error"); }
     else toast("Stok disimpan.", "success");
