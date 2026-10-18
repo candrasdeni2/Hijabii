@@ -110,12 +110,12 @@ export async function renderEdit({ pg, id, isStale = () => false }) {
           </section>
         </div>
         <aside class="od-side"><section class="ad-card"><h2>Ringkasan revisi</h2>
-          <div class="od-totals" style="max-width:none;margin-top:0">
-            <div><span>Subtotal produk</span><span data-sum="sub"></span></div>
-            <div><span>Ongkir</span><span data-sum="ship"></span></div>
-            <div class="od-grand"><span>Total baru</span><span data-sum="total"></span></div>
-            <div><span>Total sebelumnya</span><span>${esc(rupiah(origTotal))}</span></div>
-            <div><span>Selisih</span><span data-sum="delta"></span></div></div>
+          <div class="od-totals od-totals--side">
+            <div><span>Subtotal produk</span><b data-sum="sub"></b></div>
+            <div><span>Ongkir</span><b data-sum="ship"></b></div>
+            <div class="od-grand"><span>Total baru</span><b data-sum="total"></b></div>
+            <div><span>Total sebelumnya</span><b>${esc(rupiah(origTotal))}</b></div>
+            <div><span>Selisih</span><b data-sum="delta"></b></div></div>
           <p class="ad-note ad-note-warn" id="oeMsg" role="alert" hidden style="margin-top:12px"></p>
           <div class="od-actions" style="margin-top:14px">
             <button type="submit" class="btn btn-primary" id="oeSave" disabled>Simpan Revisi</button>

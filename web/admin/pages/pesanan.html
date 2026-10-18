@@ -73,5 +73,30 @@
 .od-copy:hover{background:var(--sand)}
 .od-copy:focus-visible{outline:2px solid var(--marsala);outline-offset:2px}
 .od-copy svg{width:16px;height:16px;display:block}
+/* Daftar invoice di detail pesanan (tautan) */
+.od-inv-link{padding:10px 12px;border:1px solid var(--sand);border-radius:12px;color:var(--ink);text-decoration:none;transition:background .2s}
+.od-inv-link:hover{background:var(--sand)}
+.od-inv-go{margin-left:auto;font-size:13px;font-weight:500;color:var(--marsala)}
+/* Halaman invoice */
+.iv-vers{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.iv-ver{display:inline-flex;align-items:center;min-height:36px;padding:0 14px;border:1px solid var(--sand);border-radius:999px;background:var(--paper);color:var(--ink);font-size:13px;font-weight:500;text-decoration:none}
+.iv-ver:hover{background:var(--sand)}
+.iv-ver[aria-current="page"]{background:var(--ink);border-color:var(--ink);color:var(--cream)}
+.iv-sheet{max-width:48rem;margin:0 auto;padding:20px}
+@media(min-width:768px){.iv-sheet{padding:36px 40px}}
+.iv-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 24px}
+.iv-brand{font-family:var(--font-serif);font-size:24px;font-weight:600;letter-spacing:.22em}
+.iv-store{margin-top:8px;font-size:13px;line-height:1.6;color:rgba(43,33,28,.7);overflow-wrap:anywhere}
+.iv-id{min-width:0}
+@media(min-width:640px){.iv-id{text-align:right}}
+.iv-over{font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:rgba(43,33,28,.6)}
+.iv-no{margin:4px 0 2px;font-size:16px;font-weight:600}
+.iv-date{font-size:13px;color:rgba(43,33,28,.7)}
+.iv-rev{margin-top:2px;font-size:13px;font-weight:600;color:var(--marsala)}
+.iv-addr{margin:0;font-size:14px;line-height:1.6;overflow-wrap:anywhere}
+.iv-pay{margin-top:20px;padding:14px 16px;border:1px solid var(--sand);border-radius:16px;background:var(--cream);font-size:14px;line-height:1.6}
+.iv-pay .od-sub{margin-bottom:6px}
+.iv-foot{margin:24px 0 0;text-align:center;font-family:var(--font-serif);font-size:18px;font-style:italic;color:var(--marsala)}
+.iv-foot small{display:block;margin-top:4px;font-family:var(--font-sans);font-size:12px;font-style:normal;color:rgba(43,33,28,.6)}
 </style>
 <div id="pg" aria-live="polite"></div>

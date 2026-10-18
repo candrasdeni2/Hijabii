@@ -3,7 +3,7 @@
 :root{--ad-bottom:max(env(safe-area-inset-bottom,0px),16px);--ad-sheet-gap:max(env(safe-area-inset-bottom,0px),24px)}
 .ad-skip{position:absolute;left:-999px;top:8px;background:var(--ink);color:var(--cream);padding:8px 14px;border-radius:999px;z-index:100}
 .ad-skip:focus{left:8px}
-.ad-boot{min-height:100svh;display:grid;place-items:center;color:var(--mocha);font-size:14px}
+.ad-boot{min-height:100svh;display:grid;place-items:center;color:var(#1c0e0e);font-size:18px}
 body{background:var(--cream);color:var(--ink);font-family:var(--font-sans,"Jost",system-ui,sans-serif)}
 body.ad-lock{overflow:hidden}
 :focus-visible{outline:2px solid var(--marsala);outline-offset:3px}
@@ -90,7 +90,7 @@ body.ad-lock{overflow:hidden}
 .ad-muted{color:rgba(43,33,28,.7);font-size:14px}
 
 .ad-toolbar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}
-.ad-toolbar .input{min-height:36px;font-size:12px}
+.ad-toolbar .input{min-height:36px;font-size:14px}
 .ad-toolbar .ad-search{flex:1 1 220px}
 .ad-toolbar select.input{flex:0 0 auto;min-width:150px}
 
@@ -382,3 +382,4 @@ progress{accent-color:var(--marsala)}
 
 /* Tombol berbentuk tautan (<a class="btn">) tanpa garis bawah */
 a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+

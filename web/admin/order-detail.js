@@ -67,9 +67,11 @@ export async function renderDetail({ pg, id, isStale = () => false }) {
       : `<p class="ad-muted" style="margin:0">Pesanan ini sudah final. Tidak ada aksi yang tersedia.</p>`;
 
     const invoiceHtml = S.invoices.length
-      ? S.invoices.map((v) => `<div class="od-inv-row"><span class="od-mono">${esc(v.invoice_no)}</span>
+      ? S.invoices.map((v) => `<a class="od-inv-row od-inv-link" href="#/pesanan/${esc(id)}/invoice/${v.revision}" aria-label="Buka invoice ${esc(v.invoice_no)} ${v.revision > 0 ? `revisi ${v.revision}` : "awal"}">
+          <span class="od-mono">${esc(v.invoice_no)}</span>
           ${v.revision > 0 ? `<span class="ad-badge ad-badge-off">Revisi #${v.revision}</span>` : `<span class="ad-badge ad-badge-on">Awal</span>`}
-          <span class="ad-meta">${esc(fmtDate(v.created_at))} · total ${esc(rupiah(v.total))}</span></div>`).join("")
+          <span class="ad-meta" style="margin:0">${esc(fmtDate(v.created_at))} · total ${esc(rupiah(v.total))}</span>
+          <span class="od-inv-go" aria-hidden="true">Lihat / unduh →</span></a>`).join("")
       : `<span class="ad-muted">Belum ada invoice.</span>`;
 
     pg.innerHTML = `
