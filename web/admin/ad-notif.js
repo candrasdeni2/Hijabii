@@ -10,7 +10,7 @@ const POLL_MS = 60_000;
 const UUID = /^[0-9a-f-]{36}$/i;
 
 /** Status pesanan yang menunggu tindakan admin: baru masuk, dan sudah dibayar (siap diproses & dikirim). */
-const ACTION_STATUSES = ["menunggu_konfirmasi", "diproses"];
+   const ACTION_STATUSES = ["menunggu_konfirmasi", "dikonfirmasi", "diproses"];
 
 const ICONS = {
   order:  '<path d="M4 7l8-4 8 4v10l-8 4-8-4z"/><path d="M4 7l8 4 8-4M12 11v10"/>',
@@ -172,6 +172,7 @@ export function mountOrdersBadge({ supabase }) {
     window.dispatchEvent(new CustomEvent("ad:orders-badge", { detail: count ?? 0 }));
   };
   const refreshSoon = debounce(refresh, 800);
+  window.addEventListener("ad:orders-changed", refresh); // dikirim halaman Pesanan setelah aksi (buat/ubah/ubah status)
 
   const channel = supabase.channel("ad-orders-badge")
     .on("postgres_changes", { event: "*", schema: "public", table: "orders" }, refreshSoon)
@@ -184,6 +185,7 @@ export function mountOrdersBadge({ supabase }) {
 
   return () => {
     clearInterval(poll);
+    window.removeEventListener("ad:orders-changed", refresh);
     document.removeEventListener("visibilitychange", onVisible);
     supabase.removeChannel(channel);
   };

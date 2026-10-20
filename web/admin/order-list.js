@@ -15,7 +15,8 @@ export async function renderList({ pg, isStale = () => false }) {
 
   pg.innerHTML = `
     <header class="ad-page-head"><div><h1 class="ad-h1">Pesanan</h1>
-      <p class="ad-sub">Kelola pesanan dari konfirmasi sampai selesai.</p></div></header>
+      <p class="ad-sub">Kelola pesanan dari konfirmasi sampai selesai.</p></div>
+      <a class="btn btn-primary" href="#/pesanan/baru">+ Pesanan Manual</a></header>
     <section class="ad-card" aria-label="Daftar pesanan">
       <div class="ad-toolbar">
         <input class="input ad-search" id="oSearch" type="search" placeholder="Cari nama atau nomor pesanan" aria-label="Cari pesanan" autocomplete="off" maxlength="40" value="${esc(state.search)}">
