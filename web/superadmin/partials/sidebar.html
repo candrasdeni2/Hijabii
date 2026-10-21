@@ -15,13 +15,17 @@
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M17.5 14.2c2.3.3 4 2.2 4 4.8"/></svg>
       <span class="sa-lbl">Kelola User</span>
     </a>
+    <a href="#/laporan" data-route="laporan" title="Laporan">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg>
+      <span class="sa-lbl">Laporan</span>
+    </a>
     <a href="#/log" data-route="log" title="Log Aktivitas">
       <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3"/></svg>
       <span class="sa-lbl">Log Aktivitas</span>
     </a>
-    <span class="sa-nav-soon" aria-disabled="true" title="Segera hadir">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg>
-      <span class="sa-lbl">Laporan <em>segera</em></span>
-    </span>
   </nav>
 </aside>
+<style>
+/* Mobile: bottom nav 4 slot (Admin, User, Laporan, Log). Dashboard tetap bisa dibuka lewat logo HIJABII di topbar. */
+@media(max-width:767px){.sa-nav a[data-route="dashboard"]{display:none}}
+</style>

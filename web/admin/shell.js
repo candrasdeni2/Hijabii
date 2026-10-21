@@ -9,6 +9,7 @@ import { toast } from "../assets/js/ui.js";
 import { openModal, esc } from "./ad-ui.js";
 import { mountSearch } from "./ad-search.js";
 import { mountNotifications, mountOrdersBadge } from "./ad-notif.js";
+import { mountPush, unregisterDevice } from "../assets/js/push.js";
 
 const BASE = new URL("./", import.meta.url);
 const PAGES = {
@@ -133,6 +134,13 @@ function wireBadge() {
   });
 }
 
+// Baris "Notifikasi di perangkat ini" ditaruh di bawah daftar notifikasi pada panel lonceng.
+function pushSlot() {
+  const el = document.createElement("div");
+  $("adBellPanel").append(el);
+  return el;
+}
+
 async function mountPartials() {
   const [h, s, f] = await Promise.all(["partials/header.html", "partials/sidebar.html", "partials/footer.html"].map(fetchText));
   $("app-header").innerHTML = h;
@@ -145,6 +153,7 @@ async function mountPartials() {
   document.querySelectorAll("[data-ad-name]").forEach((el) => { el.textContent = first; });
   document.querySelectorAll("[data-logout]").forEach((b) => b.addEventListener("click", async () => {
     teardown.forEach((fn) => fn());
+    await unregisterDevice(supabase); // lepas perangkat ini dari akun yang keluar
     await signOut();
     location.replace(`${ROUTES.login}?reason=logout`);
   }));
@@ -156,6 +165,7 @@ async function mountPartials() {
     mountSearch({ supabase, root: document }),
     mountNotifications({ supabase, userId: profile.id, root: document }),
     mountOrdersBadge({ supabase }),
+    mountPush({ supabase, container: pushSlot() }),
   ];
 }
 

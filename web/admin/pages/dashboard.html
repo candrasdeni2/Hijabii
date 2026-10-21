@@ -1,0 +1,164 @@
+<style>
+/* Dashboard Admin: gaya khusus halaman ini (prefiks dh-). Memakai token dari tokens.css. */
+.dh-card{background:var(--paper);border:1px solid var(--sand);border-radius:20px;box-shadow:var(--shadow-sm);padding:20px;min-width:0}
+.dh-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.dh-head h2{margin:0;font-family:var(--font-serif);font-size:24px;font-weight:500;line-height:1.2;display:flex;align-items:center;gap:10px}
+.dh-head a,.dh-more{font-family:var(--font-serif);font-size:15px;color:var(--marsala);text-underline-offset:4px;white-space:nowrap}
+.dh-subline{margin:-8px 0 14px;font-size:13px;color:rgba(43,33,28,.65)}
+.dh-count{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:var(--marsala);color:var(--cream);font:600 12px/1 var(--font-sans)}
+
+/* Banner sapaan. Tanggal disisipkan shell (decorateHead) ke .ad-page-head, diposisikan di kanan atas. */
+.dh-hero{position:relative;display:block;overflow:hidden;margin-bottom:20px;padding:26px 24px;border-radius:20px;border:1px solid var(--sand);
+  background:radial-gradient(90% 160% at 92% 0%,#E2C5BD 0,#EBD6CC 38%,rgba(246,240,231,0) 72%),linear-gradient(100deg,var(--paper),#F1E4D8);min-height:128px}
+.dh-hero>div:first-child{max-width:34rem}
+.dh-hero .ad-h1{font-size:clamp(26px,4vw,36px);font-weight:500;display:flex;align-items:center;gap:10px}
+.dh-hero .ad-h1 svg{width:20px;height:20px;fill:none;stroke:var(--marsala);stroke-width:1.5;flex:none}
+.dh-hero .ad-sub{font-family:var(--font-serif);font-size:17px;line-height:1.45;color:rgba(43,33,28,.8)}
+.dh-hero .ad-date{position:absolute;top:18px;right:22px;padding:0;color:var(--ink)}
+.dh-hero .dh-sprig{position:absolute;right:-6px;bottom:-8px;width:190px;height:150px;opacity:.55;pointer-events:none}
+@media(max-width:639px){.dh-hero{padding-top:54px}}
+
+/* Kartu ringkasan */
+.dh-stats{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin-bottom:20px}
+.dh-stat{position:relative;display:grid;grid-template-columns:52px minmax(0,1fr);column-gap:14px;align-content:start;min-height:152px;padding:20px;overflow:hidden;
+  border-radius:20px;border:1px solid var(--sand);background:var(--paper);box-shadow:var(--shadow-sm)}
+.dh-ico{grid-row:1/span 3;display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:#F1E4DA;color:var(--marsala)}
+.dh-ico svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.dh-lbl{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(43,33,28,.65)}
+.dh-val{font-family:var(--font-serif);font-size:44px;font-weight:500;line-height:1.05}
+.dh-val--money{font-size:clamp(28px,2.6vw,36px);overflow-wrap:anywhere}
+.dh-note{display:flex;align-items:center;gap:7px;margin-top:2px;font-size:13px;color:rgba(43,33,28,.72)}
+.dh-dot{width:7px;height:7px;border-radius:50%;background:var(--error);flex:none}
+.dh-go{grid-column:1/-1;align-self:end;margin-top:16px;font-family:var(--font-serif);font-size:16px;color:var(--marsala);text-underline-offset:4px}
+.dh-stat--dark{border-color:transparent;color:var(--cream);background:linear-gradient(135deg,#5E3232 0,#7B4A4A 62%,#8D5A58 100%)}
+.dh-stat--dark .dh-ico{background:rgba(255,255,255,.14);color:var(--cream)}
+.dh-stat--dark .dh-lbl,.dh-stat--dark .dh-note{color:rgba(246,240,231,.85)}
+.dh-stat--dark .dh-go{color:var(--cream)}
+
+/* Susunan utama */
+.dh-main{display:grid;gap:20px;grid-template-columns:minmax(0,1fr)}
+.dh-act{order:1}.dh-trend{order:2}.dh-low{order:3}.dh-recent{order:4}
+@media(min-width:1024px){
+  .dh-main{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,.95fr);grid-template-areas:"trend act low" "recent recent recent";align-items:stretch}
+  .dh-trend{grid-area:trend}.dh-act{grid-area:act}.dh-low{grid-area:low}.dh-recent{grid-area:recent}
+}
+
+/* Tren penjualan */
+.dh-range{min-height:36px;padding:0 12px;border:1px solid var(--sand);border-radius:10px;background:var(--paper);font:400 13px var(--font-sans);color:var(--ink)}
+.dh-trend{display:flex;flex-direction:column}
+.dh-trend #dhTrend{flex:1;display:flex;flex-direction:column}
+.dh-chart{flex:1;min-height:220px;display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;column-gap:10px;row-gap:6px;margin-top:6px}
+.dh-y{position:relative;min-width:34px}
+.dh-y span{position:absolute;right:0;transform:translateY(50%);font-size:11px;color:rgba(43,33,28,.6);white-space:nowrap}
+.dh-plot{position:relative}
+.dh-line{position:absolute;left:0;right:0;border-top:1px solid rgba(235,224,211,.9)}
+.dh-bars{position:absolute;inset:0;display:flex;align-items:flex-end}
+.dh-slot{flex:1;height:100%;display:flex;align-items:flex-end;justify-content:center}
+.dh-bar{width:min(58%,30px);min-height:2px;border-radius:5px 5px 0 0;background:#C58F8C}
+.dh-slot:last-child .dh-bar{background:#6B2F32}
+.dh-x{grid-column:2;display:flex}
+.dh-x span{flex:1;text-align:center;font-size:11px;color:rgba(43,33,28,.6);white-space:nowrap;overflow:visible}
+
+/* Perlu tindakan */
+.dh-todo{display:grid;gap:12px}
+.dh-todo a{display:flex;align-items:center;gap:14px;min-height:64px;padding:12px 14px;border:1px solid var(--sand);border-radius:16px;background:var(--cream);color:var(--ink);text-decoration:none;transition:background .25s,transform .5s var(--ease)}
+.dh-todo a:hover{background:var(--sand);transform:translateY(-2px)}
+.dh-todo .dh-ico{width:44px;height:44px;grid-row:auto;flex:none}
+.dh-todo b{display:block;font-family:var(--font-serif);font-size:17px;font-weight:600}
+.dh-todo small{display:block;font-size:12px;color:rgba(43,33,28,.65)}
+.dh-todo .dh-chev{margin-left:auto;width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* Stok menipis */
+.dh-lowlist{list-style:none;margin:0;padding:0}
+.dh-lowlist li{display:flex;align-items:center;gap:14px;padding:12px 0;border-top:1px solid rgba(235,224,211,.8)}
+.dh-lowlist li:first-child{border-top:0;padding-top:2px}
+.dh-lowlist a{color:var(--ink);text-decoration:none;font-family:var(--font-serif);font-size:18px;font-weight:600;line-height:1.2}
+.dh-lowlist a:hover{text-decoration:underline;text-underline-offset:4px}
+.dh-lowlist small{display:block;margin-top:2px;font:400 13px var(--font-sans);color:rgba(43,33,28,.65)}
+.dh-lowlist .dh-pill{margin-left:auto}
+.dh-pill{display:inline-block;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:500;white-space:nowrap}
+.dh-pill--out{background:#FAEDED;color:var(--error)}.dh-pill--low{background:#FDF3E3;color:var(--warning)}
+.dh-th{display:block;width:44px;height:56px;border-radius:10px;border:1px solid var(--sand);object-fit:cover;background:linear-gradient(135deg,#E8DCCD,#D8C6B5);flex:none}
+.dh-th--sm{width:34px;height:42px;border-radius:8px}
+
+/* Pesanan terbaru */
+.dh-recent .ad-table-wrap{overflow-x:visible}
+.dh-recent .ad-table td:nth-child(4){min-width:11rem}
+.dh-recent .ad-table th{font-size:11px;letter-spacing:.06em}
+.dh-recent .ad-table td{padding:12px}
+.dh-no{display:flex;align-items:center;gap:12px;font-family:ui-monospace,Consolas,monospace;font-size:13px;white-space:nowrap}
+.dh-sub2{display:block;margin-top:2px;font-size:12px;color:rgba(43,33,28,.6)}
+.dh-recent .ad-cards li{background:var(--paper)}
+.dh-empty{padding:28px 8px;text-align:center;font-size:14px;color:rgba(43,33,28,.7)}
+/* Responsif HP (< 768px) */
+@media(max-width:767px){
+  .dh-card{padding:16px;border-radius:18px}
+  .dh-head{flex-wrap:wrap;gap:4px 12px;margin-bottom:12px}
+  .dh-head h2{font-size:22px}
+  .dh-head a{font-size:14px}
+  .dh-hero{padding:56px 18px 20px;min-height:0}
+  .dh-hero .ad-sub{font-size:15px}
+  .dh-hero .dh-sprig{width:130px;height:104px;opacity:.4}
+  .dh-stats{gap:12px}
+  .dh-stat{min-height:0;padding:16px;grid-template-columns:46px minmax(0,1fr)}
+  .dh-ico{width:46px;height:46px}
+  .dh-val{font-size:38px}
+  .dh-go{margin-top:12px}
+  .dh-chart{min-height:200px}
+  .dh-y{min-width:30px}
+  .dh-bar{width:min(60%,22px)}
+  .dh-x span{font-size:10px}
+  .dh-lowlist a{font-size:17px}
+  /* Pesanan terbaru: daftar rata tanpa kotak di dalam kotak */
+  .dh-recent .ad-cards{gap:0}
+  .dh-recent .ad-cards li{border:0;border-top:1px solid var(--sand);border-radius:0;background:transparent;padding:14px 0}
+  .dh-recent .ad-cards li:first-child{border-top:0;padding-top:2px}
+  .dh-recent .ad-card-top{flex-wrap:wrap;align-items:center;gap:8px 10px}
+  .dh-recent .ad-card-top .badge{margin-left:auto}
+  .dh-recent .ad-email{font-size:15px;font-weight:600;color:var(--ink)}
+  .dh-recent .ad-meta{font-size:13px;margin-top:4px}
+  .dh-recent .ad-card-actions{margin-top:10px}
+  .dh-recent .ad-card-actions .btn{width:100%}
+}
+</style>
+
+<header class="ad-page-head dh-hero">
+  <div>
+    <h1 class="ad-h1"><span id="dhHello">Selamat datang</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c.6 4.6 2.4 6.4 7 7-4.6.6-6.4 2.4-7 7-.6-4.600-2.400-6.400-7-7 4.600-.6 6.400-2.400 7-7z"/></svg></h1>
+    <p class="ad-sub" id="dhSub">Berikut ringkasan toko kamu hari ini. Yuk, pastikan semua pesanan dan stok produk tetap terjaga!</p>
+  </div>
+  <svg class="dh-sprig" viewBox="0 0 190 150" fill="none" stroke="#9C6B66" stroke-width="1.2" stroke-linecap="round" aria-hidden="true">
+    <path d="M186 140C150 110 120 80 96 12M96 12c-8 14-6 26 4 34M118 50c14-4 22 2 26 12M138 80c12-6 22-2 28 8M150 100c10-4 18 0 24 8M104 30c-12 0-18 8-18 18"/>
+    <circle cx="96" cy="12" r="3"/><circle cx="144" cy="62" r="3"/><circle cx="166" cy="88" r="3"/><circle cx="174" cy="108" r="3"/>
+  </svg>
+</header>
+
+<section class="dh-stats" aria-label="Ringkasan">
+  <div class="dh-stat dh-stat--dark" id="dhOmzet"><div class="ad-skel" style="grid-column:1/-1;height:96px;margin:0"></div></div>
+  <div class="dh-stat" id="dhIn"><div class="ad-skel" style="grid-column:1/-1;height:96px;margin:0"></div></div>
+  <div class="dh-stat" id="dhOut"><div class="ad-skel" style="grid-column:1/-1;height:96px;margin:0"></div></div>
+</section>
+
+<div class="dh-main">
+  <section class="dh-card dh-trend" aria-label="Tren penjualan">
+    <div class="dh-head"><h2>Tren penjualan</h2>
+      <select class="dh-range" id="dhRange" aria-label="Rentang tren"><option value="7">7 hari</option><option value="30">30 hari</option></select></div>
+    <p class="dh-subline" id="dhTrendSub">Omzet 7 hari terakhir</p>
+    <div id="dhTrend" aria-live="polite"><div class="ad-skel" style="height:200px"></div></div>
+  </section>
+
+  <section class="dh-card dh-act" aria-label="Perlu tindakan">
+    <div class="dh-head"><h2>Perlu tindakan <span class="dh-count" id="dhActCount" hidden>0</span></h2><a href="#/pesanan" data-filter="perlu">Lihat semua</a></div>
+    <div id="dhAct" aria-live="polite"><div class="ad-skel"></div><div class="ad-skel"></div></div>
+  </section>
+
+  <section class="dh-card dh-low" aria-label="Stok menipis">
+    <div class="dh-head"><h2>Stok menipis</h2><a href="#/produk">Kelola stok</a></div>
+    <div id="dhLow" aria-live="polite"><div class="ad-skel"></div><div class="ad-skel"></div><div class="ad-skel"></div></div>
+  </section>
+
+  <section class="dh-card dh-recent" aria-label="Pesanan terbaru">
+    <div class="dh-head"><h2>Pesanan terbaru</h2><a href="#/pesanan">Lihat semua pesanan</a></div>
+    <div id="dhRecent" aria-live="polite"><div class="ad-skel"></div><div class="ad-skel"></div><div class="ad-skel"></div></div>
+  </section>
+</div>

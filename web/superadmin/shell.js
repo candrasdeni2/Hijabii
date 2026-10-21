@@ -5,7 +5,7 @@ import { ROUTES } from "../assets/js/routes.js";
 import { toast } from "../assets/js/ui.js";
 
 const BASE = new URL("./", import.meta.url);
-const PAGES = { dashboard: "Dashboard", admin: "Kelola Admin", user: "Kelola User", log: "Log Aktivitas" };
+const PAGES = { dashboard: "Dashboard", admin: "Kelola Admin", user: "Kelola User", laporan: "Laporan", log: "Log Aktivitas" };
 const DEFAULT_PAGE = "dashboard";
 
 const $ = (id) => document.getElementById(id);
