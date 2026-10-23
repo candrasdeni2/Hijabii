@@ -1,7 +1,488 @@
 <!doctype html>
-<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hijabii by Intan</title></head>
-<body style="font-family:system-ui;padding:2rem">
-<!-- PLACEHOLDER. Landing asli (index.html) belum ada di HIJABII.zip: taruh di sini; disambungkan ke data di Fase 5. -->
-<h1>Hijabii by Intan</h1><p>Landing page menyusul. Halaman uji fondasi: <a href="/_dev/foundation.html">/_dev/foundation.html</a></p>
-</body></html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hijabii — Pretty with hijab, pretty with Hijabii</title>
+<meta name="description" content="Hijab nyaman, berkualitas, dan terjangkau: pasmina tancel, viscose bamboo, viscose printed, bergo instan, dan ciput rayon.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js')</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config={theme:{extend:{colors:{cream:'#F6F0E7',paper:'#FBF8F3',sand:'#EBE0D3',mocha:'#A98B7C',marsala:'#7B4A4A',olive:'#6B6A47',ink:'#2B211C'},fontFamily:{serif:['"Cormorant Garamond"','Georgia','serif'],sans:['Jost','system-ui','sans-serif']}}}}
+</script>
+<style>
+:root{--ease:cubic-bezier(.22,1,.36,1)}
+html{scroll-behavior:smooth;scroll-padding-top:4rem}
+body{overflow-x:hidden}
+:focus-visible{outline:2px solid #7B4A4A;outline-offset:3px}
+
+/* Placeholder foto: tampil sampai file gambar ditemukan di assets/img/ */
+.ph{overflow:hidden;border-radius:1rem;background:linear-gradient(135deg,#E8DCCD,#D8C6B5)}
+.ph.slide{border-radius:0}
+.ph:not(.has-img)::after{content:attr(data-img);position:absolute;inset:0;display:grid;place-items:center;padding:.75rem;text-align:center;font:500 .75rem/1.3 Jost,sans-serif;letter-spacing:.04em;color:#7a6455;word-break:break-all}
+.ph img{animation:fade 1s ease both;transition:transform 1.1s var(--ease);will-change:transform}
+.group:hover .ph img{transform:scale(1.06)}
+
+/* Tombol bulat + hover halus */
+a.rounded-full,button.rounded-full{transition:transform .5s var(--ease),background-color .35s ease,color .35s ease,box-shadow .35s ease}
+a.rounded-full:hover,button.rounded-full:hover{transform:translateY(-2px)}
+
+/* Navbar */
+#nav.s{background:rgba(246,240,231,.9);backdrop-filter:blur(12px);box-shadow:0 1px 0 rgba(43,33,28,.08)}
+#nav.open{background:rgba(246,240,231,.97);backdrop-filter:blur(12px);border-radius:0 0 1.5rem 1.5rem}
+#menu{grid-template-rows:0fr;visibility:hidden;transition:grid-template-rows .55s var(--ease),visibility 0s .55s}
+#nav.open #menu{grid-template-rows:1fr;visibility:visible;transition-delay:0s}
+#menuIn a:not([data-wa]){font-family:"Cormorant Garamond",Georgia,serif;font-size:1.4rem;padding:.8rem 0;border-bottom:1px solid rgba(43,33,28,.1)}
+.b1,.b2,.b3{transform-box:fill-box;transform-origin:center;transition:transform .5s var(--ease),opacity .25s}
+#nav.open .b1{transform:translateY(5px) rotate(45deg)}
+#nav.open .b2{opacity:0}
+#nav.open .b3{transform:translateY(-5px) rotate(-45deg)}
+
+/* Hero: crossfade lambat + zoom pelan yang tidak "loncat" */
+.slide{opacity:0;transition:opacity 1.6s ease-in-out}
+.slide.on{opacity:1}
+.slide img{transform:scale(1.07);transition:transform 9s cubic-bezier(.2,.6,.3,1)}
+.slide.on img{transform:scale(1)}
+#heroBg{will-change:transform}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes rise{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:none}}
+.rise{animation:rise 1.3s var(--ease) both;animation-delay:var(--d,0s)}
+
+/* Reveal saat scroll */
+.js .reveal{opacity:0;transform:translateY(44px);transition:opacity 1.1s var(--ease),transform 1.3s var(--ease)}
+.js .reveal.in{opacity:1;transform:none}
+
+/* Lookbook (desktop: panel melebar saat hover/klik) */
+@media(min-width:768px){
+  .lb{flex:1;transition:flex .9s var(--ease)}
+  .lb:hover,.lb.on{flex:2.6}
+}
+
+/* FAQ */
+details summary{cursor:pointer;list-style:none}
+details summary::-webkit-details-marker{display:none}
+details[open] summary b{transform:rotate(45deg)}
+summary b{transition:transform .4s var(--ease)}
+
+.nosb{scrollbar-width:none}
+.nosb::-webkit-scrollbar{display:none}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .js .reveal{opacity:1;transform:none}
+}
+
+/* CTA: gradasi vertikal di mobile, horizontal di desktop */
+.cta-fade{background:linear-gradient(180deg,rgba(43,33,28,.2) 0%,rgba(43,33,28,.55) 38%,#2B211C 72%)}
+@media(min-width:768px){.cta-fade{background:linear-gradient(90deg,#2B211C 44%,rgba(43,33,28,.85) 54%,rgba(43,33,28,0) 80%)}}
+</style>
+</head>
+<body class="bg-cream text-ink font-sans antialiased">
+
+<header id="nav" class="fixed inset-x-0 top-0 z-40 transition-all duration-500">
+  <div class="mx-auto max-w-6xl px-5 h-16 flex items-center justify-between">
+    <a href="#" class="font-serif text-3xl tracking-wide">Hijabii</a>
+    <nav id="links" class="hidden md:flex gap-8 text-base">
+      <a href="#tentang">Tentang</a><a href="#koleksi">Koleksi</a><a href="#warna">Warna</a><a href="#lookbook">Lookbook</a><a href="#faq">FAQ</a>
+    </nav>
+    <button id="burger" class="md:hidden -mr-2 grid h-12 w-12 place-items-center rounded-full" aria-label="Menu" aria-expanded="false"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path class="b1" d="M4 7h16"/><path class="b2" d="M4 12h16"/><path class="b3" d="M4 17h16"/></svg></button>
+  </div>
+  <nav id="menu" class="md:hidden grid"><div class="overflow-hidden"><div id="menuIn" class="flex flex-col px-5 pb-6"></div></div></nav>
+</header>
+
+<main>
+<!-- HERO -->
+<section class="relative min-h-[100svh] flex items-end md:items-center overflow-hidden">
+  <div id="heroBg" class="absolute inset-x-0 -top-[12%] h-[112%]">
+    <div class="slide ph absolute inset-0" data-img="hero-01" data-pos="72% center"></div>
+    <div class="slide ph absolute inset-0" data-img="hero-02" data-pos="68% center"></div>
+    <div class="slide ph absolute inset-0" data-img="hero-03" data-pos="75% center"></div>
+  </div>
+  <div class="absolute inset-0 bg-gradient-to-t from-cream via-cream/55 to-transparent md:bg-gradient-to-r md:from-cream md:via-cream/70 md:to-transparent md:w-[68%]"></div>
+  <div class="relative z-10 mx-auto w-full max-w-6xl px-5 pt-28 pb-14">
+    <h1 class="rise font-serif text-6xl sm:text-7xl md:text-8xl lg:text-9xl leading-none">Hijabii</h1>
+    <p class="rise font-serif text-xl sm:text-2xl md:text-4xl mt-3 max-w-md" style="--d:.15s">Pretty with hijab, pretty with Hijabii.</p>
+    <p class="rise mt-5 max-w-sm text-ink/75" style="--d:.3s">Hijab nyaman, berkualitas, dan terjangkau untuk setiap langkahmu.</p>
+    <div class="rise mt-8 flex flex-wrap gap-3" style="--d:.45s">
+      <a href="#warna" class="bg-ink text-cream px-7 py-3.5 rounded-full text-sm hover:bg-marsala transition-colors">Find Your Color</a>
+      <a href="#koleksi" class="border border-ink px-7 py-3.5 rounded-full text-sm hover:bg-ink hover:text-cream transition-colors">Lihat Koleksi</a>
+    </div>
+    <div id="dots" class="mt-10 flex gap-2"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="tentang" class="py-16 md:py-24">
+  <div class="mx-auto max-w-6xl px-5 grid md:grid-cols-2 gap-14 items-center">
+    <div class="reveal">
+      <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl leading-tight">Hijabku, identitasku.</h2>
+      <p class="mt-6 text-ink/75 leading-relaxed max-w-lg">Hijabii lahir dari keresahan sederhana: sulit menemukan hijab yang nyaman dan berkualitas dengan harga terjangkau. Dari beberapa pasmina, kami tumbuh bersama kepercayaan customer hingga punya pilihan bahan, warna, dan model.</p>
+      <p class="mt-4 text-ink/75 leading-relaxed max-w-lg">Nama Hijabii berasal dari “hijab” dan “lii” yang berarti “milikku”. Bagi kami, hijab adalah bagian dari identitas seorang Muslimah.</p>
+    </div>
+    <div class="reveal grid grid-cols-2 gap-4">
+      <div class="ph relative aspect-[4/5]" data-img="about-model"></div>
+      <div class="ph relative aspect-square mt-14" data-img="about-bahan"></div>
+    </div>
+  </div>
+</section>
+
+<!-- KOLEKSI -->
+<section id="koleksi" class="py-16 md:py-24 bg-paper">
+  <div class="mx-auto max-w-6xl px-5">
+    <h2 class="reveal font-serif text-4xl sm:text-5xl md:text-6xl">Koleksi Hijabii</h2>
+    <p class="reveal mt-3 text-ink/70">Klik produk untuk lihat detail dan pesan lewat WhatsApp.</p>
+    <div id="products" class="mt-12 grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 sm:gap-x-5 sm:gap-y-10"></div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="py-16 md:py-24 bg-sand">
+  <div class="mx-auto max-w-6xl px-5">
+    <h2 class="reveal font-serif text-4xl sm:text-5xl md:text-6xl max-w-xl">Nyaman, terjangkau, tetap bergaya.</h2>
+    <div class="mt-12 grid md:grid-cols-3 gap-10">
+      <div class="reveal"><h3 class="font-serif text-3xl">Bahan nyaman</h3><p class="mt-2 text-ink/75">Adem dipakai seharian, jatuhnya flowly dan mudah dibentuk.</p></div>
+      <div class="reveal"><h3 class="font-serif text-3xl">Harga terjangkau</h3><p class="mt-2 text-ink/75">Bahan berkualitas mulai dari Rp 15.000.</p></div>
+      <div class="reveal"><h3 class="font-serif text-3xl">Mengikuti tren</h3><p class="mt-2 text-ink/75">Warna, bahan, dan model yang sesuai gaya Muslimah masa kini.</p></div>
+    </div>
+    <div class="mt-16 pt-10 border-t border-ink/15 grid grid-cols-3 gap-6 text-center">
+      <div><p class="font-serif text-3xl sm:text-5xl" data-count="1878">0</p><p class="text-sm text-ink/70 mt-1">produk terjual</p></div>
+      <div><p class="font-serif text-3xl sm:text-5xl" data-count="5">0</p><p class="text-sm text-ink/70 mt-1">jenis produk</p></div>
+      <div><p class="font-serif text-3xl sm:text-5xl">2025</p><p class="text-sm text-ink/70 mt-1">mulai berdiri</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WARNA -->
+<section id="warna" class="py-16 md:py-24">
+  <div class="mx-auto max-w-6xl px-5 grid md:grid-cols-2 gap-14 items-center">
+    <div class="reveal">
+      <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl">Find your color.</h2>
+      <p class="mt-4 text-ink/70 max-w-md">Pilih warna favoritmu, lihat tampilannya, lalu pesan lewat WhatsApp.</p>
+      <div id="swatches" class="mt-8 flex flex-wrap gap-4"></div>
+      <p id="cname" class="mt-6 font-serif text-3xl"></p>
+      <a id="cbtn" target="_blank" rel="noopener" class="mt-4 inline-block bg-ink text-cream px-7 py-3.5 rounded-full text-sm hover:bg-marsala transition-colors">Pesan warna ini</a>
+    </div>
+    <div id="cimg" class="ph relative aspect-[4/3] m-3 transition-shadow duration-500"></div>
+  </div>
+</section>
+
+<!-- LOOKBOOK -->
+<section id="lookbook" class="py-16 md:py-24 bg-sand">
+  <div class="mx-auto max-w-6xl px-5">
+    <h2 class="reveal font-serif text-4xl sm:text-5xl md:text-6xl">One hijab. Different stories.</h2>
+    <div id="lb" class="mt-12 grid grid-cols-2 gap-3 md:flex md:h-[500px]"></div>
+  </div>
+</section>
+
+<!-- TESTIMONI -->
+<section class="py-16 md:py-24">
+  <div class="mx-auto max-w-6xl px-5">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <h2 class="reveal font-serif text-4xl sm:text-5xl md:text-6xl">Dicintai pemakainya.</h2>
+      <div class="flex gap-2"><button id="prev" class="h-11 w-11 rounded-full border border-ink hover:bg-ink hover:text-cream transition-colors" aria-label="Sebelumnya">←</button><button id="next" class="h-11 w-11 rounded-full border border-ink hover:bg-ink hover:text-cream transition-colors" aria-label="Berikutnya">→</button></div>
+    </div>
+    <div id="testi" class="nosb mt-10 flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth"></div>
+    <p class="mt-4 text-xs text-ink/50">Testimoni di atas masih contoh (dummy), ganti dengan ulasan asli sebelum website online.</p>
+  </div>
+</section>
+
+<!-- KOMUNITAS -->
+<section class="py-16 md:py-24 bg-paper">
+  <div class="mx-auto max-w-6xl px-5">
+    <div class="reveal flex flex-wrap items-end justify-between gap-4">
+      <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl">Join our story.</h2>
+      <a data-ig target="_blank" rel="noopener" class="underline underline-offset-4">Follow @Hijabii_official</a>
+    </div>
+    <div id="community" class="mt-10 grid grid-cols-3 md:grid-cols-5 gap-2 sm:gap-3"></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="py-16 md:py-24">
+  <div class="mx-auto max-w-3xl px-5">
+    <h2 class="reveal font-serif text-4xl sm:text-5xl md:text-6xl">Pertanyaan umum</h2>
+    <div id="faqlist" class="mt-10 border-t border-ink/15"></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="px-4 md:px-8 pb-16 md:pb-20">
+  <div class="reveal relative isolate overflow-hidden rounded-[2rem] bg-ink text-cream">
+    <div class="ph absolute inset-0 -z-10" data-img="cta-banner" data-cls="absolute inset-0 h-full w-full object-cover" data-pos="100% 28%"></div>
+    <div class="cta-fade absolute inset-0 -z-10"></div>
+    <div class="relative px-7 pt-56 pb-12 sm:pt-64 md:px-16 md:py-32 md:w-3/5">
+      <h2 class="font-serif text-4xl sm:text-5xl md:text-7xl leading-tight">Be you.<br>Be Hijabii.</h2>
+      <p class="mt-5 text-cream/75 max-w-sm">Temukan warna dan model yang paling kamu banget.</p>
+      <a data-wa class="mt-8 inline-block rounded-full bg-cream text-ink px-8 py-3.5 text-sm hover:bg-sand">Find Your Color</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="py-14 bg-paper text-sm">
+  <div class="mx-auto max-w-6xl px-5 grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+    <div><p class="font-serif text-3xl">Hijabii</p><p class="mt-2 text-ink/70">Hijabii by Intan<br>Pretty with hijab, pretty with Hijabii.</p></div>
+    <div><p class="font-medium mb-2">Kontak</p><p class="text-ink/70">hijabiibyintan@gmail.com<br>WhatsApp 0858-9205-2182<br>Kp. Pasir Bedil, Desa Cempaka, Kec. Warunggunung, Lebak, Banten</p></div>
+    <div><p class="font-medium mb-2">Pembayaran &amp; pengiriman</p><p class="text-ink/70">Dana, transfer BSI<br>Kantor Pos, J&amp;T, JNE</p></div>
+    <div><p class="font-medium mb-3">Ikuti kami</p><div class="flex flex-col gap-3"><a data-ig target="_blank" rel="noopener" class="group flex items-center gap-3 hover:text-marsala transition-colors"><span class="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-ink/20 transition-colors group-hover:border-ink group-hover:bg-ink group-hover:text-cream"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></span><span class="leading-tight"><span class="block text-ink">Instagram</span><span class="text-xs text-ink/60">@Hijabii_official</span></span></a><a data-tt target="_blank" rel="noopener" class="group flex items-center gap-3 hover:text-marsala transition-colors"><span class="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-ink/20 transition-colors group-hover:border-ink group-hover:bg-ink group-hover:text-cream"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></span><span class="leading-tight"><span class="block text-ink">TikTok</span><span class="text-xs text-ink/60">@Hijabi_official</span></span></a></div></div>
+  </div>
+  <p class="mt-12 text-center text-xs text-ink/50">© Hijabii by Intan. All rights reserved.</p>
+</footer>
+
+<a data-wa class="fixed bottom-5 right-5 z-30 bg-ink text-cream text-sm px-5 py-3 rounded-full shadow-lg hover:bg-marsala transition-colors">Chat WhatsApp</a>
+
+<!-- MODAL PRODUK -->
+<div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-ink/60">
+  <div class="relative rounded-3xl bg-cream w-full max-w-3xl max-h-[90vh] overflow-auto grid md:grid-cols-2">
+    <button id="mx" class="absolute right-3 top-3 z-10 grid h-10 w-10 place-items-center rounded-full bg-cream/85 text-2xl" aria-label="Tutup">×</button>
+    <div id="mimg" class="ph relative aspect-[4/3] md:aspect-auto md:min-h-[440px]"></div>
+    <div class="p-5 sm:p-7">
+      <h3 id="mname" class="font-serif text-4xl"></h3>
+      <p id="mprice" class="mt-1 text-lg"></p>
+      <dl id="minfo" class="mt-5 text-sm space-y-1"></dl>
+      <ul id="mpts" class="mt-4 text-sm text-ink/75 list-disc pl-5 space-y-1"></ul>
+      <p class="mt-5 text-sm font-medium">Pilih warna</p>
+      <div id="mcol" class="mt-2 flex gap-3"></div>
+      <a id="mbtn" target="_blank" rel="noopener" class="mt-6 block text-center rounded-full bg-ink text-cream py-3.5 text-sm hover:bg-marsala transition-colors">Pesan via WhatsApp</a>
+      <p class="mt-3 text-xs text-ink/55">Warna pada foto bisa sedikit berbeda karena pencahayaan.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Semua data website ada di sini. Edit lalu refresh browser. */
+const CONFIG = {
+  wa: '6285892052182',                                  // nomor WhatsApp (format 62...)
+  ig: 'https://instagram.com/Hijabii_official',
+  tiktok: 'https://www.tiktok.com/@Hijabi_official',    // ejaan sesuai form, cek lagi
+
+  // Warna: nama file foto = warna-<nama huruf kecil>, contoh warna-cream.png
+  colors: [
+    { n: 'Cream',   h: '#EADBC8' },
+    { n: 'Mocha',   h: '#A98B7C' },
+    { n: 'Marsala', h: '#7B4A4A' },
+    { n: 'Olive',   h: '#6B6A47' },
+    { n: 'Black',   h: '#1F1B19' }
+  ],
+
+  // Foto produk: <id>-utama (contoh pasmina-tancel-utama.png)
+  products: [
+    { id: 'pasmina-tancel',  name: 'Pasmina Tancel',  price: 42000, tag: 'Best seller', bahan: 'Tancel',       size: '170 × 80 cm', pts: ['Bahan adem', 'Flowly, mudah dibentuk'] },
+    { id: 'viscose-printed', name: 'Viscose Printed', price: 62000, tag: 'Motif',       bahan: 'Viscose',      size: '170 × 80 cm', pts: ['Motif stylish', 'Flowly, mudah dibentuk'] },
+    { id: 'viscose-bamboo',  name: 'Viscose Bamboo',  price: 56000, tag: 'Best seller', bahan: 'Serat bamboo', size: '170 × 80 cm', pts: ['Flowly, mudah dibentuk', 'Warna beragam'] },
+    { id: 'bergo-instan',    name: 'Bergo Instan',    price: 35000,                     bahan: 'Jersey',       size: 'M dan L',     pts: ['Mudah digunakan', 'Bahan adem'] },
+    { id: 'ciput-rayon',     name: 'Ciput Rayon',     price: 15000,                     bahan: 'Rayon',        size: '',            pts: ['Bahan adem', 'Anti geser', 'Tali bisa disesuaikan'] }
+  ],
+
+  // Foto: lookbook-<key>.png
+  lookbook: [
+    { key: 'campus', n: 'Campus' }, { key: 'office', n: 'Office' },
+    { key: 'casual', n: 'Casual' }, { key: 'occasion', n: 'Occasion' }
+  ],
+
+  // Foto: komunitas-01 sampai komunitas-05
+  communityCount: 5,
+
+  // TESTIMONI DUMMY, ganti dengan ulasan asli
+  testimonials: [
+    { t: 'Bahannya adem banget dan jatuhnya cantik. Cocok dipakai ke kampus seharian.', n: 'Aulia', c: 'Jakarta' },
+    { t: 'Suka banget sama viscose bamboo-nya, gampang dibentuk dan nggak bikin gerah.', n: 'Salsa', c: 'Bandung' },
+    { t: 'Pengirimannya cepat dan packing-nya rapi. Pasti order lagi!', n: 'Rani', c: 'Surabaya' }
+  ],
+
+  faq: [
+    { q: 'Bagaimana cara order?', a: 'Pilih produk dan warna, klik “Pesan via WhatsApp”, lalu kami konfirmasi stok dan total pembayaran. Setelah pembayaran lewat Dana atau transfer BSI diterima, pesanan langsung diproses.' },
+    { q: 'Bagaimana pengiriman ke luar kota?', a: 'Pesanan dikirim dari Lebak, Banten, lewat Kantor Pos, J&T, atau JNE. Estimasi tiba tergantung kota tujuan.' },
+    { q: 'Apa ukuran produknya?', a: 'Pasmina berukuran 170 × 80 cm. Bergo tersedia ukuran M dan L. Warna di foto bisa sedikit berbeda karena pencahayaan.' },
+    { q: 'Bagaimana kebijakan retur dan penukaran?', a: 'Retur dan penukaran hanya untuk produk rusak (sobek), cacat, atau salah kirim. Sertakan video unboxing dan ajukan maksimal 2×24 jam setelah barang diterima. Produk yang sudah dibeli tidak dapat dikembalikan.' },
+    { q: 'Bagaimana cara merawat hijab?', a: 'Jangan menyikat atau memeras terlalu keras, hindari jarum pentul untuk hijab viscose, hindari panas berlebih saat menjemur dan menyetrika, dan simpan di tempat bersih dan kering.' }
+  ]
+};
+
+const C = CONFIG, $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const rp = n => 'Rp ' + n.toLocaleString('id-ID');
+const wa = m => `https://wa.me/${C.wa}?text=${encodeURIComponent(m)}`;
+
+/* ---------- Foto: cari assets/img/<nama>.(png|jpg|jpeg|webp), kalau belum ada tampil placeholder ---------- */
+const exts = ['png', 'jpg', 'jpeg', 'webp'];
+function loadImg(el) {
+  const n = el.dataset.img, img = new Image();
+  let i = 0;
+  el.classList.remove('has-img');
+  el.querySelector(':scope > img')?.remove();
+  img.alt = el.dataset.alt || n;
+  img.className = el.dataset.cls || 'absolute inset-0 w-full h-full object-cover';
+  img.style.objectPosition = el.dataset.pos || 'center';
+  const next = () => { if (i < exts.length) img.src = `assets/img/${n}.${exts[i++]}`; };
+  img.onload = () => { if (el.dataset.img !== n) return; el.prepend(img); el.classList.add('has-img'); };
+  img.onerror = next;
+  next();
+}
+
+/* ---------- Render konten dari config ---------- */
+$('#products').innerHTML = C.products.map((p, i) => `
+  <button class="group text-left reveal" style="transition-delay:${(i % 3) * 80}ms" data-i="${i}">
+    <div class="ph relative aspect-[4/5]" data-img="${p.id}-utama">
+      ${p.tag ? `<span class="absolute left-3 top-3 z-10 rounded-full bg-cream px-3 py-1 text-xs">${p.tag}</span>` : ''}
+    </div>
+    <p class="mt-3 font-serif text-xl sm:text-2xl">${p.name}</p>
+    <p class="text-sm text-ink/70">${rp(p.price)}</p>
+    <div class="mt-2 flex gap-1.5">${C.colors.map(c => `<i class="h-3 w-3 rounded-full" style="background:${c.h}"></i>`).join('')}</div>
+  </button>`).join('');
+
+$('#lb').innerHTML = C.lookbook.map(l => `
+  <div class="lb ph relative aspect-[3/4] md:aspect-auto reveal cursor-pointer" data-img="lookbook-${l.key}">
+    <span class="absolute bottom-3 left-3 z-10 rounded-full bg-cream px-4 py-1.5 text-sm">${l.n}</span>
+  </div>`).join('');
+
+$('#testi').innerHTML = C.testimonials.map(t => `
+  <figure class="snap-start shrink-0 w-[85%] md:w-[360px] rounded-2xl bg-paper p-7">
+    <p class="text-sm tracking-widest" aria-label="5 bintang">★★★★★</p>
+    <blockquote class="mt-4 font-serif text-xl sm:text-2xl leading-snug">“${t.t}”</blockquote>
+    <figcaption class="mt-5 text-sm text-ink/60">${t.n}, ${t.c}</figcaption>
+  </figure>`).join('');
+
+$('#community').innerHTML = Array.from({ length: C.communityCount }, (_, i) =>
+  `<div class="ph relative aspect-square reveal" data-img="komunitas-0${i + 1}"></div>`).join('');
+
+$('#faqlist').innerHTML = C.faq.map(f => `
+  <details class="border-b border-ink/15 py-5">
+    <summary class="flex justify-between gap-4 font-serif text-xl sm:text-2xl">${f.q}<b class="font-sans font-light text-2xl">+</b></summary>
+    <p class="mt-3 text-ink/75 max-w-xl">${f.a}</p>
+  </details>`).join('');
+
+$('#swatches').innerHTML = C.colors.map((c, i) =>
+  `<button class="h-12 w-12 rounded-full ring-ink ring-offset-4 ring-offset-cream transition-all" style="background:${c.h}" data-c="${i}" aria-label="${c.n}"></button>`).join('');
+
+$('#menuIn').innerHTML = $('#links').innerHTML;
+
+/* ---------- Link WhatsApp / sosial ---------- */
+$$('[data-wa]').forEach(a => { a.href = wa('Halo Hijabii, saya mau order.'); a.target = '_blank'; a.rel = 'noopener'; });
+$$('[data-ig]').forEach(a => a.href = C.ig);
+$$('[data-tt]').forEach(a => a.href = C.tiktok);
+
+/* ---------- Hero: slideshow ---------- */
+const slides = $$('.slide'), dots = $('#dots');
+let si = 0, timer;
+dots.innerHTML = slides.map((_, i) => `<button class="h-1.5 w-8 bg-ink/25 transition-colors" data-d="${i}" aria-label="Foto ${i + 1}"></button>`).join('');
+function show(i) {
+  si = i;
+  slides.forEach((s, j) => s.classList.toggle('on', j === i));
+  [...dots.children].forEach((d, j) => d.classList.toggle('!bg-ink', j === i));
+}
+show(0);
+timer = setInterval(() => show((si + 1) % slides.length), 6000);
+dots.onclick = e => { if (e.target.dataset.d != null) { show(+e.target.dataset.d); clearInterval(timer); } };
+
+/* ---------- Navbar & menu mobile ---------- */
+const onScroll = () => $('#nav').classList.toggle('s', scrollY > 40);
+addEventListener('scroll', onScroll, { passive: true }); onScroll();
+$('#burger').onclick = () => $('#burger').setAttribute('aria-expanded', $('#nav').classList.toggle('open'));
+$('#menu').onclick = e => { if (e.target.closest('a')) { $('#nav').classList.remove('open'); $('#burger').setAttribute('aria-expanded', false); } };
+
+/* ---------- Find Your Color ---------- */
+function pickColor(i) {
+  const c = C.colors[i], box = $('#cimg');
+  $$('#swatches button').forEach((b, j) => b.classList.toggle('ring-2', j === i));
+  $('#cname').textContent = c.n;
+  box.dataset.img = 'warna-' + c.n.toLowerCase();
+  box.style.boxShadow = `0 0 0 10px ${c.h}`;
+  loadImg(box);
+  $('#cbtn').href = wa(`Halo Hijabii, saya tertarik dengan warna ${c.n}.`);
+}
+$('#swatches').onclick = e => { const b = e.target.closest('button'); if (b) pickColor(+b.dataset.c); };
+pickColor(0);
+
+/* ---------- Lookbook (tap di mobile / klik di desktop) ---------- */
+$('#lb').onclick = e => {
+  const p = e.target.closest('.lb'); if (!p) return;
+  const on = p.classList.contains('on');
+  $$('.lb').forEach(x => x.classList.remove('on'));
+  if (!on) p.classList.add('on');
+};
+
+/* ---------- Testimoni: tombol + auto geser ---------- */
+const tr = $('#testi'), step = () => tr.firstElementChild.offsetWidth + 20;
+const slide = d => {
+  const end = tr.scrollLeft + tr.clientWidth >= tr.scrollWidth - 4;
+  tr.scrollTo({ left: d > 0 && end ? 0 : tr.scrollLeft + d * step(), behavior: 'smooth' });
+};
+$('#prev').onclick = () => slide(-1);
+$('#next').onclick = () => slide(1);
+if (!matchMedia('(prefers-reduced-motion:reduce)').matches) {
+  let auto = setInterval(() => slide(1), 5000);
+  tr.onmouseenter = () => clearInterval(auto);
+  tr.onmouseleave = () => auto = setInterval(() => slide(1), 5000);
+}
+
+/* ---------- Modal produk ---------- */
+const modal = $('#modal');
+let cur = 0, mc = 0;
+function setModalColor(i) {
+  mc = i;
+  const p = C.products[cur], c = C.colors[i];
+  $$('#mcol button').forEach((b, j) => b.classList.toggle('ring-2', j === i));
+  $('#mbtn').href = wa(`Halo Hijabii, saya mau order ${p.name} warna ${c.n}.`);
+}
+function openModal(i) {
+  cur = i;
+  const p = C.products[i];
+  $('#mname').textContent = p.name;
+  $('#mprice').textContent = rp(p.price);
+  $('#minfo').innerHTML = `<div><dt class="inline text-ink/60">Bahan: </dt><dd class="inline">${p.bahan}</dd></div>` +
+    (p.size ? `<div><dt class="inline text-ink/60">Ukuran: </dt><dd class="inline">${p.size}</dd></div>` : '');
+  $('#mpts').innerHTML = p.pts.map(x => `<li>${x}</li>`).join('');
+  $('#mcol').innerHTML = C.colors.map((c, j) =>
+    `<button class="h-9 w-9 rounded-full ring-ink ring-offset-2 ring-offset-cream" style="background:${c.h}" data-c="${j}" aria-label="${c.n}"></button>`).join('');
+  $('#mimg').dataset.img = p.id + '-utama';
+  loadImg($('#mimg'));
+  setModalColor(0);
+  modal.classList.replace('hidden', 'flex');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() { modal.classList.replace('flex', 'hidden'); document.body.style.overflow = ''; }
+$('#products').onclick = e => { const b = e.target.closest('[data-i]'); if (b) openModal(+b.dataset.i); };
+$('#mcol').onclick = e => { const b = e.target.closest('button'); if (b) setModalColor(+b.dataset.c); };
+$('#mx').onclick = closeModal;
+modal.onclick = e => { if (e.target === modal) closeModal(); };
+addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* ---------- Muat semua foto, lalu animasi scroll & counter ---------- */
+$$('[data-img]').forEach(el => { if (!el.classList.contains('has-img')) loadImg(el); });
+
+function count(el) {
+  const to = +el.dataset.count, t0 = performance.now();
+  (function f(t) {
+    const k = Math.min((t - t0) / 1400, 1);
+    el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3))).toLocaleString('id-ID');
+    if (k < 1) requestAnimationFrame(f);
+  })(t0);
+}
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return;
+  const t = e.target; t.classList.add('in');
+  if (t.classList.contains('reveal')) setTimeout(() => { t.classList.remove('reveal'); t.style.transitionDelay = ''; }, 1600 + parseInt(t.style.transitionDelay || 0));
+  if (e.target.dataset.count) count(e.target);
+  io.unobserve(e.target);
+}), { threshold: .15 });
+$$('.reveal').forEach(el => {
+  const sibs = [...el.parentElement.children].filter(c => c.classList.contains('reveal'));
+  el.style.transitionDelay = sibs.indexOf(el) * 100 + 'ms';
+});
+$$('.reveal,[data-count]').forEach(el => io.observe(el));
+
+/* ---------- Parallax hero (halus, via rAF) ---------- */
+const hb = $('#heroBg');
+if (!matchMedia('(prefers-reduced-motion:reduce)').matches) {
+  let tick = false;
+  addEventListener('scroll', () => {
+    if (tick) return; tick = true;
+    requestAnimationFrame(() => { if (scrollY < innerHeight) hb.style.transform = `translate3d(0,${scrollY * .12}px,0)`; tick = false; });
+  }, { passive: true });
+}
+</script>
+</body>
+</html>

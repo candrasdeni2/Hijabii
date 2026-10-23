@@ -70,6 +70,10 @@
   }
   #submitBtn:hover{filter:brightness(1.12)}
 
+  .signup{text-align:center;font-size:14px;color:rgba(43,33,28,.75);margin:1.25rem 0 0}
+  .signup a{display:inline-block;padding:.5rem .25rem;color:var(--marsala);font-weight:500;text-decoration:underline;text-underline-offset:4px}
+  .signup a:hover{color:var(--ink)}
+
   .reason-banner{border-radius:12px;padding:.75rem 1rem;font-size:13px;margin-bottom:1rem;display:none}
   .reason-banner.show{display:block}
   .reason-banner[data-kind="error"]{background:#FDF0F0;color:var(--error);border:1px solid #F5C6C6}
@@ -150,6 +154,8 @@
         Masuk
       </button>
     </form>
+
+    <p class="signup">Belum punya akun? <a href="daftar.html">Daftar</a></p>
   </div>
 
 </div>
@@ -192,7 +198,9 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   await withLoading(btn, async () => {
     const { error } = await signIn(email, password);
     if (error) {
-      const msg = /invalid|credentials/i.test(error.message)
+      const msg = /email not confirmed/i.test(error.message)
+        ? 'Email belum diverifikasi. Cek kotak masuk (dan folder spam) untuk link verifikasi.'
+        : /invalid|credentials/i.test(error.message)
         ? 'Email atau password salah.'
         : /banned/i.test(error.message)
         ? 'Akun Anda telah dinonaktifkan. Hubungi admin.'
