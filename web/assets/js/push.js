@@ -124,14 +124,23 @@ const TEXT = {
   unconfigured: ["Belum dikonfigurasi", "Kunci VAPID belum diisi di config.js."],
 };
 
-export function mountPush({ supabase, container }) {
+// Teks untuk Customer (mountPush({ audience: "customer" })): isi pesan menyesuaikan kabar pesanan, bukan pesanan baru.
+const TEXT_C = {
+  ...TEXT,
+  on: ["Aktif di perangkat ini", "Kabar pesananmu (invoice direvisi, diproses, dikirim, dibatalkan) tetap sampai walau web ditutup."],
+  off: ["Belum aktif di perangkat ini", "Aktifkan agar kabar pesananmu tetap sampai walau web tidak dibuka."],
+  "needs-install": ["Pasang ke Layar Utama dulu", "Di iPhone/iPad, ketuk Bagikan lalu Tambah ke Layar Utama, buka web dari ikon itu, kemudian aktifkan di sini."],
+};
+
+export function mountPush({ supabase, container, audience = "admin" }) {
+  const TX = audience === "customer" ? TEXT_C : TEXT;
   if (!document.getElementById("pu-css")) {
     const s = document.createElement("style"); s.id = "pu-css"; s.textContent = CSS; document.head.append(s);
   }
   let state = "off", busy = false, alive = true;
 
   function paint() {
-    const [t, s] = TEXT[state] ?? TEXT.unsupported;
+    const [t, s] = TX[state] ?? TX.unsupported;
     const btns = state === "off" ? `<button type="button" class="pu-btn" data-act="on">Aktifkan notifikasi</button>`
       : state === "on" ? `<button type="button" class="pu-btn is-ghost" data-act="test">Kirim notifikasi uji</button>
           <button type="button" class="pu-btn is-ghost" data-act="off">Matikan</button>` : "";
@@ -168,7 +177,7 @@ export function mountPush({ supabase, container }) {
         await save(supabase, await subscribe(reg)); // izin sudah ada: tidak butuh gestur; memperbarui baris/endpoint yang berubah
         await refresh();
       } else if (state === "off" && firstHint()) {
-        toast("Aktifkan notifikasi push lewat ikon lonceng agar pesanan baru tetap sampai saat web ditutup.", "info", 7000);
+        toast(audience === "customer" ? "Aktifkan notifikasi lewat ikon lonceng agar kabar pesananmu tetap sampai saat web ditutup." : "Aktifkan notifikasi push lewat ikon lonceng agar pesanan baru tetap sampai saat web ditutup.", "info", 7000);
       }
     } catch (e) { console.error(e); }
   })();

@@ -86,7 +86,7 @@ summary b{transition:transform .4s var(--ease)}
   <div class="mx-auto max-w-6xl px-5 h-16 flex items-center justify-between">
     <a href="#" class="font-serif text-3xl tracking-wide">Hijabii</a>
     <nav id="links" class="hidden md:flex gap-8 text-base">
-      <a href="#tentang">Tentang</a><a href="#koleksi">Koleksi</a><a href="#warna">Warna</a><a href="#lookbook">Lookbook</a><a href="#faq">FAQ</a>
+      <a href="#tentang">Tentang</a><a href="#koleksi">Koleksi</a><a href="#warna">Warna</a><a href="#lookbook">Lookbook</a><a href="#faq">FAQ</a><a id="navLogin">Login</a>
     </nav>
     <button id="burger" class="md:hidden -mr-2 grid h-12 w-12 place-items-center rounded-full" aria-label="Menu" aria-expanded="false"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path class="b1" d="M4 7h16"/><path class="b2" d="M4 12h16"/><path class="b3" d="M4 17h16"/></svg></button>
   </div>
@@ -103,8 +103,8 @@ summary b{transition:transform .4s var(--ease)}
   </div>
   <div class="absolute inset-0 bg-gradient-to-t from-cream via-cream/55 to-transparent md:bg-gradient-to-r md:from-cream md:via-cream/70 md:to-transparent md:w-[68%]"></div>
   <div class="relative z-10 mx-auto w-full max-w-6xl px-5 pt-28 pb-14">
-    <h1 class="rise font-serif text-6xl sm:text-7xl md:text-8xl lg:text-9xl leading-none">Hijabii</h1>
-    <p class="rise font-serif text-xl sm:text-2xl md:text-4xl mt-3 max-w-md" style="--d:.15s">Pretty with hijab, pretty with Hijabii.</p>
+    <h1 class="rise font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-none">Hijabii</h1>
+    <p class="rise font-serif text-lg sm:text-xl md:text-3xl mt-3 max-w-md" style="--d:.15s">Pretty with hijab, pretty with Hijabii.</p>
     <p class="rise mt-5 max-w-sm text-ink/75" style="--d:.3s">Hijab nyaman, berkualitas, dan terjangkau untuk setiap langkahmu.</p>
     <div class="rise mt-8 flex flex-wrap gap-3" style="--d:.45s">
       <a href="#warna" class="bg-ink text-cream px-7 py-3.5 rounded-full text-sm hover:bg-marsala transition-colors">Find Your Color</a>
@@ -118,13 +118,13 @@ summary b{transition:transform .4s var(--ease)}
 <section id="tentang" class="py-16 md:py-24">
   <div class="mx-auto max-w-6xl px-5 grid md:grid-cols-2 gap-14 items-center">
     <div class="reveal">
-      <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl leading-tight">Hijabku, identitasku.</h2>
+      <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl leading-tight">Hijabku, identitasku.</h2>
       <p class="mt-6 text-ink/75 leading-relaxed max-w-lg">Hijabii lahir dari keresahan sederhana: sulit menemukan hijab yang nyaman dan berkualitas dengan harga terjangkau. Dari beberapa pasmina, kami tumbuh bersama kepercayaan customer hingga punya pilihan bahan, warna, dan model.</p>
       <p class="mt-4 text-ink/75 leading-relaxed max-w-lg">Nama Hijabii berasal dari “hijab” dan “lii” yang berarti “milikku”. Bagi kami, hijab adalah bagian dari identitas seorang Muslimah.</p>
     </div>
     <div class="reveal grid grid-cols-2 gap-4">
       <div class="ph relative aspect-[4/5]" data-img="about-model"></div>
-      <div class="ph relative aspect-square mt-14" data-img="about-bahan"></div>
+      <div class="ph relative aspect-[4/5]" data-img="about-bahan"></div>
     </div>
   </div>
 </section>
@@ -132,25 +132,30 @@ summary b{transition:transform .4s var(--ease)}
 <!-- KOLEKSI -->
 <section id="koleksi" class="py-16 md:py-24 bg-paper">
   <div class="mx-auto max-w-6xl px-5">
-    <h2 class="reveal font-serif text-4xl sm:text-5xl md:text-6xl">Koleksi Hijabii</h2>
-    <p class="reveal mt-3 text-ink/70">Klik produk untuk lihat detail dan pesan lewat WhatsApp.</p>
-    <div id="products" class="mt-12 grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 sm:gap-x-5 sm:gap-y-10"></div>
+    <div class="flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
+      <div>
+        <h2 class="reveal font-serif text-3xl sm:text-4xl md:text-5xl">Koleksi Hijabii</h2>
+        <p class="reveal mt-3 text-ink/70">Klik produk untuk lihat detail, warna, dan ukuran.</p>
+      </div>
+      <a id="allShop" class="reveal underline underline-offset-4 py-2">Lihat semua</a>
+    </div>
+    <div id="products" class="mt-10 grid grid-cols-2 md:grid-cols-5 gap-x-3 gap-y-6 md:gap-x-4 md:gap-y-8" aria-live="polite"></div>
   </div>
 </section>
 
 <!-- WHY -->
-<section class="py-16 md:py-24 bg-sand">
+<section class="py-10 md:py-14 bg-sand">
   <div class="mx-auto max-w-6xl px-5">
-    <h2 class="reveal font-serif text-4xl sm:text-5xl md:text-6xl max-w-xl">Nyaman, terjangkau, tetap bergaya.</h2>
-    <div class="mt-12 grid md:grid-cols-3 gap-10">
-      <div class="reveal"><h3 class="font-serif text-3xl">Bahan nyaman</h3><p class="mt-2 text-ink/75">Adem dipakai seharian, jatuhnya flowly dan mudah dibentuk.</p></div>
-      <div class="reveal"><h3 class="font-serif text-3xl">Harga terjangkau</h3><p class="mt-2 text-ink/75">Bahan berkualitas mulai dari Rp 15.000.</p></div>
-      <div class="reveal"><h3 class="font-serif text-3xl">Mengikuti tren</h3><p class="mt-2 text-ink/75">Warna, bahan, dan model yang sesuai gaya Muslimah masa kini.</p></div>
+    <h2 class="reveal font-serif text-2xl sm:text-3xl md:text-4xl max-w-md leading-tight">Nyaman, terjangkau, tetap bergaya.</h2>
+    <div class="mt-7 grid md:grid-cols-3 gap-6 md:gap-10">
+      <div class="reveal"><h3 class="font-serif text-xl md:text-2xl">Bahan nyaman</h3><p class="mt-1 text-sm text-ink/75">Adem dipakai seharian, jatuhnya flowly dan mudah dibentuk.</p></div>
+      <div class="reveal"><h3 class="font-serif text-xl md:text-2xl">Harga terjangkau</h3><p class="mt-1 text-sm text-ink/75">Bahan berkualitas mulai dari Rp 15.000.</p></div>
+      <div class="reveal"><h3 class="font-serif text-xl md:text-2xl">Mengikuti tren</h3><p class="mt-1 text-sm text-ink/75">Warna, bahan, dan model yang sesuai gaya Muslimah masa kini.</p></div>
     </div>
-    <div class="mt-16 pt-10 border-t border-ink/15 grid grid-cols-3 gap-6 text-center">
-      <div><p class="font-serif text-3xl sm:text-5xl" data-count="1878">0</p><p class="text-sm text-ink/70 mt-1">produk terjual</p></div>
-      <div><p class="font-serif text-3xl sm:text-5xl" data-count="5">0</p><p class="text-sm text-ink/70 mt-1">jenis produk</p></div>
-      <div><p class="font-serif text-3xl sm:text-5xl">2025</p><p class="text-sm text-ink/70 mt-1">mulai berdiri</p></div>
+    <div class="mt-8 pt-6 border-t border-ink/15 grid grid-flow-col auto-cols-fr gap-4 text-center">
+      <div><p class="font-serif text-2xl sm:text-3xl" data-count="1878">0</p><p class="text-xs sm:text-sm text-ink/70 mt-1">produk terjual</p></div>
+      <div id="statTypes" hidden><p class="font-serif text-2xl sm:text-3xl" id="statTypesN" data-count="0">0</p><p class="text-xs sm:text-sm text-ink/70 mt-1">jenis produk</p></div>
+      <div><p class="font-serif text-2xl sm:text-3xl">2025</p><p class="text-xs sm:text-sm text-ink/70 mt-1">mulai berdiri</p></div>
     </div>
   </div>
 </section>
@@ -159,11 +164,12 @@ summary b{transition:transform .4s var(--ease)}
 <section id="warna" class="py-16 md:py-24">
   <div class="mx-auto max-w-6xl px-5 grid md:grid-cols-2 gap-14 items-center">
     <div class="reveal">
-      <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl">Find your color.</h2>
-      <p class="mt-4 text-ink/70 max-w-md">Pilih warna favoritmu, lihat tampilannya, lalu pesan lewat WhatsApp.</p>
+      <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl">Find your color.</h2>
+      <p class="mt-4 text-ink/70 max-w-md">Pilih warna favoritmu, lihat tampilannya, lalu buka produknya.</p>
       <div id="swatches" class="mt-8 flex flex-wrap gap-4"></div>
-      <p id="cname" class="mt-6 font-serif text-3xl"></p>
-      <a id="cbtn" target="_blank" rel="noopener" class="mt-4 inline-block bg-ink text-cream px-7 py-3.5 rounded-full text-sm hover:bg-marsala transition-colors">Pesan warna ini</a>
+      <p id="cname" class="mt-6 font-serif text-2xl"></p>
+      <p class="mt-5 text-sm text-ink/60">Tersedia di:</p>
+      <div id="cprods" class="mt-2 flex flex-wrap gap-2"></div>
     </div>
     <div id="cimg" class="ph relative aspect-[4/3] m-3 transition-shadow duration-500"></div>
   </div>
@@ -172,7 +178,7 @@ summary b{transition:transform .4s var(--ease)}
 <!-- LOOKBOOK -->
 <section id="lookbook" class="py-16 md:py-24 bg-sand">
   <div class="mx-auto max-w-6xl px-5">
-    <h2 class="reveal font-serif text-4xl sm:text-5xl md:text-6xl">One hijab. Different stories.</h2>
+    <h2 class="reveal font-serif text-3xl sm:text-4xl md:text-5xl">One hijab. Different stories.</h2>
     <div id="lb" class="mt-12 grid grid-cols-2 gap-3 md:flex md:h-[500px]"></div>
   </div>
 </section>
@@ -181,7 +187,7 @@ summary b{transition:transform .4s var(--ease)}
 <section class="py-16 md:py-24">
   <div class="mx-auto max-w-6xl px-5">
     <div class="flex flex-wrap items-end justify-between gap-4">
-      <h2 class="reveal font-serif text-4xl sm:text-5xl md:text-6xl">Dicintai pemakainya.</h2>
+      <h2 class="reveal font-serif text-3xl sm:text-4xl md:text-5xl">Dicintai pemakainya.</h2>
       <div class="flex gap-2"><button id="prev" class="h-11 w-11 rounded-full border border-ink hover:bg-ink hover:text-cream transition-colors" aria-label="Sebelumnya">←</button><button id="next" class="h-11 w-11 rounded-full border border-ink hover:bg-ink hover:text-cream transition-colors" aria-label="Berikutnya">→</button></div>
     </div>
     <div id="testi" class="nosb mt-10 flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth"></div>
@@ -193,8 +199,7 @@ summary b{transition:transform .4s var(--ease)}
 <section class="py-16 md:py-24 bg-paper">
   <div class="mx-auto max-w-6xl px-5">
     <div class="reveal flex flex-wrap items-end justify-between gap-4">
-      <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl">Join our story.</h2>
-      <a data-ig target="_blank" rel="noopener" class="underline underline-offset-4">Follow @Hijabii_official</a>
+      <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl">Join our story.</h2>
     </div>
     <div id="community" class="mt-10 grid grid-cols-3 md:grid-cols-5 gap-2 sm:gap-3"></div>
   </div>
@@ -203,8 +208,18 @@ summary b{transition:transform .4s var(--ease)}
 <!-- FAQ -->
 <section id="faq" class="py-16 md:py-24">
   <div class="mx-auto max-w-3xl px-5">
-    <h2 class="reveal font-serif text-4xl sm:text-5xl md:text-6xl">Pertanyaan umum</h2>
+    <h2 class="reveal font-serif text-3xl sm:text-4xl md:text-5xl">Pertanyaan umum</h2>
     <div id="faqlist" class="mt-10 border-t border-ink/15"></div>
+  </div>
+</section>
+
+<!-- LOGIN -->
+<section id="masuk" class="pb-16 md:pb-24">
+  <div class="mx-auto max-w-3xl px-5 text-center">
+    <h2 class="reveal font-serif text-3xl sm:text-4xl md:text-5xl">Siap belanja?</h2>
+    <p class="reveal mt-3 text-ink/70">Masuk atau daftar dulu untuk memesan.</p>
+    <div class="reveal mt-7"><a id="loginBtn" class="inline-block bg-ink text-cream px-12 py-3.5 rounded-full text-sm hover:bg-marsala transition-colors">Login</a></div>
+    <p class="reveal mt-4 text-sm text-ink/70">Belum punya akun? <a id="daftarLink" class="underline underline-offset-4 text-marsala">Daftar</a></p>
   </div>
 </section>
 
@@ -214,9 +229,9 @@ summary b{transition:transform .4s var(--ease)}
     <div class="ph absolute inset-0 -z-10" data-img="cta-banner" data-cls="absolute inset-0 h-full w-full object-cover" data-pos="100% 28%"></div>
     <div class="cta-fade absolute inset-0 -z-10"></div>
     <div class="relative px-7 pt-56 pb-12 sm:pt-64 md:px-16 md:py-32 md:w-3/5">
-      <h2 class="font-serif text-4xl sm:text-5xl md:text-7xl leading-tight">Be you.<br>Be Hijabii.</h2>
+      <h2 class="font-serif text-3xl sm:text-4xl md:text-6xl leading-tight">Be you.<br>Be Hijabii.</h2>
       <p class="mt-5 text-cream/75 max-w-sm">Temukan warna dan model yang paling kamu banget.</p>
-      <a data-wa class="mt-8 inline-block rounded-full bg-cream text-ink px-8 py-3.5 text-sm hover:bg-sand">Find Your Color</a>
+      <a id="ctaShop" class="mt-8 inline-block rounded-full bg-cream text-ink px-8 py-3.5 text-sm hover:bg-sand">Belanja sekarang</a>
     </div>
   </div>
 </section>
@@ -234,79 +249,41 @@ summary b{transition:transform .4s var(--ease)}
 
 <a data-wa class="fixed bottom-5 right-5 z-30 bg-ink text-cream text-sm px-5 py-3 rounded-full shadow-lg hover:bg-marsala transition-colors">Chat WhatsApp</a>
 
-<!-- MODAL PRODUK -->
-<div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-ink/60">
-  <div class="relative rounded-3xl bg-cream w-full max-w-3xl max-h-[90vh] overflow-auto grid md:grid-cols-2">
-    <button id="mx" class="absolute right-3 top-3 z-10 grid h-10 w-10 place-items-center rounded-full bg-cream/85 text-2xl" aria-label="Tutup">×</button>
-    <div id="mimg" class="ph relative aspect-[4/3] md:aspect-auto md:min-h-[440px]"></div>
-    <div class="p-5 sm:p-7">
-      <h3 id="mname" class="font-serif text-4xl"></h3>
-      <p id="mprice" class="mt-1 text-lg"></p>
-      <dl id="minfo" class="mt-5 text-sm space-y-1"></dl>
-      <ul id="mpts" class="mt-4 text-sm text-ink/75 list-disc pl-5 space-y-1"></ul>
-      <p class="mt-5 text-sm font-medium">Pilih warna</p>
-      <div id="mcol" class="mt-2 flex gap-3"></div>
-      <a id="mbtn" target="_blank" rel="noopener" class="mt-6 block text-center rounded-full bg-ink text-cream py-3.5 text-sm hover:bg-marsala transition-colors">Pesan via WhatsApp</a>
-      <p class="mt-3 text-xs text-ink/55">Warna pada foto bisa sedikit berbeda karena pencahayaan.</p>
-    </div>
-  </div>
-</div>
+<script type="module">
+/* Data produk, warna, lookbook, dan FAQ diambil dari Supabase (diisi lewat panel admin). Sisanya (teks, testimoni contoh, sosial) ada di CONFIG. */
+import { supabase, imageUrl } from './assets/js/supabase.js';
+import { ROUTES } from './assets/js/routes.js';
 
-<script>
-/* Semua data website ada di sini. Edit lalu refresh browser. */
 const CONFIG = {
-  wa: '6285892052182',                                  // nomor WhatsApp (format 62...)
+  wa: '6285892052182',                                  // cadangan bila nomor di Pengaturan admin belum terbaca
   ig: 'https://instagram.com/Hijabii_official',
   tiktok: 'https://www.tiktok.com/@Hijabi_official',    // ejaan sesuai form, cek lagi
-
-  // Warna: nama file foto = warna-<nama huruf kecil>, contoh warna-cream.png
-  colors: [
-    { n: 'Cream',   h: '#EADBC8' },
-    { n: 'Mocha',   h: '#A98B7C' },
-    { n: 'Marsala', h: '#7B4A4A' },
-    { n: 'Olive',   h: '#6B6A47' },
-    { n: 'Black',   h: '#1F1B19' }
-  ],
-
-  // Foto produk: <id>-utama (contoh pasmina-tancel-utama.png)
-  products: [
-    { id: 'pasmina-tancel',  name: 'Pasmina Tancel',  price: 42000, tag: 'Best seller', bahan: 'Tancel',       size: '170 × 80 cm', pts: ['Bahan adem', 'Flowly, mudah dibentuk'] },
-    { id: 'viscose-printed', name: 'Viscose Printed', price: 62000, tag: 'Motif',       bahan: 'Viscose',      size: '170 × 80 cm', pts: ['Motif stylish', 'Flowly, mudah dibentuk'] },
-    { id: 'viscose-bamboo',  name: 'Viscose Bamboo',  price: 56000, tag: 'Best seller', bahan: 'Serat bamboo', size: '170 × 80 cm', pts: ['Flowly, mudah dibentuk', 'Warna beragam'] },
-    { id: 'bergo-instan',    name: 'Bergo Instan',    price: 35000,                     bahan: 'Jersey',       size: 'M dan L',     pts: ['Mudah digunakan', 'Bahan adem'] },
-    { id: 'ciput-rayon',     name: 'Ciput Rayon',     price: 15000,                     bahan: 'Rayon',        size: '',            pts: ['Bahan adem', 'Anti geser', 'Tali bisa disesuaikan'] }
-  ],
-
-  // Foto: lookbook-<key>.png
-  lookbook: [
-    { key: 'campus', n: 'Campus' }, { key: 'office', n: 'Office' },
-    { key: 'casual', n: 'Casual' }, { key: 'occasion', n: 'Occasion' }
-  ],
-
-  // Foto: komunitas-01 sampai komunitas-05
-  communityCount: 5,
-
+  communityCount: 5,                                    // foto: komunitas-01 sampai komunitas-05
   // TESTIMONI DUMMY, ganti dengan ulasan asli
   testimonials: [
     { t: 'Bahannya adem banget dan jatuhnya cantik. Cocok dipakai ke kampus seharian.', n: 'Aulia', c: 'Jakarta' },
     { t: 'Suka banget sama viscose bamboo-nya, gampang dibentuk dan nggak bikin gerah.', n: 'Salsa', c: 'Bandung' },
     { t: 'Pengirimannya cepat dan packing-nya rapi. Pasti order lagi!', n: 'Rani', c: 'Surabaya' }
-  ],
-
-  faq: [
-    { q: 'Bagaimana cara order?', a: 'Pilih produk dan warna, klik “Pesan via WhatsApp”, lalu kami konfirmasi stok dan total pembayaran. Setelah pembayaran lewat Dana atau transfer BSI diterima, pesanan langsung diproses.' },
-    { q: 'Bagaimana pengiriman ke luar kota?', a: 'Pesanan dikirim dari Lebak, Banten, lewat Kantor Pos, J&T, atau JNE. Estimasi tiba tergantung kota tujuan.' },
-    { q: 'Apa ukuran produknya?', a: 'Pasmina berukuran 170 × 80 cm. Bergo tersedia ukuran M dan L. Warna di foto bisa sedikit berbeda karena pencahayaan.' },
-    { q: 'Bagaimana kebijakan retur dan penukaran?', a: 'Retur dan penukaran hanya untuk produk rusak (sobek), cacat, atau salah kirim. Sertakan video unboxing dan ajukan maksimal 2×24 jam setelah barang diterima. Produk yang sudah dibeli tidak dapat dikembalikan.' },
-    { q: 'Bagaimana cara merawat hijab?', a: 'Jangan menyikat atau memeras terlalu keras, hindari jarum pentul untuk hijab viscose, hindari panas berlebih saat menjemur dan menyetrika, dan simpan di tempat bersih dan kering.' }
   ]
 };
 
 const C = CONFIG, $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
-const rp = n => 'Rp ' + n.toLocaleString('id-ID');
-const wa = m => `https://wa.me/${C.wa}?text=${encodeURIComponent(m)}`;
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const rp = n => 'Rp ' + Number(n ?? 0).toLocaleString('id-ID');
+const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+const wa = m => `https://wa.me/${waNumber}?text=${encodeURIComponent(m)}`;
+let waNumber = C.wa;
 
-/* ---------- Foto: cari assets/img/<nama>.(png|jpg|jpeg|webp), kalau belum ada tampil placeholder ---------- */
+/* ---------- Alamat toko & login (BASE otomatis dari routes.js) ---------- */
+const TOKO = ROUTES.home.customer;                         // contoh: /Hijabii/web/toko/
+const produkUrl = slug => `${TOKO}#/produk/${encodeURIComponent(slug)}`;
+$('#allShop').href = `${TOKO}#/katalog`;
+$('#ctaShop').href = `${TOKO}#/katalog`;
+$('#navLogin').href = ROUTES.login;
+$('#loginBtn').href = ROUTES.login;                        // form login yang sudah ada (di sana juga ada link Daftar)
+$('#daftarLink').href = ROUTES.login.replace('login.html', 'daftar.html');
+
+/* ---------- Foto statis: assets/img/<nama>.(png|jpg|jpeg|webp), belum ada -> placeholder ---------- */
 const exts = ['png', 'jpg', 'jpeg', 'webp'];
 function loadImg(el) {
   const n = el.dataset.img, img = new Image();
@@ -321,48 +298,42 @@ function loadImg(el) {
   img.onerror = next;
   next();
 }
+/* Foto dari Supabase Storage; selama belum termuat (atau kosong) placeholder tetap tampil */
+function photo(el, path, alt) {
+  const t = el._t = (el._t || 0) + 1;
+  el.classList.remove('has-img');
+  el.querySelector(':scope > img')?.remove();
+  const url = imageUrl(path);
+  if (!url) return;
+  const img = new Image();
+  img.alt = alt || ''; img.decoding = 'async';
+  img.className = 'absolute inset-0 w-full h-full object-cover';
+  img.onload = () => { if (el._t === t) el.classList.add('has-img'); };
+  img.onerror = () => { console.warn('Foto gagal dimuat:', url); if (el._t === t) img.remove(); };
+  el.prepend(img);                       // dipasang dulu agar browser pasti mengunduh
+  img.src = url;
+}
 
-/* ---------- Render konten dari config ---------- */
-$('#products').innerHTML = C.products.map((p, i) => `
-  <button class="group text-left reveal" style="transition-delay:${(i % 3) * 80}ms" data-i="${i}">
-    <div class="ph relative aspect-[4/5]" data-img="${p.id}-utama">
-      ${p.tag ? `<span class="absolute left-3 top-3 z-10 rounded-full bg-cream px-3 py-1 text-xs">${p.tag}</span>` : ''}
-    </div>
-    <p class="mt-3 font-serif text-xl sm:text-2xl">${p.name}</p>
-    <p class="text-sm text-ink/70">${rp(p.price)}</p>
-    <div class="mt-2 flex gap-1.5">${C.colors.map(c => `<i class="h-3 w-3 rounded-full" style="background:${c.h}"></i>`).join('')}</div>
-  </button>`).join('');
-
-$('#lb').innerHTML = C.lookbook.map(l => `
-  <div class="lb ph relative aspect-[3/4] md:aspect-auto reveal cursor-pointer" data-img="lookbook-${l.key}">
-    <span class="absolute bottom-3 left-3 z-10 rounded-full bg-cream px-4 py-1.5 text-sm">${l.n}</span>
-  </div>`).join('');
-
+/* ---------- Konten statis ---------- */
 $('#testi').innerHTML = C.testimonials.map(t => `
   <figure class="snap-start shrink-0 w-[85%] md:w-[360px] rounded-2xl bg-paper p-7">
     <p class="text-sm tracking-widest" aria-label="5 bintang">★★★★★</p>
-    <blockquote class="mt-4 font-serif text-xl sm:text-2xl leading-snug">“${t.t}”</blockquote>
-    <figcaption class="mt-5 text-sm text-ink/60">${t.n}, ${t.c}</figcaption>
+    <blockquote class="mt-4 font-serif text-xl sm:text-2xl leading-snug">“${esc(t.t)}”</blockquote>
+    <figcaption class="mt-5 text-sm text-ink/60">${esc(t.n)}, ${esc(t.c)}</figcaption>
   </figure>`).join('');
-
 $('#community').innerHTML = Array.from({ length: C.communityCount }, (_, i) =>
   `<div class="ph relative aspect-square reveal" data-img="komunitas-0${i + 1}"></div>`).join('');
 
-$('#faqlist').innerHTML = C.faq.map(f => `
-  <details class="border-b border-ink/15 py-5">
-    <summary class="flex justify-between gap-4 font-serif text-xl sm:text-2xl">${f.q}<b class="font-sans font-light text-2xl">+</b></summary>
-    <p class="mt-3 text-ink/75 max-w-xl">${f.a}</p>
-  </details>`).join('');
-
-$('#swatches').innerHTML = C.colors.map((c, i) =>
-  `<button class="h-12 w-12 rounded-full ring-ink ring-offset-4 ring-offset-cream transition-all" style="background:${c.h}" data-c="${i}" aria-label="${c.n}"></button>`).join('');
-
-$('#menuIn').innerHTML = $('#links').innerHTML;
-
 /* ---------- Link WhatsApp / sosial ---------- */
-$$('[data-wa]').forEach(a => { a.href = wa('Halo Hijabii, saya mau order.'); a.target = '_blank'; a.rel = 'noopener'; });
+function setWa() { $$('[data-wa]').forEach(a => { a.href = wa('Halo Hijabii, saya mau order.'); a.target = '_blank'; a.rel = 'noopener'; }); }
+setWa();
 $$('[data-ig]').forEach(a => a.href = C.ig);
 $$('[data-tt]').forEach(a => a.href = C.tiktok);
+
+/* ---------- Menu ---------- */
+const syncMenu = () => { $('#menuIn').innerHTML = $('#links').innerHTML; };
+syncMenu();
+const drop = id => { $('#' + id).hidden = true; $$(`a[href="#${id}"]`).forEach(a => a.remove()); };   // bagian kosong disembunyikan beserta tautan menunya
 
 /* ---------- Hero: slideshow ---------- */
 const slides = $$('.slide'), dots = $('#dots');
@@ -383,78 +354,10 @@ addEventListener('scroll', onScroll, { passive: true }); onScroll();
 $('#burger').onclick = () => $('#burger').setAttribute('aria-expanded', $('#nav').classList.toggle('open'));
 $('#menu').onclick = e => { if (e.target.closest('a')) { $('#nav').classList.remove('open'); $('#burger').setAttribute('aria-expanded', false); } };
 
-/* ---------- Find Your Color ---------- */
-function pickColor(i) {
-  const c = C.colors[i], box = $('#cimg');
-  $$('#swatches button').forEach((b, j) => b.classList.toggle('ring-2', j === i));
-  $('#cname').textContent = c.n;
-  box.dataset.img = 'warna-' + c.n.toLowerCase();
-  box.style.boxShadow = `0 0 0 10px ${c.h}`;
-  loadImg(box);
-  $('#cbtn').href = wa(`Halo Hijabii, saya tertarik dengan warna ${c.n}.`);
-}
-$('#swatches').onclick = e => { const b = e.target.closest('button'); if (b) pickColor(+b.dataset.c); };
-pickColor(0);
-
-/* ---------- Lookbook (tap di mobile / klik di desktop) ---------- */
-$('#lb').onclick = e => {
-  const p = e.target.closest('.lb'); if (!p) return;
-  const on = p.classList.contains('on');
-  $$('.lb').forEach(x => x.classList.remove('on'));
-  if (!on) p.classList.add('on');
-};
-
-/* ---------- Testimoni: tombol + auto geser ---------- */
-const tr = $('#testi'), step = () => tr.firstElementChild.offsetWidth + 20;
-const slide = d => {
-  const end = tr.scrollLeft + tr.clientWidth >= tr.scrollWidth - 4;
-  tr.scrollTo({ left: d > 0 && end ? 0 : tr.scrollLeft + d * step(), behavior: 'smooth' });
-};
-$('#prev').onclick = () => slide(-1);
-$('#next').onclick = () => slide(1);
-if (!matchMedia('(prefers-reduced-motion:reduce)').matches) {
-  let auto = setInterval(() => slide(1), 5000);
-  tr.onmouseenter = () => clearInterval(auto);
-  tr.onmouseleave = () => auto = setInterval(() => slide(1), 5000);
-}
-
-/* ---------- Modal produk ---------- */
-const modal = $('#modal');
-let cur = 0, mc = 0;
-function setModalColor(i) {
-  mc = i;
-  const p = C.products[cur], c = C.colors[i];
-  $$('#mcol button').forEach((b, j) => b.classList.toggle('ring-2', j === i));
-  $('#mbtn').href = wa(`Halo Hijabii, saya mau order ${p.name} warna ${c.n}.`);
-}
-function openModal(i) {
-  cur = i;
-  const p = C.products[i];
-  $('#mname').textContent = p.name;
-  $('#mprice').textContent = rp(p.price);
-  $('#minfo').innerHTML = `<div><dt class="inline text-ink/60">Bahan: </dt><dd class="inline">${p.bahan}</dd></div>` +
-    (p.size ? `<div><dt class="inline text-ink/60">Ukuran: </dt><dd class="inline">${p.size}</dd></div>` : '');
-  $('#mpts').innerHTML = p.pts.map(x => `<li>${x}</li>`).join('');
-  $('#mcol').innerHTML = C.colors.map((c, j) =>
-    `<button class="h-9 w-9 rounded-full ring-ink ring-offset-2 ring-offset-cream" style="background:${c.h}" data-c="${j}" aria-label="${c.n}"></button>`).join('');
-  $('#mimg').dataset.img = p.id + '-utama';
-  loadImg($('#mimg'));
-  setModalColor(0);
-  modal.classList.replace('hidden', 'flex');
-  document.body.style.overflow = 'hidden';
-}
-function closeModal() { modal.classList.replace('flex', 'hidden'); document.body.style.overflow = ''; }
-$('#products').onclick = e => { const b = e.target.closest('[data-i]'); if (b) openModal(+b.dataset.i); };
-$('#mcol').onclick = e => { const b = e.target.closest('button'); if (b) setModalColor(+b.dataset.c); };
-$('#mx').onclick = closeModal;
-modal.onclick = e => { if (e.target === modal) closeModal(); };
-addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-/* ---------- Muat semua foto, lalu animasi scroll & counter ---------- */
-$$('[data-img]').forEach(el => { if (!el.classList.contains('has-img')) loadImg(el); });
-
+/* ---------- Animasi scroll & counter ---------- */
 function count(el) {
   const to = +el.dataset.count, t0 = performance.now();
+  if (reduce) { el.textContent = to.toLocaleString('id-ID'); return; }
   (function f(t) {
     const k = Math.min((t - t0) / 1400, 1);
     el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3))).toLocaleString('id-ID');
@@ -465,24 +368,170 @@ const io = new IntersectionObserver(es => es.forEach(e => {
   if (!e.isIntersecting) return;
   const t = e.target; t.classList.add('in');
   if (t.classList.contains('reveal')) setTimeout(() => { t.classList.remove('reveal'); t.style.transitionDelay = ''; }, 1600 + parseInt(t.style.transitionDelay || 0));
-  if (e.target.dataset.count) count(e.target);
-  io.unobserve(e.target);
+  if (t.dataset.count) count(t);
+  io.unobserve(t);
 }), { threshold: .15 });
-$$('.reveal').forEach(el => {
-  const sibs = [...el.parentElement.children].filter(c => c.classList.contains('reveal'));
-  el.style.transitionDelay = sibs.indexOf(el) * 100 + 'ms';
-});
-$$('.reveal,[data-count]').forEach(el => io.observe(el));
+function watch(scope) {
+  scope.querySelectorAll('.reveal').forEach(el => {
+    const sibs = [...el.parentElement.children].filter(c => c.classList.contains('reveal'));
+    el.style.transitionDelay = sibs.indexOf(el) * 100 + 'ms';
+    io.observe(el);
+  });
+}
+$$('[data-img]').forEach(loadImg);                          // hanya elemen statis (yang dari database dirender setelahnya)
+watch(document);
+$$('[data-count]').forEach(el => { if (+el.dataset.count) io.observe(el); });
 
-/* ---------- Parallax hero (halus, via rAF) ---------- */
+/* ---------- Testimoni: tombol + auto geser ---------- */
+const tr = $('#testi'), step = () => tr.firstElementChild.offsetWidth + 20;
+const slide = d => {
+  const end = tr.scrollLeft + tr.clientWidth >= tr.scrollWidth - 4;
+  tr.scrollTo({ left: d > 0 && end ? 0 : tr.scrollLeft + d * step(), behavior: 'smooth' });
+};
+$('#prev').onclick = () => slide(-1);
+$('#next').onclick = () => slide(1);
+if (!reduce) {
+  let auto = setInterval(() => slide(1), 5000);
+  tr.onmouseenter = () => clearInterval(auto);
+  tr.onmouseleave = () => auto = setInterval(() => slide(1), 5000);
+}
+
+/* ---------- Parallax hero ---------- */
 const hb = $('#heroBg');
-if (!matchMedia('(prefers-reduced-motion:reduce)').matches) {
+if (!reduce) {
   let tick = false;
   addEventListener('scroll', () => {
     if (tick) return; tick = true;
     requestAnimationFrame(() => { if (scrollY < innerHeight) hb.style.transform = `translate3d(0,${scrollY * .12}px,0)`; tick = false; });
   }, { passive: true });
 }
+
+/* =====================  DATA DARI SUPABASE  ===================== */
+const HEX = /^#[0-9a-f]{3,8}$/i;
+const ok = r => (r.status === 'fulfilled' && !r.value.error ? r.value.data : null);
+
+function normProduct(r) {
+  const colors = (r.product_colors ?? []).map(c => ({
+    name: c.name, hex: HEX.test(c.hex_code ?? '') ? c.hex_code : null, image: c.image_path, sort: c.sort_order ?? 0,
+    stock: (c.product_variants ?? []).reduce((s, v) => s + (Number(v.stock) || 0), 0)
+  })).sort((a, b) => a.sort - b.sort || a.name.localeCompare(b.name, 'id'));
+  const cover = (colors.find(c => c.image && c.stock > 0) ?? colors.find(c => c.image))?.image ?? null;
+  return { name: r.name, slug: r.slug, price: r.price, colors, cover, stock: colors.reduce((s, c) => s + c.stock, 0) };
+}
+
+function renderProducts(list) {
+  const box = $('#products');
+  if (!list.length) { box.innerHTML = '<p class="col-span-full text-ink/70">Produk sedang disiapkan. Cek lagi sebentar lagi.</p>'; return; }
+  const shown = list.slice(0, 10);
+  box.innerHTML = shown.map(p => `
+    <a href="${esc(produkUrl(p.slug))}" class="group text-left reveal block min-w-0">
+      <div class="ph relative aspect-[4/5]" data-img="${esc(p.name)}">
+        ${p.stock <= 0 ? '<span class="absolute left-2.5 top-2.5 z-10 rounded-full bg-ink/70 text-cream px-2.5 py-1 text-xs">Habis</span>' : ''}
+      </div>
+      <p class="mt-2.5 font-serif text-lg md:text-base font-semibold leading-tight break-words">${esc(p.name)}</p>
+      <p class="text-sm text-ink/70">${rp(p.price)}</p>
+      <div class="mt-2 flex flex-wrap items-center gap-1.5">${p.colors.slice(0, 6).map(c => `<i class="h-3 w-3 rounded-full border border-ink/10" style="background:${c.hex || '#A98B7C'}" title="${esc(c.name)}"></i>`).join('')}${p.colors.length > 6 ? `<span class="text-xs text-ink/60">+${p.colors.length - 6}</span>` : ''}</div>
+    </a>`).join('');
+  [...box.children].forEach((a, i) => photo(a.querySelector('.ph'), shown[i].cover, shown[i].name));
+  watch(box);
+}
+
+function renderColors(list) {
+  // Satu pilihan per nama warna; tiap warna mencatat semua produk yang memilikinya
+  const groups = new Map();
+  for (const p of list) for (const c of p.colors) {
+    const k = c.name.trim().toLowerCase();
+    if (!groups.has(k)) groups.set(k, { name: c.name.trim(), hex: c.hex, items: [] });
+    const g = groups.get(k);
+    if (!g.hex && c.hex) g.hex = c.hex;
+    g.items.push({ slug: p.slug, product: p.name, image: c.image, stock: c.stock });
+  }
+  const cols = [...groups.values()];
+  if (!cols.length) { drop('warna'); return; }
+  const sw = $('#swatches'), box = $('#cimg');
+  sw.innerHTML = cols.map((c, i) => {
+    const th = c.hex ? '' : (c.items.find(x => x.image)?.image ?? null);
+    return `<button class="h-12 w-12 rounded-full ring-ink ring-offset-4 ring-offset-cream transition-all overflow-hidden border border-ink/10" style="background:${c.hex || '#A98B7C'}" data-c="${i}" data-th="${esc(th ?? '')}" aria-label="${esc(c.name)}" aria-pressed="false"></button>`;
+  }).join('');
+  [...sw.children].forEach(b => {
+    if (!b.dataset.th) return;
+    const u = imageUrl(b.dataset.th); if (!u) return;
+    const im = new Image(); im.alt = ''; im.className = 'h-full w-full object-cover'; im.src = u; b.append(im);
+  });
+  function pick(i) {
+    const c = cols[i];
+    const best = c.items.find(x => x.image && x.stock > 0) ?? c.items.find(x => x.image) ?? c.items[0];
+    $$('#swatches button').forEach((b, j) => { b.classList.toggle('ring-2', j === i); b.setAttribute('aria-pressed', String(j === i)); });
+    $('#cname').textContent = c.name;
+    box.dataset.img = `${best.product} · ${c.name}`;
+    box.style.boxShadow = c.hex ? `0 0 0 10px ${c.hex}` : 'none';
+    photo(box, best.image, `${best.product} warna ${c.name}`);
+    $('#cprods').innerHTML = c.items.map(x =>
+      `<a href="${esc(produkUrl(x.slug))}" class="rounded-full border border-ink px-5 py-2.5 text-sm hover:bg-ink hover:text-cream transition-colors${x.stock <= 0 ? ' opacity-60' : ''}">${esc(x.product)}${x.stock <= 0 ? ' (habis)' : ''}</a>`).join('');
+  }
+  sw.onclick = e => { const b = e.target.closest('button'); if (b) pick(+b.dataset.c); };
+  pick(0);
+}
+
+function renderLookbook(rows) {
+  if (!rows?.length) { drop('lookbook'); return; }
+  const lb = $('#lb');
+  lb.innerHTML = rows.map(l => `
+    <div class="lb ph relative aspect-[3/4] md:aspect-auto reveal cursor-pointer" data-img="${esc(l.title)}">
+      <span class="absolute bottom-3 left-3 z-10 rounded-full bg-cream px-4 py-1.5 text-sm">${esc(l.title)}</span>
+    </div>`).join('');
+  [...lb.children].forEach((el, i) => photo(el, rows[i].image_path, rows[i].title));
+  lb.onclick = e => {
+    const p = e.target.closest('.lb'); if (!p) return;
+    const on = p.classList.contains('on');
+    $$('.lb').forEach(x => x.classList.remove('on'));
+    if (!on) p.classList.add('on');
+  };
+  watch(lb);
+}
+
+function renderFaq(rows) {
+  if (!rows?.length) { drop('faq'); return; }
+  $('#faqlist').innerHTML = rows.map(f => `
+    <details class="border-b border-ink/15 py-5">
+      <summary class="flex justify-between gap-4 font-serif text-xl sm:text-2xl">${esc(f.question)}<b class="font-sans font-light text-2xl">+</b></summary>
+      <p class="mt-3 text-ink/75 max-w-xl" style="white-space:pre-line">${esc(f.answer)}</p>
+    </details>`).join('');
+}
+
+async function loadData() {
+  $('#products').innerHTML = '<p class="col-span-full text-ink/60">Memuat produk…</p>';
+  if (!supabase) {
+    $('#products').innerHTML = '<p class="col-span-full text-ink/70">Toko belum dikonfigurasi.</p>';
+    ['warna', 'lookbook', 'faq'].forEach(drop); syncMenu(); return;
+  }
+  const rs = await Promise.allSettled([
+    supabase.from('products').select('name, slug, price, created_at, product_colors(name, hex_code, image_path, sort_order, product_variants(stock))')
+      .eq('status', 'active').order('created_at', { ascending: false }).limit(100),
+    supabase.from('lookbooks').select('title, image_path').eq('is_active', true).order('sort_order').order('created_at'),
+    supabase.from('faqs').select('question, answer').eq('is_active', true).order('sort_order').order('created_at'),
+    supabase.from('settings').select('admin_whatsapp').maybeSingle()
+  ]);
+  const [pr, lbk, fq, st] = rs.map(ok);
+
+  const num = String(st?.admin_whatsapp ?? '').replace(/\D/g, '').replace(/^0/, '62');
+  if (num) { waNumber = num; setWa(); }
+
+  if (pr) {
+    const list = pr.map(normProduct).sort((a, b) => (a.stock <= 0) - (b.stock <= 0));
+    renderProducts(list);
+    renderColors(list);
+    if (list.length) { $('#statTypes').hidden = false; const n = $('#statTypesN'); n.dataset.count = String(list.length); io.observe(n); }
+  } else {
+    $('#products').innerHTML = '<div class="col-span-full"><p class="text-ink/70">Produk gagal dimuat. Periksa koneksi lalu coba lagi.</p><button id="retry" class="mt-3 rounded-full border border-ink px-6 py-2.5 text-sm hover:bg-ink hover:text-cream transition-colors">Coba lagi</button></div>';
+    $('#retry').onclick = loadData;
+    drop('warna');
+  }
+  renderLookbook(lbk);
+  renderFaq(fq);
+  syncMenu();
+}
+loadData();
 </script>
 </body>
 </html>

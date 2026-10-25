@@ -5,7 +5,7 @@ import { ROUTES } from "../assets/js/routes.js";
 import { toast } from "../assets/js/ui.js";
 
 const BASE = new URL("./", import.meta.url);
-const PAGES = { dashboard: "Dashboard", admin: "Kelola Admin", user: "Kelola User", laporan: "Laporan", log: "Log Aktivitas" };
+const PAGES = { dashboard: "Dashboard", admin: "Kelola Admin", user: "Kelola User", log: "Log Aktivitas" };
 const DEFAULT_PAGE = "dashboard";
 
 const $ = (id) => document.getElementById(id);
@@ -64,19 +64,23 @@ async function render() {
   }
 }
 
+async function doLogout() {
+  try { await signOut(); } catch (e) { console.error(e); }
+  location.replace(ROUTES.login);
+}
+
 async function mountPartials() {
   const [h, s, f] = await Promise.all(["partials/header.html", "partials/sidebar.html", "partials/footer.html"].map(fetchText));
   $("app-header").innerHTML = h;
   $("app-sidebar").innerHTML = s;
   $("app-footer").innerHTML = f;
 
-  // Header sengaja tidak menampilkan email/nama akun.
-  $("hdrAvatar").textContent = "S";
-  $("hdrGreet").textContent = "Halo, Super Admin";
-  $("btnLogout").addEventListener("click", async () => {
-    await signOut();
-    location.replace(`${ROUTES.login}?reason=logout`);
-  });
+  // Nama + inisial tampil di blok akun (bawah sidebar). Email sengaja tidak ditampilkan.
+  const name = profile.full_name || "Super Admin";
+  document.querySelectorAll("[data-ad-name]").forEach((el) => { el.textContent = name; });
+  document.querySelectorAll("[data-ad-avatar]").forEach((el) => { el.textContent = (name.trim()[0] || "S").toUpperCase(); });
+  // Tombol Keluar ada dua (topbar HP + bawah sidebar)
+  document.querySelectorAll("[data-logout]").forEach((b) => b.addEventListener("click", doLogout));
 }
 
 (async function boot() {

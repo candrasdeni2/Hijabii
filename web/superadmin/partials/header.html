@@ -1,12 +1,10 @@
 <header class="sa-topbar">
-  <a class="sa-wordmark sa-only-mobile" href="#/dashboard" aria-label="Hijabii, ke dashboard">HIJABII</a>
-  <p class="sa-greet sa-only-desktop" id="hdrGreet"></p>
+  <a class="sa-wordmark" href="#/dashboard" aria-label="Hijabii, ke dashboard">HIJABII</a>
   <div class="sa-topbar-right">
+    <!-- Mobile saja (topbar disembunyikan di tablet/desktop): chip peran + logout. Di tablet/desktop keduanya pindah ke bawah sidebar. -->
     <span class="sa-chip" title="Peran akun Anda">SUPER ADMIN</span>
-    <span class="sa-avatar" id="hdrAvatar" aria-hidden="true">·</span>
-    <button type="button" class="sa-logout" id="btnLogout" aria-label="Keluar">
+    <button type="button" class="sa-logout" data-logout aria-label="Keluar">
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H6a2 2 0 00-2 2v12a2 2 0 002 2h3M16 8l4 4-4 4M20 12H9"/></svg>
-      <span class="sa-only-desktop">Keluar</span>
     </button>
   </div>
 </header>

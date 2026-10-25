@@ -117,15 +117,10 @@ export async function loadReviews(productId, from = 0, to = 9) {
 /** Kartu produk (katalog + beranda). */
 export function productCard(p) {
   const out = p.stock <= 0;
-  const dots = p.colors.slice(0, 6).map((c) => (c.hex
-    ? `<span class="tk-cdot" style="background:${hexOk(c.hex)}" title="${esc(c.name)}"></span>`
-    : `<span class="tk-cthumb" title="${esc(c.name)}">${img(c.image, c.name)}</span>`)).join("");
-  const more = p.colors.length > 6 ? `<span class="tk-small tk-muted">+${p.colors.length - 6}</span>` : "";
   return `<a class="tk-pcard${out ? " is-out" : ""}" href="#/produk/${encodeURIComponent(p.slug)}">
     <div class="tk-pmedia">${img(p.cover, p.name)}${out ? '<span class="tk-tag is-out">Habis</span>' : ""}</div>
     <h3 class="tk-pname">${esc(p.name)}</h3>
     <div class="tk-price">${esc(rupiahStr(p.price))}</div>
-    ${p.colors.length ? `<div class="tk-cdots" aria-label="${p.colors.length} warna">${dots}${more}</div>` : ""}
     ${p.count > 0 ? `<div class="tk-rate"><span class="tk-star" aria-hidden="true">★</span><span>${p.avg.toFixed(1)}</span><span class="tk-muted">(${p.count})</span></div>` : ""}
   </a>`;
 }

@@ -116,7 +116,7 @@ img{display:block;max-width:100%}
 .tk-tag{position:absolute;top:10px;left:10px;padding:4px 10px;border-radius:999px;background:rgba(246,240,231,.95);font-size:12px}
 .tk-tag.is-out{background:rgba(43,33,28,.72);color:var(--cream)}
 .tk-pname{margin:10px 0 2px;font-family:var(--font-serif);font-size:20px;line-height:1.2;font-weight:600;overflow-wrap:anywhere}
-@media(min-width:768px){.tk-pname{font-size:23px}}
+@media(min-width:768px){.tk-pname{font-size:16px}}
 .tk-price{font-size:14px;color:rgba(43,33,28,.75)}
 .tk-cdots{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;align-items:center}
 .tk-cdot{width:12px;height:12px;border-radius:50%;border:1px solid rgba(43,33,28,.15);background:var(--mocha)}
@@ -144,7 +144,7 @@ img{display:block;max-width:100%}
 
 /* ---------- Detail produk ---------- */
 .tk-pd{display:grid;gap:20px}
-@media(min-width:900px){.tk-pd{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:48px;align-items:start}.tk-pd-info{position:sticky;top:84px}}
+@media(min-width:900px){.tk-pd{grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:48px;align-items:start}.tk-pd-info{position:sticky;top:84px}}
 .tk-gal{display:grid;gap:10px}
 .tk-gal-main{position:relative;aspect-ratio:4/5;border-radius:20px;overflow:hidden;background:var(--sand)}
 .tk-gal-main img{transition:opacity .25s}
@@ -392,3 +392,60 @@ a.btn{text-decoration:none}
 /* ikon keranjang di header (mobile): bottom nav tidak memuat Keranjang */
 .tk-cart-m{position:relative}
 @media(min-width:768px){.tk-cart-m{display:none!important}}
+
+/* TEMPEL DI PALING BAWAH toko/shell.css — kecilkan galeri foto & pilihan warna di mobile (<768px). Desktop tidak berubah. */
+@media(max-width:767px){
+  .tk-pd{gap:12px}
+  .tk-gal{gap:8px}
+  .tk-gal-main{aspect-ratio:1/1;max-height:46svh;border-radius:14px}   /* tinggi foto: ubah 46svh */
+  .tk-gal-top{top:8px;left:8px;right:8px}
+  .tk-rbtn{width:40px;height:40px}
+  .tk-rbtn svg{width:18px;height:18px}
+  .tk-gal-count{right:8px;bottom:8px;padding:2px 10px;font-size:11px}
+  .tk-thumbs{gap:6px}
+  .tk-thumbs button{width:44px;height:44px;border-radius:8px;border-width:1.5px}   /* thumbnail foto */
+  .tk-pd h1{font-size:18px;line-height:1.25}
+  .tk-pd-price{font-size:18px;margin-top:4px}
+  .tk-label{margin:14px 0 8px;font-size:12px}
+  .tk-sws{gap:8px}
+  .tk-sw{width:40px;height:40px;border-radius:8px}                                  /* kotak pilihan warna */
+  .tk-size{min-height:38px;min-width:44px;padding:0 14px;font-size:13px}
+}
+
+/* TEMPEL DI PALING BAWAH toko/shell.css */
+
+/* 1) Mobile (<768px): kolom cari langsung tampil di header (logo + cari + ikon), tanpa ikon cari dan tanpa baris di bawah header */
+@media(max-width:767px){
+  .tk-bar{gap:8px}
+  .tk-actions{flex:1;min-width:0;margin-left:0;gap:2px}
+  .tk-search{display:block!important;flex:1;min-width:0}
+  .tk-search input{width:100%;min-height:40px;font-size:16px}   /* 16px: cegah auto-zoom iOS */
+  .tk-only-search-m,.tk-searchbar{display:none!important}
+}
+
+/* 2) Tablet (768–1023px): menu atas belum muncul (baru ≥1024px), jadi pakai bottom nav seperti mobile */
+@media(min-width:768px) and (max-width:1023px){
+  .bottom-nav{display:grid}
+  .tk-main{padding-bottom:calc(var(--tk-nav-h) + 56px)}
+  .tk-footer{padding-bottom:calc(var(--tk-nav-h) + 24px)}
+  .tk-wa{bottom:calc(var(--tk-nav-h) + 16px)}
+  .tk-bar-cta{bottom:var(--tk-nav-h)}
+  .tk-cartbtn{display:none}        /* Keranjang sudah ada di bottom nav */
+}
+
+/* TEMPEL DI PALING BAWAH toko/shell.css — ikon header (lonceng, keranjang, akun) + panel notifikasi. */
+
+/* Tombol teks "Keranjang (n)" diganti ikon keranjang (tk-cart-ico) */
+.tk-cartbtn{display:none!important}
+/* Badge angka di ikon header */
+.tk-ico .tk-nbadge{top:3px;right:0}
+.tk-bell-btn .tk-nbadge{background:var(--error,#9E3D3D)}
+.tk-bell-btn[aria-expanded="true"]{background:var(--sand)}
+.tk-bell-panel[hidden]{display:none}
+.tk-bell-panel .pu-box{border-top:1px solid var(--sand)}
+
+/* Mobile: panel selebar layar di bawah header (bukan menempel ke ikon yang ada di tepi kanan) */
+@media(max-width:767px){
+  .tk-bell{position:static}
+  .tk-bell-panel{left:12px;right:12px;width:auto;top:calc(100% + 8px)}
+}

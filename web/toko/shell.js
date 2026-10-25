@@ -14,14 +14,15 @@ const ROUTE = {
   lookbook: { mod: "lookbook", title: "Lookbook", nav: "home" },
   faq: { mod: "faq", title: "FAQ", nav: "akun" },
   keranjang: { mod: "keranjang", title: "Keranjang", nav: "keranjang", auth: true },
-  checkout: { mod: "checkout", title: "Checkout", nav: "keranjang", auth: true },
+  checkout: { mod: "checkout", title: "Checkout", nav: "checkout", auth: true },
   pesanan: { mod: "pesanan", title: "Pesanan Saya", nav: "pesanan", auth: true },
   akun: { mod: "akun", title: "Akun", nav: "akun", auth: true },
    profil: { mod: "profil", title: "Profil", nav: "akun", auth: true },
+   alamat: { mod: "alamat", title: "Alamat", nav: "alamat", auth: true },
 };
 let token = 0, cleanup = null, teardown = [];
 // Halaman yang sudah tersedia. Rute lain tampil "segera hadir" sampai berkasnya ditambahkan (daftarkan namanya di sini).
-const READY = new Set(["beranda", "keranjang", "produk", "katalog", "akun", "profil"]);
+const READY = new Set(["beranda", "keranjang", "lookbook", "produk", "checkout", "pesanan", "katalog", "akun", "profil","alamat","faq"]);
 
 function parseHash() {
   const raw = location.hash.replace(/^#\/?/, "");
@@ -33,12 +34,13 @@ function parseHash() {
 /* ---------------- Kerangka ---------------- */
 function paintShell() {
   const p = me.profile, customer = isCustomer();
-  const menu = [["#/", "Home", "home"], ["#/katalog", "Katalog", "katalog"], ["#/lookbook", "Lookbook", "lookbook"], ["#/faq", "FAQ", "faq"]]
+  const menu = [["#/", "Home", "home"], ["#/katalog", "Katalog", "katalog"], ["#/lookbook", "Lookbook", "lookbook"], ["#/faq", "FAQ", "faq"], ["#/pesanan", "Pesanan", "pesanan"]]
     .map(([h, t, k]) => `<a href="${h}" data-menu="${k}">${t}</a>`).join("");
   const searchForm = (id, cls) => `<form class="${cls}" role="search" data-search><label class="sr-only" for="${id}" style="position:absolute;left:-999px">Cari produk</label>
     ${cls === "tk-search" ? ICON.search : ""}<input id="${id}" type="search" placeholder="Cari produk…" autocomplete="off" enterkeyhint="search" maxlength="60"></form>`;
   document.getElementById("tkTop").innerHTML = p && !customer
     ? `<div class="tk-strip">Anda masuk sebagai ${esc(ROLE[p.role] ?? p.role)}. Akun ini tidak bisa berbelanja. <a href="${esc(roleHome(p.role))}">Buka panel</a></div>` : "";
+  // Ikon di samping kolom cari: lonceng (semua ukuran, hanya customer), keranjang dan akun (≥1024px; di bawah itu ada di bottom nav).
   document.getElementById("tkHeadSlot").innerHTML = `
   <header class="tk-header"><div class="tk-wrap">
     <div class="tk-bar">
@@ -47,8 +49,9 @@ function paintShell() {
       <div class="tk-actions">
         ${searchForm("tkQ", "tk-search")}
         <button type="button" class="tk-ico tk-only-search-m" id="tkSearchBtn" aria-label="Cari produk" aria-expanded="false">${ICON.search}</button>
+        ${customer ? `<span class="tk-bell" id="tkBell"></span>` : ""}
+        <a class="tk-ico tk-cart-ico tk-only-d" href="#/keranjang" id="tkCartLink" aria-label="Keranjang">${ICON.bag}<span class="tk-nbadge" id="tkCartN" hidden>0</span></a>
         ${p ? `<a class="tk-ico tk-only-d" href="#/akun" aria-label="Akun">${ICON.user}</a>` : `<span class="tk-login"><a href="${esc(ROUTES.login)}?next=${encodeURIComponent(location.pathname)}">Masuk</a><a class="is-fill tk-reg" href="${esc(ROUTES.login.replace("login.html", "daftar.html"))}">Daftar</a></span>`}
-        <a class="tk-cartbtn" href="#/keranjang">Keranjang (<span id="tkCartN">0</span>)</a>
       </div>
     </div>
     <div class="tk-searchbar" id="tkSearchbar">${searchForm("tkQm", "tk-sbf")}</div>
@@ -77,7 +80,8 @@ function paintShell() {
   }));
   window.addEventListener("tk:cart", (e) => {
     const n = Number(e.detail) || 0, t = n > 99 ? "99+" : String(n);
-    document.getElementById("tkCartN").textContent = t;
+    const c = document.getElementById("tkCartN"); c.textContent = t; c.hidden = n <= 0;
+    document.getElementById("tkCartLink").setAttribute("aria-label", n > 0 ? `Keranjang, ${n} barang` : "Keranjang");
     const b = document.getElementById("tkNavCart"); b.textContent = t; b.hidden = n <= 0;
     b.setAttribute("aria-label", `${n} barang di keranjang`);
   });
@@ -174,6 +178,10 @@ async function render() {
   paintShell();
   if (isCustomer()) {
     refreshCartCount();
+    // Lonceng realtime + push (langganan push diselaraskan otomatis di sini bila izin sudah ada). Gagal dimuat tidak boleh merusak toko.
+    import("./bell.js")
+      .then(({ mountBell }) => teardown.push(mountBell({ host: document.getElementById("tkBell"), supabase, profile: me.profile })))
+      .catch((e) => console.error(e));
   }
   supabase.auth.onAuthStateChange((evt) => {
     if (evt === "SIGNED_OUT" && me.profile) { teardown.forEach((f) => f?.()); location.replace(ROUTES.home.customer); }

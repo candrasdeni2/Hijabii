@@ -102,7 +102,7 @@ body.sa-lock{overflow:hidden}
 .sa-stat:last-child:nth-child(odd){grid-column:1/-1}
 @media(min-width:1024px){.sa-stat:last-child:nth-child(odd){grid-column:auto}}
 .sa-stat-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:rgba(43,33,28,.6)}
-.sa-stat-val{font-family:var(--font-serif);font-size:40px;font-weight:500;line-height:1.1;margin-top:6px}
+.sa-stat-val{font-family:var(--font-sans,"Jost",system-ui,sans-serif);font-size:36px;font-weight:500;line-height:1.1;margin-top:6px}
 .sa-grid2{display:grid;gap:20px}
 @media(min-width:1024px){.sa-grid2{grid-template-columns:minmax(0,3fr) minmax(0,2fr)}}
 .sa-quick{display:grid;gap:10px}
@@ -188,3 +188,22 @@ body.sa-lock{overflow:hidden}
 /* Daftar ringkas (selalu tampil, dipakai dashboard) */
 .sa-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .sa-list li{border:1px solid var(--sand);border-radius:12px;padding:12px;background:var(--cream)}
+
+/* ---------- Template header admin untuk Super Admin ---------- */
+/* Topbar hanya untuk mobile (wordmark + chip peran + logout). Di tablet/desktop peran dan logout pindah ke bawah sidebar. */
+@media(min-width:768px){.sa-topbar{display:none}}
+
+/* Blok akun di bawah sidebar (tablet/desktop) */
+.sa-account{display:none}
+@media(min-width:768px){
+  .sa-account{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:auto;padding-top:12px;border-top:1px solid var(--sand)}
+  .sa-account-info{display:none}
+  .sa-account .sa-logout{padding:0;flex:none}
+}
+@media(min-width:1024px){
+  .sa-account{flex-direction:row;gap:10px}
+  .sa-account-info{display:grid;flex:1;min-width:0;gap:1px}
+  .sa-account-name{font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .sa-account-role{font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--marsala)}
+}
+

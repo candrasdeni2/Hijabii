@@ -1,7 +1,7 @@
 // Edge Function send-push — mengirim Web Push ke perangkat milik user.
 // Dua pemanggil:
 //  1) Database Webhook (INSERT pada public.notifications), dikenali dari header x-webhook-secret.
-//  2) Tombol "Kirim notifikasi uji" di web admin (Bearer token user yang login), hanya ke perangkat milik sendiri.
+//  2) Tombol "Kirim notifikasi uji" di web (Bearer token user yang login), hanya ke perangkat milik sendiri.
 // Deploy dengan --no-verify-jwt (pengecekan dilakukan di sini). Secret: VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, VAPID_SUBJECT, WEBHOOK_SECRET.
 // SUPABASE_URL dan SUPABASE_SERVICE_ROLE_KEY disediakan otomatis oleh Supabase.
 import { createClient } from "npm:@supabase/supabase-js@2";
@@ -46,9 +46,15 @@ async function sendTo(userId: string, payload: Payload) {
 }
 
 // Tujuan ketika notifikasi diklik, relatif terhadap folder web/ (lihat sw.js).
-function pathFor(role: string | null, data: Record<string, unknown> | null) {
-  if (role === "admin") return UUID.test(String(data?.order_id ?? "")) ? `admin/#/pesanan/${data!.order_id}` : "admin/";
+// type = tipe notifikasi (mis. 'invoice_direvisi'); dipakai agar customer langsung ke invoice.
+function pathFor(role: string | null, data: Record<string, unknown> | null, type?: string | null) {
+  const id = String(data?.order_id ?? "");
+  if (role === "admin") return UUID.test(id) ? `admin/#/pesanan/${id}` : "admin/";
   if (role === "super_admin") return "superadmin/";
+  if (role === "customer") {
+    if (UUID.test(id)) return type === "invoice_direvisi" ? `toko/#/pesanan/${id}/invoice` : `toko/#/pesanan/${id}`;
+    return type === "password_diubah" ? "toko/#/profil" : "toko/#/pesanan";
+  }
   return "";
 }
 
@@ -65,7 +71,7 @@ Deno.serve(async (req) => {
       if (type !== "INSERT" || table !== "notifications" || !record || !UUID.test(record.user_id ?? "")) return json({ skipped: true });
       const { data: prof } = await db.from("profiles").select("role").eq("id", record.user_id).maybeSingle();
       const out = await sendTo(record.user_id, {
-        title: record.title, body: record.body ?? "", path: pathFor(prof?.role ?? null, record.data), tag: record.id,
+        title: record.title, body: record.body ?? "", path: pathFor(prof?.role ?? null, record.data, record.type), tag: record.id,
       });
       return json(out);
     }
@@ -79,7 +85,8 @@ Deno.serve(async (req) => {
     if (!body?.test) return json({ error: "Permintaan tidak dikenal" }, 400);
     const { data: prof } = await db.from("profiles").select("role").eq("id", user.id).maybeSingle();
     return json(await sendTo(user.id, {
-      title: "Notifikasi uji", body: "Web push Hijabii berfungsi di perangkat ini.", path: pathFor(prof?.role ?? null, null), tag: "test",
+      title: "Notifikasi uji", body: "Web push Hijabii berfungsi di perangkat ini.",
+      path: prof?.role === "customer" ? "toko/" : pathFor(prof?.role ?? null, null), tag: "test",
     }));
   } catch (e) {
     console.error(e);
