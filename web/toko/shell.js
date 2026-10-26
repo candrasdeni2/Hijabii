@@ -19,10 +19,14 @@ const ROUTE = {
   akun: { mod: "akun", title: "Akun", nav: "akun", auth: true },
    profil: { mod: "profil", title: "Profil", nav: "akun", auth: true },
    alamat: { mod: "alamat", title: "Alamat", nav: "alamat", auth: true },
+  notifikasi: { mod: "notifikasi", title: "Notifikasi", nav: "akun", auth: true },
 };
 let token = 0, cleanup = null, teardown = [];
 // Halaman yang sudah tersedia. Rute lain tampil "segera hadir" sampai berkasnya ditambahkan (daftarkan namanya di sini).
-const READY = new Set(["beranda", "keranjang", "lookbook", "produk", "checkout", "pesanan", "katalog", "akun", "profil","alamat","faq"]);
+const READY = new Set(["beranda", "keranjang", "lookbook", "produk", "checkout", "pesanan", "katalog", "akun", "profil","alamat","faq","notifikasi"]);
+
+// Ikon filter (dipakai tombol di header; hanya tampil di halaman Katalog pada layar <1024px, lihat shell.css)
+const FILTER_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>`;
 
 function parseHash() {
   const raw = location.hash.replace(/^#\/?/, "");
@@ -36,7 +40,7 @@ function paintShell() {
   const p = me.profile, customer = isCustomer();
   const menu = [["#/", "Home", "home"], ["#/katalog", "Katalog", "katalog"], ["#/lookbook", "Lookbook", "lookbook"], ["#/faq", "FAQ", "faq"], ["#/pesanan", "Pesanan", "pesanan"]]
     .map(([h, t, k]) => `<a href="${h}" data-menu="${k}">${t}</a>`).join("");
-  const searchForm = (id, cls) => `<form class="${cls}" role="search" data-search><label class="sr-only" for="${id}" style="position:absolute;left:-999px">Cari produk</label>
+  const searchForm = (id, cls) => `<form class="${cls}" role="search" data-search><label class="sr-only" for="${id}">Cari produk</label>
     ${cls === "tk-search" ? ICON.search : ""}<input id="${id}" type="search" placeholder="Cari produk…" autocomplete="off" enterkeyhint="search" maxlength="60"></form>`;
   document.getElementById("tkTop").innerHTML = p && !customer
     ? `<div class="tk-strip">Anda masuk sebagai ${esc(ROLE[p.role] ?? p.role)}. Akun ini tidak bisa berbelanja. <a href="${esc(roleHome(p.role))}">Buka panel</a></div>` : "";
@@ -49,6 +53,7 @@ function paintShell() {
       <div class="tk-actions">
         ${searchForm("tkQ", "tk-search")}
         <button type="button" class="tk-ico tk-only-search-m" id="tkSearchBtn" aria-label="Cari produk" aria-expanded="false">${ICON.search}</button>
+        <button type="button" class="tk-ico tk-filter-btn" id="tkFilterBtn" aria-label="Filter kategori">${FILTER_ICON}</button>
         ${customer ? `<span class="tk-bell" id="tkBell"></span>` : ""}
         <a class="tk-ico tk-cart-ico tk-only-d" href="#/keranjang" id="tkCartLink" aria-label="Keranjang">${ICON.bag}<span class="tk-nbadge" id="tkCartN" hidden>0</span></a>
         ${p ? `<a class="tk-ico tk-only-d" href="#/akun" aria-label="Akun">${ICON.user}</a>` : `<span class="tk-login"><a href="${esc(ROUTES.login)}?next=${encodeURIComponent(location.pathname)}">Masuk</a><a class="is-fill tk-reg" href="${esc(ROUTES.login.replace("login.html", "daftar.html"))}">Daftar</a></span>`}
@@ -78,6 +83,7 @@ function paintShell() {
     sb.classList.remove("is-open"); btn.setAttribute("aria-expanded", "false");
     location.hash = q ? `#/katalog?q=${encodeURIComponent(q)}` : "#/katalog";
   }));
+  document.getElementById("tkFilterBtn").addEventListener("click", () => window.dispatchEvent(new CustomEvent("tk:filter")));   // dipasang oleh pages/katalog.js
   window.addEventListener("tk:cart", (e) => {
     const n = Number(e.detail) || 0, t = n > 99 ? "99+" : String(n);
     const c = document.getElementById("tkCartN"); c.textContent = t; c.hidden = n <= 0;

@@ -199,6 +199,15 @@ export async function removeCartItem(id) {
   await refreshCartCount();
 }
 
+/* Pilihan item keranjang untuk checkout. Yang disimpan hanya id yang DIMATIKAN, jadi item baru otomatis ikut terpilih. */
+const CART_OFF_KEY = "tk:cartOff";
+export function getCartOff() {
+  try { return new Set(JSON.parse(sessionStorage.getItem(CART_OFF_KEY) || "[]")); } catch { return new Set(); }
+}
+export function setCartOff(set) {
+  try { sessionStorage.setItem(CART_OFF_KEY, JSON.stringify([...set])); } catch { /* storage diblokir: pilihan tidak tersimpan */ }
+}
+
 /* ---------------- Lain-lain ---------------- */
 export const emptyState = (title, text = "", ctaHref = "", ctaLabel = "") => `<div class="tk-empty">
   <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M14 22h36l-3 32H17z"/><path d="M24 22v-5a8 8 0 0116 0v5"/></svg>

@@ -1,5 +1,5 @@
 // Checkout: penerima (prefill dari alamat utama), area + kurir + cek ongkir (fallback manual), metode bayar, lalu place_order.
-import { supabase, loadCart, rupiah, esc, fail, emptyState, errorBox, toast, withLoading, openDialog, getSettings, refreshCartCount, img } from "../tk-lib.js";
+import { supabase, loadCart, rupiah, esc, fail, emptyState, errorBox, toast, withLoading, openDialog, getSettings, refreshCartCount, img, getCartOff } from "../tk-lib.js";
 import { mountAreaPicker, pretty } from "../../assets/js/area-picker.js";
 import { getShippingRates } from "../../assets/js/shipping-cost.js";
 import { COURIER } from "../../assets/js/labels.js";
@@ -79,6 +79,10 @@ export async function init({ root, profile, isStale }) {
   addrs = addrs ?? [];
 
   if (!rows.length) { body.innerHTML = emptyState("Keranjang kosong", "Pilih produk dulu sebelum checkout.", "#/katalog", "Lihat Koleksi"); return; }
+  // Hanya produk yang dicentang di keranjang yang di-checkout.
+  const unsel = getCartOff();
+  rows = rows.filter((r) => !unsel.has(r.id));
+  if (!rows.length) { toast("Pilih dulu produk yang mau di-checkout.", "warning"); location.hash = "#/keranjang"; return; }
   if (rows.some((r) => !r.ok || r.over)) { toast("Ada produk di keranjang yang perlu disesuaikan dulu.", "warning"); location.hash = "#/keranjang"; return; }
 
   const items = rows.map((r) => ({ variant_id: r.variantId, qty: r.qty }));

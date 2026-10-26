@@ -1,33 +1,47 @@
 // Keranjang: tambah/ubah jumlah/hapus. Stok TIDAK dikunci di sini (baru terkunci saat Pesan); stok dicek ulang tiap halaman dibuka.
-import { loadCart, setCartQty, removeCartItem, rupiah, esc, img, fail, emptyState, errorBox, toast } from "../tk-lib.js";
+import { loadCart, setCartQty, removeCartItem, getCartOff, setCartOff, rupiah, esc, img, fail, emptyState, errorBox, toast } from "../tk-lib.js";
 
 export async function init({ root, isStale }) {
   root.innerHTML = `<div class="tk-wrap"><div class="tk-head"><h1 class="tk-h1">Keranjang</h1></div><div id="cBody"><div class="skeleton" style="height:120px"></div></div></div>`;
   const body = root.querySelector("#cBody");
   let rows = [];
+  let unsel = getCartOff();   // id item yang TIDAK dicentang (tersimpan di sessionStorage, dibaca juga oleh checkout)
 
-  const sub = () => rows.filter((r) => r.ok).reduce((s, r) => s + r.qty * r.price, 0);
-  const okQty = () => rows.filter((r) => r.ok).reduce((s, r) => s + r.qty, 0);
+  const isSel = (r) => r.ok && !unsel.has(r.id);
+  const sub = () => rows.filter(isSel).reduce((s, r) => s + r.qty * r.price, 0);
+  const okQty = () => rows.filter(isSel).reduce((s, r) => s + r.qty, 0);
+
+  // Checkbox "Pilih semua" di samping judul: centang penuh / setengah (indeterminate) / kosong.
+  function syncAll() {
+    const w = root.querySelector("#cSelAllW"), cb = root.querySelector("#cSelAll"); if (!w || !cb) return;
+    const can = rows.filter((r) => r.ok), n = can.filter((r) => !unsel.has(r.id)).length;
+    w.hidden = !rows.length; cb.disabled = !can.length;
+    cb.checked = can.length > 0 && n === can.length; cb.indeterminate = n > 0 && n < can.length;
+  }
 
   function paint() {
     if (!rows.length) { body.innerHTML = emptyState("Belum ada produk", "Pilih produk favoritmu lalu masukkan ke keranjang.", "#/katalog", "Lihat Koleksi"); return; }
-    const over = rows.filter((r) => r.over), dead = rows.filter((r) => !r.ok);
+    const over = rows.filter((r) => isSel(r) && r.over), dead = rows.filter((r) => !r.ok);
     const can = okQty() > 0 && !over.length;
+    const offAttr = can ? "" : `aria-disabled="true" tabindex="-1" data-off="${okQty() ? "bad" : "empty"}"`;
     body.innerHTML = `<div class="tk-cart">
-      <div>
+      <div class="tk-cart-main">
         ${over.length ? `<div class="tk-note" role="alert" style="margin-bottom:12px"><span>Stok beberapa produk berkurang. Sesuaikan jumlahnya sebelum checkout.</span><button class="btn btn-secondary btn-sm" type="button" data-fix>Sesuaikan</button></div>` : ""}
-        ${dead.length ? `<div class="tk-note" role="alert" style="margin-bottom:12px"><span>Ada produk yang sudah habis atau tidak dijual. Hapus dari keranjang untuk melanjutkan.</span></div>` : ""}
+        ${dead.length ? `<div class="tk-note" role="alert" style="margin-bottom:12px"><span>Ada produk yang sudah habis atau tidak dijual. Produk itu tidak ikut checkout; hapus dari keranjang jika tidak diperlukan.</span></div>` : ""}
+        <div class="tk-selrow"><label class="tk-selall" id="cSelAllW"><input type="checkbox" id="cSelAll" data-selall><span>Pilih semua</span></label></div>
         <ul class="tk-items" style="list-style:none;margin:0;padding:0">${rows.map(item).join("")}</ul>
       </div>
       <aside class="tk-card tk-sum" aria-label="Ringkasan">
         <h2 class="tk-h2" style="font-size:22px;margin-bottom:10px">Ringkasan</h2>
         <div class="tk-sum-row"><span>Subtotal produk (${okQty()})</span><span>${esc(rupiah(sub()))}</span></div>
         <div class="tk-sum-row tk-muted tk-small"><span>Ongkir dihitung saat checkout dan tampil di invoice.</span></div>
-        <a class="btn btn-accent" href="#/checkout" ${can ? "" : 'aria-disabled="true" tabindex="-1" data-off'}>Checkout (${okQty()})</a>
+        <a class="btn btn-accent" href="#/checkout" ${offAttr}>Checkout (${okQty()})</a>
       </aside></div>
-      <div class="tk-bar-cta"><div class="tk-tot"><span>Subtotal</span><b>${esc(rupiah(sub()))}</b></div><a class="btn btn-accent" href="#/checkout" ${can ? "" : 'aria-disabled="true" tabindex="-1" data-off'}>Checkout (${okQty()})</a></div>`;
+      <div class="tk-bar-cta"><div class="tk-tot"><span>Subtotal</span><b>${esc(rupiah(sub()))}</b></div><a class="btn btn-accent" href="#/checkout" ${offAttr}>Checkout (${okQty()})</a></div>`;
+    syncAll();
   }
-  const item = (r) => `<li class="tk-it${r.ok && !r.over ? "" : " is-bad"}" data-id="${esc(r.id)}">
+  const item = (r) => `<li class="tk-it has-ck${r.ok && !r.over ? "" : " is-bad"}${isSel(r) ? "" : " is-off"}" data-id="${esc(r.id)}">
+    <label class="tk-pick"><input type="checkbox" data-sel aria-label="Pilih ${esc(r.name)} untuk checkout" ${isSel(r) ? "checked" : ""} ${r.ok ? "" : "disabled"}></label>
     <div class="tk-it-img">${img(r.image, r.name)}</div>
     <div style="min-width:0">
       ${r.slug ? `<a class="tk-it-name" href="#/produk/${encodeURIComponent(r.slug)}">${esc(r.name)}</a>` : `<span class="tk-it-name">${esc(r.name)}</span>`}
@@ -43,6 +57,9 @@ export async function init({ root, isStale }) {
     try {
       rows = await loadCart();
       if (isStale()) return;
+      // buang id yang sudah tidak ada di keranjang (mis. sudah dipesan/dihapus)
+      const ids = new Set(rows.map((r) => r.id));
+      unsel = new Set([...unsel].filter((id) => ids.has(id))); setCartOff(unsel);
       paint();
     } catch (e) {
       console.error(e);
@@ -54,7 +71,7 @@ export async function init({ root, isStale }) {
   // root (#view) dipakai ulang antar halaman: pendengar WAJIB dilepas saat pindah halaman (shell memanggil fungsi yang dikembalikan init)
   const ac = new AbortController();
   root.addEventListener("click", async (e) => {
-    const off = e.target.closest("[data-off]"); if (off) { e.preventDefault(); toast("Selesaikan dulu produk yang bermasalah di keranjang.", "warning"); return; }
+    const off = e.target.closest("[data-off]"); if (off) { e.preventDefault(); toast(off.dataset.off === "empty" ? "Pilih dulu produk yang mau di-checkout." : "Selesaikan dulu produk yang bermasalah di keranjang.", "warning"); return; }
     if (e.target.closest("[data-fix]")) {
       try {
         for (const r of rows.filter((x) => x.over)) await setCartQty(r.id, r.stock);
@@ -65,7 +82,7 @@ export async function init({ root, isStale }) {
     const li = e.target.closest("[data-id]"); if (!li) return;
     const r = rows.find((x) => x.id === li.dataset.id); if (!r) return;
     try {
-      if (e.target.closest("[data-del]")) { await removeCartItem(r.id); rows = rows.filter((x) => x.id !== r.id); paint(); return; }
+      if (e.target.closest("[data-del]")) { await removeCartItem(r.id); rows = rows.filter((x) => x.id !== r.id); unsel.delete(r.id); setCartOff(unsel); paint(); return; }
       const d = e.target.closest("[data-inc]") ? 1 : e.target.closest("[data-dec]") ? -1 : 0;
       if (!d) return;
       const next = r.qty + d;
@@ -75,6 +92,21 @@ export async function init({ root, isStale }) {
       r.qty = next; r.over = next > r.stock; paint();
       root.querySelector(`[data-id="${CSS.escape(r.id)}"] ${d > 0 ? "[data-inc]" : "[data-dec]"}`)?.focus();
     } catch (err) { fail(err, "Gagal memperbarui keranjang."); load(); }
+  }, { signal: ac.signal });
+  // Centang per produk + "Pilih semua"
+  root.addEventListener("change", (e) => {
+    if (e.target.closest("[data-selall]")) {
+      const can = rows.filter((r) => r.ok), allOn = can.every((r) => !unsel.has(r.id));
+      can.forEach((r) => (allOn ? unsel.add(r.id) : unsel.delete(r.id)));   // sudah penuh → kosongkan; selain itu → pilih semua
+      setCartOff(unsel); paint();
+      root.querySelector("[data-selall]")?.focus();
+      return;
+    }
+    const cb = e.target.closest("[data-sel]"); if (!cb) return;
+    const li = cb.closest("[data-id]"), r = li && rows.find((x) => x.id === li.dataset.id); if (!r) return;
+    if (cb.checked) unsel.delete(r.id); else unsel.add(r.id);
+    setCartOff(unsel); paint();
+    root.querySelector(`[data-id="${CSS.escape(r.id)}"] [data-sel]`)?.focus();
   }, { signal: ac.signal });
   await load();
   return () => ac.abort();

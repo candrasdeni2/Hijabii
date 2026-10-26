@@ -1,57 +1,86 @@
-/* toko/shell.css — gaya halaman Customer (prefiks tk-). Memakai token dari assets/css/tokens.css dan komponen dari components.css. */
+/* toko/shell.css — gaya halaman Customer (prefiks tk-). Memakai token dari assets/css/tokens.css dan komponen dari components.css.
+   Urutan file: dasar -> header -> konten umum -> halaman -> footer/WA -> bottom nav -> aturan header per halaman.
+   Breakpoint: <768 mobile, 768-1023 tablet (bottom nav), >=1024 desktop (menu atas). Ditulis mobile-first. */
+
+/* ========== Dasar ========== */
 html{scroll-behavior:smooth}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body{min-height:100svh;font-size:15px}
 a{color:inherit}
 img{display:block;max-width:100%}
+/* Jarak aman bawah minimal 16px: HP layar panjang/sudut membulat sering melaporkan safe-area 0. --tk-nav-h = tinggi bottom nav sebenarnya */
+:root{--tk-bottom:max(env(safe-area-inset-bottom,0px),16px);--tk-nav-h:calc(57px + var(--tk-bottom))}
 .tk-wrap{width:100%;max-width:72rem;margin:0 auto;padding:0 16px}
 .tk-skip{position:absolute;left:-999px;top:8px;z-index:200;background:var(--ink);color:var(--cream);padding:8px 14px;border-radius:999px}
 .tk-skip:focus{left:8px}
+.tk-sr{position:absolute;left:-999px}
 .tk-boot{min-height:60vh;display:grid;place-items:center;color:rgba(43,33,28,.7)}
-.tk-only-d{display:none}
-@media(min-width:1024px){.tk-only-d{display:revert}.tk-only-m{display:none!important}}
+a.btn{text-decoration:none}
+.tk-btn-light{background:var(--cream);color:var(--ink)}.tk-btn-light:hover:not(:disabled){background:var(--sand)}
 
-/* ---------- Header ---------- */
+/* ========== Header ========== */
 .tk-header{position:sticky;top:0;z-index:60;background:rgba(246,240,231,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid rgba(43,33,28,.08)}
-.tk-bar{display:flex;align-items:center;gap:12px;min-height:60px}
+.tk-strip{background:var(--ink);color:var(--cream);font-size:13px;padding:8px 16px;text-align:center}
+.tk-strip a{color:var(--cream);text-underline-offset:3px}
+.tk-bar{display:flex;align-items:center;gap:8px;min-height:60px}
+@media(min-width:768px){.tk-bar{gap:12px}}
 .tk-logo{font-family:var(--font-serif);font-size:24px;font-weight:500;text-decoration:none;color:var(--ink)}
 .tk-menu{display:none;gap:28px;flex:1;justify-content:center}
 .tk-menu a{font-size:14px;text-decoration:none;color:rgba(43,33,28,.75);padding:8px 2px;border-bottom:2px solid transparent}
 .tk-menu a:hover{color:var(--ink)}
 .tk-menu a[aria-current="page"]{color:var(--marsala);border-bottom-color:var(--marsala);font-weight:500}
-.tk-actions{display:flex;align-items:center;gap:6px;margin-left:auto}
-.tk-strip{background:var(--ink);color:var(--cream);font-size:13px;padding:8px 16px;text-align:center}
-.tk-strip a{color:var(--cream);text-underline-offset:3px}
+@media(min-width:1024px){.tk-menu{display:flex}}
+
+/* Kanan header: cari + ikon. Mobile: cari memenuhi sisa lebar. */
+.tk-actions{display:flex;align-items:center;gap:2px;flex:1;min-width:0}
+@media(min-width:768px){.tk-actions{flex:none;margin-left:auto;gap:6px}}
+
+/* Ikon (lonceng, filter, keranjang, akun) */
 .tk-ico{position:relative;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:0;background:transparent;color:var(--ink);cursor:pointer;text-decoration:none}
 .tk-ico:hover{background:var(--sand)}
 .tk-ico svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+/* Khusus desktop: ditulis SETELAH .tk-ico supaya display:none tidak tertimpa display:grid */
+.tk-only-d{display:none}
+@media(min-width:1024px){.tk-only-d{display:revert}.tk-ico.tk-only-d{display:grid}.tk-only-m{display:none!important}}
 .tk-dot{position:absolute;top:9px;right:10px;width:9px;height:9px;border-radius:50%;background:var(--error);border:2px solid var(--cream)}
 .tk-nbadge{position:absolute;top:-2px;right:-9px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--marsala);color:var(--cream);font-size:11px;font-weight:600;line-height:18px;text-align:center}
-.tk-search{display:none;position:relative}
-.tk-search input{width:220px;min-height:40px;border-radius:999px;border:1px solid var(--sand);background:var(--paper);padding:0 16px 0 40px;font:inherit;font-size:14px}
+.tk-ico .tk-nbadge{top:3px;right:0}
+.tk-bell-btn .tk-nbadge{background:var(--error,#9E3D3D)}
+.tk-bell-btn[aria-expanded="true"]{background:var(--sand)}
+
+/* Kolom cari: selalu tampil di header (bukan ikon yang dibuka dulu) */
+.tk-search{position:relative;display:block;flex:1;min-width:0}
+.tk-search input{width:100%;min-height:40px;border-radius:999px;border:1px solid var(--sand);background:var(--paper);padding:0 16px 0 40px;font:inherit;font-size:16px}   /* 16px: cegah auto-zoom iOS */
 .tk-search input:focus{outline:none;border-color:var(--marsala);box-shadow:var(--shadow-focus)}
 .tk-search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:17px;height:17px;fill:none;stroke:var(--mocha);stroke-width:1.8;stroke-linecap:round}
-.tk-searchbar{display:none;padding:0 0 12px}
-.tk-searchbar.is-open{display:block}
-.tk-searchbar input{width:100%;min-height:44px;border-radius:999px;border:1px solid var(--sand);background:var(--paper);padding:0 18px;font:inherit;font-size:16px}
-.tk-searchbar input:focus{outline:none;border-color:var(--marsala);box-shadow:var(--shadow-focus)}
-.tk-cartbtn{display:none;align-items:center;gap:8px;min-height:40px;padding:0 18px;border-radius:999px;background:var(--marsala);color:var(--cream);text-decoration:none;font-size:14px;font-weight:500;transition:transform .5s var(--ease),background-color .25s}
-.tk-cartbtn:hover{background:var(--marsala-dark);transform:translateY(-2px)}
+@media(min-width:768px){.tk-search{flex:none}.tk-search input{width:220px;font-size:14px}}
+@media(min-width:1024px){.tk-search input{width:240px}}
+/* Ikon cari + baris cari di bawah header (pola lama) sudah tidak dipakai; markup-nya masih ada di shell.js, jadi disembunyikan */
+.tk-only-search-m,.tk-searchbar{display:none!important}
+
+/* Tombol Masuk/Daftar untuk tamu */
 .tk-login{display:inline-flex;align-items:center;gap:6px}
 .tk-login a{font-size:14px;text-decoration:none;padding:8px 12px;border-radius:999px}
 .tk-login a:first-child:hover{background:var(--sand)}
 .tk-login a.is-fill{background:var(--ink);color:var(--cream)}
-@media(max-width:767px){.tk-login a.tk-reg{display:none}.tk-login a:first-child{background:var(--ink);color:var(--cream);font-size:13px}}
 .tk-login a.is-fill:hover{background:var(--marsala)}
-@media(min-width:768px){.tk-cartbtn{display:inline-flex}.tk-search{display:block}.tk-searchbar{display:none!important}.tk-only-search-m{display:none!important}}
-@media(min-width:1024px){.tk-menu{display:flex}.tk-search input{width:240px}}
+@media(max-width:767px){.tk-login a.tk-reg{display:none}.tk-login a:first-child{background:var(--ink);color:var(--cream);font-size:13px}}
 .tk-who{display:none;font-size:13px;color:rgba(43,33,28,.75)}
 .tk-who a{color:var(--marsala);text-decoration:underline;text-underline-offset:3px}
 
-/* Lonceng */
+/* Filter (hanya Katalog di <1024px, lihat "Aturan header per halaman") */
+.tk-filter-btn{display:none}
+.tk-filter-btn.is-on::after{content:"";position:absolute;top:9px;right:9px;width:9px;height:9px;border-radius:50%;background:var(--marsala);border:2px solid var(--cream)}
+
+/* Lonceng + panel notifikasi */
 .tk-bell{position:relative}
-.tk-bell-panel{position:absolute;top:calc(100% + 8px);right:-48px;width:min(380px,calc(100vw - 24px));background:var(--paper);border:1px solid var(--sand);border-radius:16px;box-shadow:var(--shadow-lg);overflow:hidden;z-index:70}
-@media(min-width:768px){.tk-bell-panel{right:0}}
+.tk-bell-panel{position:absolute;top:calc(100% + 8px);right:0;width:min(380px,calc(100vw - 24px));background:var(--paper);border:1px solid var(--sand);border-radius:16px;box-shadow:var(--shadow-lg);overflow:hidden;z-index:70}
+.tk-bell-panel[hidden]{display:none}
+.tk-bell-panel .pu-box{border-top:1px solid var(--sand)}
+@media(max-width:767px){   /* mobile: panel selebar layar di bawah header */
+  .tk-bell{position:static}
+  .tk-bell-panel{left:12px;right:12px;width:auto}
+}
 .tk-bell-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px 10px;border-bottom:1px solid var(--sand)}
 .tk-bell-head h2{font-size:20px;font-weight:500}
 .tk-linkbtn{background:none;border:0;padding:6px 0;font:inherit;font-size:13px;color:var(--marsala);text-decoration:underline;text-underline-offset:4px;cursor:pointer;min-height:36px}
@@ -68,12 +97,13 @@ img{display:block;max-width:100%}
 .tk-nt-w{display:block;font-size:12px;color:rgba(43,33,28,.6);margin-top:4px}
 .tk-nt-dot{flex:none;width:8px;height:8px;margin-top:6px;border-radius:50%;background:var(--error)}
 
-/* ---------- Konten ---------- */
-.tk-main{padding:20px 0 112px;outline:none}
-@media(min-width:768px){.tk-main{padding:32px 0 64px}}
-.tk-h1{font-size:34px;line-height:1.15;font-weight:600}
+/* ========== Konten umum ========== */
+.tk-main{padding:20px 0 calc(var(--tk-nav-h) + 56px);outline:none}   /* bawah: ruang untuk bottom nav */
+@media(min-width:768px){.tk-main{padding-top:32px}}
+@media(min-width:1024px){.tk-main{padding-bottom:64px}}
+.tk-h1{font-size:24px;line-height:1.15;font-weight:600}
 @media(min-width:768px){.tk-h1{font-size:44px}}
-.tk-h2{font-size:26px;line-height:1.2;font-weight:600}
+.tk-h2{font-size:24px;line-height:1.2;font-weight:600}
 .tk-sub{margin:6px 0 0;color:rgba(43,33,28,.75);font-size:15px}
 .tk-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:20px}
 .tk-back{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:rgba(43,33,28,.75);text-decoration:none;font-size:14px;background:none;border:0;padding:0;cursor:pointer;font-family:inherit}
@@ -101,7 +131,7 @@ img{display:block;max-width:100%}
 .tk-chip:hover{background:var(--sand)}
 .tk-chip[aria-pressed="true"],.tk-chip.is-on{background:var(--marsala);border-color:var(--marsala);color:var(--cream)}
 
-/* ---------- Foto + kartu produk ---------- */
+/* ========== Foto + kartu produk ========== */
 .tk-ph{background:linear-gradient(135deg,#E8DCCD,#D8C6B5);display:grid;place-items:center;color:rgba(43,33,28,.5);font-size:12px;width:100%;height:100%}
 .tk-img{width:100%;height:100%;object-fit:cover;background:var(--sand)}
 .tk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 12px}
@@ -126,7 +156,7 @@ img{display:block;max-width:100%}
 .tk-star{color:var(--warning)}
 .tk-more{display:flex;justify-content:center;margin-top:28px}
 
-/* ---------- Beranda ---------- */
+/* ========== Beranda (gaya lama; beranda.js sekarang memakai pages/beranda.css dengan awalan .bd-) ========== */
 .tk-hero{position:relative;border-radius:24px;overflow:hidden;min-height:420px;display:flex;align-items:flex-end;background:var(--sand) url('../assets/img/hero-02.png') 62% center/cover no-repeat}
 .tk-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(43,33,28,.62),rgba(43,33,28,.05) 65%)}
 .tk-hero-in{position:relative;z-index:1;padding:28px 22px;color:#fff;max-width:34rem}
@@ -142,32 +172,31 @@ img{display:block;max-width:100%}
 .tk-lb-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 @media(min-width:768px){.tk-lb-row{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}}
 
-/* ---------- Detail produk ---------- */
-.tk-pd{display:grid;gap:20px}
+/* ========== Detail produk (mobile-first: ringkas di mobile, longgar >=768) ========== */
+.tk-pd{display:grid;gap:12px}
+@media(min-width:768px){.tk-pd{gap:20px}}
 @media(min-width:900px){.tk-pd{grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:48px;align-items:start}.tk-pd-info{position:sticky;top:84px}}
-.tk-gal{display:grid;gap:10px}
-.tk-gal-main{position:relative;aspect-ratio:4/5;border-radius:20px;overflow:hidden;background:var(--sand)}
+.tk-gal{display:grid;gap:8px}
+.tk-gal-main{position:relative;aspect-ratio:1/1;max-height:46svh;border-radius:14px;overflow:hidden;background:var(--sand)}   /* tinggi foto mobile: ubah 46svh */
 .tk-gal-main img{transition:opacity .25s}
-.tk-gal-count{position:absolute;right:12px;bottom:12px;padding:4px 12px;border-radius:999px;background:rgba(43,33,28,.75);color:var(--cream);font-size:12px}
+.tk-gal-count{position:absolute;right:8px;bottom:8px;padding:2px 10px;border-radius:999px;background:rgba(43,33,28,.75);color:var(--cream);font-size:11px}
 .tk-gal-nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.82);backdrop-filter:blur(6px);cursor:pointer;display:none;place-items:center}
 .tk-gal-nav svg{width:20px;height:20px;fill:none;stroke:var(--ink);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .tk-gal-nav.is-prev{left:10px}.tk-gal-nav.is-next{right:10px}
 .tk-gal-main:hover .tk-gal-nav.is-on,.tk-gal-nav.is-on:focus-visible{display:grid}
-.tk-gal-top{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;z-index:2}
-.tk-rbtn{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.82);backdrop-filter:blur(6px);cursor:pointer}
-.tk-rbtn svg{width:20px;height:20px;fill:none;stroke:var(--ink);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-.tk-thumbs{display:flex;gap:8px;overflow-x:auto;padding:2px}
-.tk-thumbs button{flex:none;width:64px;height:64px;border-radius:10px;overflow:hidden;border:2px solid transparent;padding:0;background:var(--sand);cursor:pointer}
+.tk-gal-top{position:absolute;top:8px;left:8px;right:8px;display:flex;justify-content:space-between;z-index:2}
+.tk-rbtn{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.82);backdrop-filter:blur(6px);cursor:pointer}
+.tk-rbtn svg{width:18px;height:18px;fill:none;stroke:var(--ink);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.tk-thumbs{display:flex;gap:6px;overflow-x:auto;padding:2px}
+.tk-thumbs button{flex:none;width:44px;height:44px;border-radius:8px;overflow:hidden;border:1.5px solid transparent;padding:0;background:var(--sand);cursor:pointer}   /* thumbnail foto */
 .tk-thumbs button[aria-current="true"]{border-color:var(--marsala)}
 .tk-thumbs img{width:100%;height:100%;object-fit:cover}
-.tk-pd h1{font-size:34px;line-height:1.12;font-weight:600;overflow-wrap:anywhere}
-@media(min-width:768px){.tk-pd h1{font-size:42px}}
-.tk-pd-price{font-size:22px;margin:8px 0 0;font-weight:500}
-.tk-label{display:block;font-size:13px;font-weight:500;margin:22px 0 10px}
+.tk-pd h1{font-size:18px;line-height:1.25;font-weight:600;overflow-wrap:anywhere}
+.tk-pd-price{font-size:18px;margin:4px 0 0;font-weight:500}
+.tk-label{display:block;font-size:12px;font-weight:500;margin:14px 0 8px}
 .tk-label b{color:var(--marsala);font-weight:600}
-.tk-sws{display:flex;flex-wrap:wrap;gap:10px}
-.tk-sw{position:relative;width:48px;height:48px;border-radius:10px;border:1px solid var(--sand);padding:0;overflow:hidden;background:var(--sand);cursor:pointer}
-@media(min-width:768px){.tk-sw{width:64px;height:64px}}
+.tk-sws{display:flex;flex-wrap:wrap;gap:8px}
+.tk-sw{position:relative;width:40px;height:40px;border-radius:8px;border:1px solid var(--sand);padding:0;overflow:hidden;background:var(--sand);cursor:pointer}   /* kotak pilihan warna */
 .tk-sw img{width:100%;height:100%;object-fit:cover}
 .tk-sw[aria-pressed="true"]{box-shadow:0 0 0 2px var(--cream),0 0 0 4px var(--marsala)}
 .tk-sw.is-hex{border-radius:50%}
@@ -175,10 +204,27 @@ img{display:block;max-width:100%}
 .tk-sw.is-out img{filter:grayscale(1);opacity:.6}
 .tk-sw.is-out::after{content:"";position:absolute;inset:0;background:linear-gradient(to top right,transparent calc(50% - 1px),rgba(43,33,28,.5),transparent calc(50% + 1px))}
 .tk-sizes{display:flex;flex-wrap:wrap;gap:8px}
-.tk-size{min-width:48px;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--sand);background:var(--paper);font:500 14px var(--font-sans);cursor:pointer;color:var(--ink)}
+.tk-size{min-width:44px;min-height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--sand);background:var(--paper);font:500 13px var(--font-sans);cursor:pointer;color:var(--ink)}
 .tk-size:hover:not(:disabled){border-color:var(--mocha)}
 .tk-size[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--cream)}
 .tk-size:disabled{text-decoration:line-through;opacity:.45;cursor:not-allowed}
+.tk-sisa{font-size:11px;color:var(--warning);margin-left:4px;font-weight:400}
+.tk-size[aria-pressed="true"] .tk-sisa{color:#F2D9A8}
+@media(min-width:768px){
+  .tk-gal{gap:10px}
+  .tk-gal-main{aspect-ratio:4/5;max-height:none;border-radius:20px}
+  .tk-gal-count{right:12px;bottom:12px;padding:4px 12px;font-size:12px}
+  .tk-gal-top{top:12px;left:12px;right:12px}
+  .tk-rbtn{width:44px;height:44px}.tk-rbtn svg{width:20px;height:20px}
+  .tk-thumbs{gap:8px}
+  .tk-thumbs button{width:64px;height:64px;border-radius:10px;border-width:2px}
+  .tk-pd h1{font-size:42px;line-height:1.12}
+  .tk-pd-price{font-size:22px;margin-top:8px}
+  .tk-label{font-size:13px;margin:22px 0 10px}
+  .tk-sws{gap:10px}
+  .tk-sw{width:64px;height:64px;border-radius:10px}
+  .tk-size{min-width:48px;min-height:44px;padding:0 16px;font-size:14px}
+}
 .tk-hint{margin:8px 0 0;font-size:13px;color:var(--warning)}
 .tk-qty{display:inline-flex;align-items:center;border:1px solid var(--sand);border-radius:999px;background:var(--paper);padding:3px}
 .tk-qty button{width:38px;height:38px;border-radius:50%;border:0;background:transparent;font-size:20px;line-height:1;cursor:pointer;color:var(--ink)}
@@ -189,7 +235,7 @@ img{display:block;max-width:100%}
 .tk-stock.is-low{color:var(--warning)}
 .tk-cta{display:none;gap:12px;margin-top:24px}
 @media(min-width:768px){.tk-cta{display:flex}.tk-cta .btn{flex:1}}
-.tk-sticky{position:fixed;z-index:55;left:0;right:0;bottom:calc(60px + env(safe-area-inset-bottom));display:flex;gap:10px;align-items:center;padding:10px 16px;background:rgba(246,240,231,.96);backdrop-filter:blur(8px);border-top:1px solid rgba(43,33,28,.08)}
+.tk-sticky{position:fixed;z-index:55;left:0;right:0;bottom:var(--tk-nav-h);display:flex;gap:10px;align-items:center;padding:10px 16px;background:rgba(246,240,231,.96);backdrop-filter:blur(8px);border-top:1px solid rgba(43,33,28,.08)}
 .tk-sticky .btn{flex:1;padding-inline:12px}
 @media(min-width:768px){.tk-sticky{display:none}}
 .tk-wa-ico{flex:none;display:grid;place-items:center;width:48px;height:48px;border-radius:50%;border:1px solid var(--sand);background:var(--paper);color:var(--ink)}
@@ -202,8 +248,13 @@ img{display:block;max-width:100%}
 .tk-rev p{margin:8px 0 0;overflow-wrap:anywhere;white-space:pre-line}
 .tk-avg{display:flex;align-items:baseline;gap:10px;margin-bottom:14px}
 .tk-avg b{font-family:var(--font-serif);font-size:44px;line-height:1;font-weight:600}
+.tk-stars-in{display:flex;gap:2px}
+.tk-stars-in button{width:44px;height:44px;border:0;background:transparent;font-size:32px;line-height:1;color:var(--sand);cursor:pointer}
+.tk-stars-in button.is-on{color:var(--warning)}
+.tk-count{font-size:12px;color:rgba(43,33,28,.65);text-align:right;margin-top:4px}
+.tk-reasons{display:grid;gap:10px;margin:14px 0}
 
-/* ---------- Keranjang ---------- */
+/* ========== Keranjang ========== */
 .tk-cart{display:grid;gap:20px}
 @media(min-width:900px){.tk-cart{grid-template-columns:minmax(0,1fr) 340px;align-items:start}}
 .tk-items{display:grid;gap:12px}
@@ -213,18 +264,31 @@ img{display:block;max-width:100%}
 .tk-it-name{font-family:var(--font-serif);font-size:20px;line-height:1.2;font-weight:600;text-decoration:none;overflow-wrap:anywhere}
 .tk-it-var{font-size:13px;color:rgba(43,33,28,.75);margin-top:2px}
 .tk-it-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap}
+.tk-it-row .tk-link{min-height:44px;padding:0 6px}
 .tk-it-warn{margin-top:8px;font-size:13px;color:var(--error)}
+/* Keranjang: checkbox pilih produk + "Pilih semua" di atas pojok kanan card */
+.tk-cart-main{position:relative}
+.tk-selrow{position:absolute;right:0;bottom:100%;margin-bottom:16px}   /* melayang tepat di atas pojok kanan card, tidak menambah tinggi kolom (Ringkasan tetap sejajar card pertama) */
+.tk-selall,.tk-pick{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;color:rgba(43,33,28,.85)}
+.tk-selall{min-height:36px}
+.tk-selall[hidden]{display:none}
+.tk-selall input,.tk-pick input{width:20px;height:20px;margin:0;flex:none;accent-color:var(--marsala);cursor:pointer}
+.tk-selall input:disabled,.tk-pick input:disabled{cursor:not-allowed}
+.tk-it.has-ck{grid-template-columns:20px 80px minmax(0,1fr);gap:12px}
+.tk-it.has-ck .tk-pick{align-self:center;padding:10px;margin:-10px}   /* padding+margin: area sentuh 40px tanpa menambah lebar kolom */
+.tk-it.is-off .tk-it-img{opacity:.55}
 .tk-sum{position:sticky;top:84px}
 .tk-sum-row{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:6px 0}
 .tk-sum-row.is-total{border-top:1px solid var(--sand);margin-top:8px;padding-top:14px;font-size:17px;font-weight:600}
 .tk-sum .btn{width:100%;margin-top:14px}
-.tk-bar-cta{position:fixed;z-index:55;left:0;right:0;bottom:calc(60px + env(safe-area-inset-bottom));padding:10px 16px;background:rgba(246,240,231,.96);backdrop-filter:blur(8px);border-top:1px solid rgba(43,33,28,.08);display:flex;align-items:center;gap:12px}
+@media(max-width:899px){.tk-sum .btn{display:none}}   /* <900px: tombol Checkout ada di bar bawah */
+.tk-bar-cta{position:fixed;z-index:55;left:0;right:0;bottom:var(--tk-nav-h);padding:10px 16px;background:rgba(246,240,231,.96);backdrop-filter:blur(8px);border-top:1px solid rgba(43,33,28,.08);display:flex;align-items:center;gap:12px}
 .tk-bar-cta .btn{flex:1}
 .tk-bar-cta .tk-tot{display:grid;font-size:12px;line-height:1.3;color:rgba(43,33,28,.7)}
 .tk-bar-cta .tk-tot b{font-size:16px;color:var(--ink)}
 @media(min-width:900px){.tk-bar-cta{display:none}}
 
-/* ---------- Checkout ---------- */
+/* ========== Checkout (gaya lama; checkout.js memakai gayanya sendiri .co-*) ========== */
 .tk-co{display:grid;gap:20px}
 @media(min-width:900px){.tk-co{grid-template-columns:minmax(0,1fr) 360px;align-items:start}}
 .tk-co h2{font-size:22px;margin-bottom:14px}
@@ -250,7 +314,7 @@ img{display:block;max-width:100%}
 .tk-ck{display:flex;gap:10px;align-items:flex-start;font-size:14px}
 .tk-ck input{margin-top:3px;width:18px;height:18px;accent-color:var(--marsala)}
 
-/* ---------- Pesanan ---------- */
+/* ========== Pesanan + invoice (gaya lama; pesanan.js memakai gayanya sendiri .po-*) ========== */
 .tk-tabs{display:flex;gap:8px;overflow-x:auto;margin:0 -16px 16px;padding:2px 16px 8px;scrollbar-width:none}
 .tk-tabs::-webkit-scrollbar{display:none}
 @media(min-width:1024px){.tk-tabs{margin-inline:0;padding-inline:0}}
@@ -288,8 +352,6 @@ img{display:block;max-width:100%}
 .tk-cd{font-variant-numeric:tabular-nums;font-weight:600}
 .tk-pills{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .tk-revpill{display:inline-block;padding:2px 10px;border-radius:999px;background:#F3ECF4;color:var(--marsala);font-size:12px;font-weight:500}
-
-/* Invoice */
 .tk-inv{background:var(--paper);border:1px solid var(--sand);border-radius:16px;padding:18px}
 @media(min-width:768px){.tk-inv{padding:28px}}
 .tk-inv-h{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;border-bottom:1px solid var(--sand);padding-bottom:14px;margin-bottom:14px}
@@ -304,14 +366,7 @@ img{display:block;max-width:100%}
 .tk-inv-pay{margin-top:16px;padding:12px 14px;border-radius:12px;background:var(--cream);font-size:13.5px}
 .tk-revs-list{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 0}
 
-/* Bintang + sheet ulasan */
-.tk-stars-in{display:flex;gap:2px}
-.tk-stars-in button{width:44px;height:44px;border:0;background:transparent;font-size:32px;line-height:1;color:var(--sand);cursor:pointer}
-.tk-stars-in button.is-on{color:var(--warning)}
-.tk-count{font-size:12px;color:rgba(43,33,28,.65);text-align:right;margin-top:4px}
-.tk-reasons{display:grid;gap:10px;margin:14px 0}
-
-/* ---------- Akun ---------- */
+/* ========== Akun (gaya lama; halaman Akun sekarang memakai acct-ui.js) ========== */
 .tk-acc-grid{display:grid;gap:16px}
 @media(min-width:900px){.tk-acc-grid{grid-template-columns:minmax(0,1fr) 340px;align-items:start}}
 .tk-id{display:flex;align-items:center;gap:14px;margin-bottom:18px}
@@ -322,7 +377,7 @@ img{display:block;max-width:100%}
 .tk-mlist a:hover,.tk-mlist button:hover{color:var(--marsala)}
 .tk-mbadge{min-width:22px;height:22px;padding:0 7px;border-radius:11px;background:var(--marsala);color:var(--cream);font-size:12px;font-weight:600;display:inline-grid;place-items:center}
 
-/* ---------- FAQ + Lookbook ---------- */
+/* ========== FAQ + Lookbook (gaya lama; halaman FAQ/Lookbook memakai gayanya sendiri) ========== */
 .tk-faq{display:grid;gap:10px;max-width:48rem}
 .tk-q{border:1px solid var(--sand);border-radius:16px;background:var(--paper);overflow:hidden}
 .tk-q button{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;min-height:56px;padding:12px 18px;border:0;background:none;font:600 17px var(--font-serif);text-align:left;cursor:pointer;color:var(--ink)}
@@ -340,112 +395,42 @@ img{display:block;max-width:100%}
 .tk-lb span{position:absolute;left:0;right:0;bottom:0;padding:28px 14px 12px;background:linear-gradient(to top,rgba(43,33,28,.65),transparent);color:#fff;font-family:var(--font-serif);font-size:22px;text-align:left}
 .tk-zoom{width:100%;max-height:78vh;object-fit:contain;border-radius:12px}
 
-/* ---------- Footer + WA ---------- */
-.tk-footer{border-top:1px solid var(--sand);background:var(--paper);padding:28px 0 120px;font-size:14px;color:rgba(43,33,28,.8)}
-@media(min-width:768px){.tk-footer{padding-bottom:36px}}
+/* ========== Footer + tombol WhatsApp ========== */
+.tk-footer{border-top:1px solid var(--sand);background:var(--paper);padding:28px 0 calc(var(--tk-nav-h) + 24px);font-size:14px;color:rgba(43,33,28,.8)}
+@media(min-width:1024px){.tk-footer{padding-bottom:36px}}
 .tk-footer .tk-wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between;align-items:center}
 .tk-footer nav{display:flex;gap:20px;flex-wrap:wrap}
 .tk-footer a{text-decoration:none}.tk-footer a:hover{color:var(--marsala)}
-.tk-wa{position:fixed;z-index:54;right:16px;bottom:calc(76px + env(safe-area-inset-bottom));display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 18px;border-radius:999px;background:var(--ink);color:var(--cream);text-decoration:none;font-size:14px;box-shadow:var(--shadow-lg)}
+.tk-wa{position:fixed;z-index:54;right:16px;bottom:calc(var(--tk-nav-h) + 16px);display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 18px;border-radius:999px;background:var(--ink);color:var(--cream);text-decoration:none;font-size:14px;box-shadow:var(--shadow-lg)}
 .tk-wa svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .tk-wa span{display:none}
-@media(min-width:768px){.tk-wa{bottom:20px;right:20px}.tk-wa span{display:inline}}
+@media(min-width:768px){.tk-wa{right:20px}.tk-wa span{display:inline}}
+@media(min-width:1024px){.tk-wa{bottom:20px}}
 body[data-route="produk"] .tk-wa,body[data-route="keranjang"] .tk-wa,body[data-route="checkout"] .tk-wa{display:none}
-.bottom-nav{z-index:56}
-.bottom-nav a{position:relative}
-.bottom-nav svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.bottom-nav .tk-nbadge{top:4px;right:calc(50% - 22px)}
 
-.tk-sbf input{width:100%}
-
-.tk-btn-light{background:var(--cream);color:var(--ink)}.tk-btn-light:hover:not(:disabled){background:var(--sand)}
-.tk-sisa{font-size:11px;color:var(--warning);margin-left:4px;font-weight:400}
-.tk-size[aria-pressed="true"] .tk-sisa{color:#F2D9A8}
-.tk-sr{position:absolute;left:-999px}
-
-.tk-it-row .tk-link{min-height:44px;padding:0 6px}
-a.btn{text-decoration:none}
-@media(max-width:899px){.tk-sum .btn{display:none}}   /* mobile: tombol Checkout ada di bar bawah */
-
-/* ===== Bottom nav customer: disamakan dengan bottom nav admin (admin/shell.css .ad-side/.ad-nav) =====
-   Jarak aman bawah minimal 16px: HP layar panjang/sudut membulat sering melaporkan safe-area 0. */
-:root{--tk-bottom:max(env(safe-area-inset-bottom,0px),16px);--tk-nav-h:calc(57px + var(--tk-bottom))}
-.bottom-nav{z-index:56;background:var(--paper);-webkit-backdrop-filter:none;backdrop-filter:none;
-  border-top:1px solid var(--sand);padding-bottom:var(--tk-bottom)}
-.bottom-nav a{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
-  min-height:56px;padding:6px 2px;font-size:11px;font-weight:500;color:rgba(43,33,28,.6);text-decoration:none}
+/* ========== Bottom nav (mobile + tablet <1024px; disamakan dengan bottom nav admin) ========== */
+.bottom-nav{z-index:56;background:var(--paper);-webkit-backdrop-filter:none;backdrop-filter:none;border-top:1px solid var(--sand);padding-bottom:var(--tk-bottom)}
+@media(min-width:768px) and (max-width:1023px){.bottom-nav{display:grid}}   /* components.css menyembunyikannya di >=768px; di tablet dinyalakan lagi */
+.bottom-nav a{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:56px;padding:6px 2px;font-size:11px;font-weight:500;color:rgba(43,33,28,.6);text-decoration:none}
 .bottom-nav a[aria-current="page"]{color:var(--marsala);font-weight:600}
 .bottom-nav svg{width:22px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.bottom-nav .tk-nbadge{top:2px;right:auto;left:calc(50% + 6px);min-width:18px;height:18px;padding:0 5px;border-radius:999px;
-  background:var(--error,#9E3D3D);color:var(--cream);font-size:10px;font-weight:600;line-height:18px;text-align:center}
+.bottom-nav .tk-nbadge{top:2px;right:auto;left:calc(50% + 6px);min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:var(--error,#9E3D3D);color:var(--cream);font-size:10px;font-weight:600;line-height:18px;text-align:center}
 
-/* Elemen yang duduk di atas nav mengikuti tinggi nav yang sebenarnya (bukan angka tetap 60px) */
-@media(max-width:767px){
-  .tk-sticky,.tk-bar-cta{bottom:var(--tk-nav-h)}
-  .tk-wa{bottom:calc(var(--tk-nav-h) + 16px)}
-  .tk-main{padding-bottom:calc(var(--tk-nav-h) + 56px)}
-  .tk-footer{padding-bottom:calc(var(--tk-nav-h) + 24px)}
-}
-/* 768-899px: nav bawah sudah hilang, jadi bar checkout menempel ke dasar layar */
-@media(min-width:768px){.tk-bar-cta{bottom:0}}
+/* ========== Aturan header per halaman (mobile + tablet <1024px; desktop tidak berubah) ========== */
+/* Nama halaman = nilai body[data-route] yang diisi shell.js */
+@media(max-width:1023px){
+  /* Halaman belanja/akun: header hanya logo, tanpa kolom cari dan tanpa ikon apa pun */
+  body[data-route="keranjang"] .tk-actions,
+  body[data-route="checkout"] .tk-actions,
+  body[data-route="pesanan"] .tk-actions,
+  body[data-route="akun"] .tk-actions,
+  body[data-route="profil"] .tk-actions,
+  body[data-route="alamat"] .tk-actions,
+  body[data-route="notifikasi"] .tk-actions{display:none}
 
-/* ikon keranjang di header (mobile): bottom nav tidak memuat Keranjang */
-.tk-cart-m{position:relative}
-@media(min-width:768px){.tk-cart-m{display:none!important}}
-
-/* TEMPEL DI PALING BAWAH toko/shell.css — kecilkan galeri foto & pilihan warna di mobile (<768px). Desktop tidak berubah. */
-@media(max-width:767px){
-  .tk-pd{gap:12px}
-  .tk-gal{gap:8px}
-  .tk-gal-main{aspect-ratio:1/1;max-height:46svh;border-radius:14px}   /* tinggi foto: ubah 46svh */
-  .tk-gal-top{top:8px;left:8px;right:8px}
-  .tk-rbtn{width:40px;height:40px}
-  .tk-rbtn svg{width:18px;height:18px}
-  .tk-gal-count{right:8px;bottom:8px;padding:2px 10px;font-size:11px}
-  .tk-thumbs{gap:6px}
-  .tk-thumbs button{width:44px;height:44px;border-radius:8px;border-width:1.5px}   /* thumbnail foto */
-  .tk-pd h1{font-size:18px;line-height:1.25}
-  .tk-pd-price{font-size:18px;margin-top:4px}
-  .tk-label{margin:14px 0 8px;font-size:12px}
-  .tk-sws{gap:8px}
-  .tk-sw{width:40px;height:40px;border-radius:8px}                                  /* kotak pilihan warna */
-  .tk-size{min-height:38px;min-width:44px;padding:0 14px;font-size:13px}
+  /* Katalog: kolom cari + ikon filter (lonceng disembunyikan) */
+  body[data-route="katalog"] .tk-filter-btn{display:grid}
+  body[data-route="katalog"] .tk-bell{display:none}
 }
 
-/* TEMPEL DI PALING BAWAH toko/shell.css */
-
-/* 1) Mobile (<768px): kolom cari langsung tampil di header (logo + cari + ikon), tanpa ikon cari dan tanpa baris di bawah header */
-@media(max-width:767px){
-  .tk-bar{gap:8px}
-  .tk-actions{flex:1;min-width:0;margin-left:0;gap:2px}
-  .tk-search{display:block!important;flex:1;min-width:0}
-  .tk-search input{width:100%;min-height:40px;font-size:16px}   /* 16px: cegah auto-zoom iOS */
-  .tk-only-search-m,.tk-searchbar{display:none!important}
-}
-
-/* 2) Tablet (768–1023px): menu atas belum muncul (baru ≥1024px), jadi pakai bottom nav seperti mobile */
-@media(min-width:768px) and (max-width:1023px){
-  .bottom-nav{display:grid}
-  .tk-main{padding-bottom:calc(var(--tk-nav-h) + 56px)}
-  .tk-footer{padding-bottom:calc(var(--tk-nav-h) + 24px)}
-  .tk-wa{bottom:calc(var(--tk-nav-h) + 16px)}
-  .tk-bar-cta{bottom:var(--tk-nav-h)}
-  .tk-cartbtn{display:none}        /* Keranjang sudah ada di bottom nav */
-}
-
-/* TEMPEL DI PALING BAWAH toko/shell.css — ikon header (lonceng, keranjang, akun) + panel notifikasi. */
-
-/* Tombol teks "Keranjang (n)" diganti ikon keranjang (tk-cart-ico) */
-.tk-cartbtn{display:none!important}
-/* Badge angka di ikon header */
-.tk-ico .tk-nbadge{top:3px;right:0}
-.tk-bell-btn .tk-nbadge{background:var(--error,#9E3D3D)}
-.tk-bell-btn[aria-expanded="true"]{background:var(--sand)}
-.tk-bell-panel[hidden]{display:none}
-.tk-bell-panel .pu-box{border-top:1px solid var(--sand)}
-
-/* Mobile: panel selebar layar di bawah header (bukan menempel ke ikon yang ada di tepi kanan) */
-@media(max-width:767px){
-  .tk-bell{position:static}
-  .tk-bell-panel{left:12px;right:12px;width:auto;top:calc(100% + 8px)}
-}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}

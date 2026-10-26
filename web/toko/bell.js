@@ -5,12 +5,12 @@ import { esc, ICON, relativeTime, toast } from "./tk-lib.js";
 import { mountPush } from "../assets/js/push.js";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-const TYPE_ICON = {
+export const TYPE_ICON = {
   invoice_direvisi: ICON.receipt, diproses: ICON.order, dikirim: ICON.box,
   dibatalkan_admin: ICON.cancel, dibatalkan_customer: ICON.cancel, kedaluwarsa: ICON.cancel, password_diubah: ICON.user,
 };
 /** Tujuan saat notifikasi diklik: invoice direvisi -> halaman invoice, lainnya -> detail pesanan. */
-const targetOf = (n) => {
+export const targetOf = (n) => {
   const id = String(n.data?.order_id ?? "");
   if (UUID.test(id)) return n.type === "invoice_direvisi" ? `#/pesanan/${id}/invoice` : `#/pesanan/${id}`;
   return n.type === "password_diubah" ? "#/profil" : "#/pesanan";

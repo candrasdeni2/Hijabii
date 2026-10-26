@@ -2,7 +2,7 @@
 // Semua produk aktif dimuat sekali (di-cache 60 detik) lalu difilter di klien, jadi ganti kategori terasa instan.
 // Foto lazy-load (loading="lazy" dari img() di tk-lib). Chip dan "lihat lainnya" tidak memicu muat ulang halaman:
 // URL diperbarui dengan replaceState supaya bisa dibagikan dan tombol Kembali tetap benar.
-import { loadProducts, loadCategories, productCard, gridSkeleton, emptyState, errorBox, esc } from "../tk-lib.js";
+import { loadProducts, loadCategories, productCard, gridSkeleton, emptyState, errorBox, esc, openDialog } from "../tk-lib.js";
 
 const PAGE = 24;          // kelipatan 2, 3, dan 4 kolom, jadi baris terakhir selalu penuh
 const TTL = 60_000;
@@ -15,6 +15,14 @@ async function loadAll(force = false) {
   return cache;
 }
 /** huruf kecil + tanpa aksen, supaya "pasmina" cocok dengan "Pasmina" */
+const CSS = `
+@media(max-width:1023px){#kChips{display:none!important}}   /* di bawah 1024px kategori dipilih lewat ikon filter di header */
+.kf-list{display:grid;border-top:1px solid var(--sand,#EBE0D3)}
+.kf-opt{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:52px;padding:0 4px;border:0;border-bottom:1px solid var(--sand,#EBE0D3);background:none;
+  font:500 15px var(--font-sans,sans-serif);color:var(--ink,#2B211C);text-align:left;cursor:pointer}
+.kf-opt[aria-checked="true"]{color:var(--marsala,#7B4A4A);font-weight:600}
+.kf-opt svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+`;
 const norm = (s) => String(s ?? "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 
 export async function init({ root, query, isStale }) {
@@ -24,7 +32,10 @@ export async function init({ root, query, isStale }) {
     <div class="tk-chips" id="kChips" role="group" aria-label="Filter kategori" hidden></div>
     <div id="kBody">${gridSkeleton(8)}</div></div>`;
   const $ = (s) => root.querySelector(s);
+  if (!document.getElementById("kfStyle")) { const el = document.createElement("style"); el.id = "kfStyle"; el.textContent = CSS; document.head.append(el); }
   const body = $("#kBody"), chips = $("#kChips");
+  const fbtn = document.getElementById("tkFilterBtn");
+  ["tkQ", "tkQm"].forEach((id) => { const i = document.getElementById(id); if (i) i.value = st.q; });   // kolom cari di header ikut kata kunci aktif
   let data = null;
 
   async function ensure(force = false) {
@@ -73,7 +84,10 @@ export async function init({ root, query, isStale }) {
   function paint() {
     const list = visible();
     const hapus = st.cat ? `#/katalog?cat=${encodeURIComponent(st.cat)}` : "#/katalog";
-    $("#kSub").innerHTML = `${list.length} produk${st.q ? ` untuk “${esc(st.q)}” · <a href="${esc(hapus)}" style="color:var(--marsala)">Hapus pencarian</a>` : ""}`;
+    const catName = st.cat ? data.categories.find((c) => c.id === st.cat)?.name : "";
+    const tanpaKat = st.q ? `#/katalog?q=${encodeURIComponent(st.q)}` : "#/katalog";
+    fbtn?.classList.toggle("is-on", Boolean(st.cat));
+    $("#kSub").innerHTML = `${list.length} produk${st.q ? ` untuk “${esc(st.q)}” · <a href="${esc(hapus)}" style="color:var(--marsala)">Hapus pencarian</a>` : ""}${catName ? ` · ${esc(catName)} · <a href="${esc(tanpaKat)}" style="color:var(--marsala)">Hapus filter</a>` : ""}`;
     if (!list.length) {
       body.innerHTML = emptyState(
         st.q ? "Produk tidak ditemukan" : "Belum ada produk",
@@ -107,5 +121,25 @@ export async function init({ root, query, isStale }) {
     if (st.cat && !catsInUse().some((c) => c.id === st.cat)) st.cat = "";   // ?cat= yang tidak dikenal diabaikan
     paintChips(); paint();
   }
+  /* Ikon filter di header (mobile/tablet): pilih kategori lewat sheet */
+  function openFilter() {
+    if (!data) return;
+    const cats = catsInUse();
+    const node = document.createElement("div");
+    const CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+    node.innerHTML = cats.length
+      ? `<div class="kf-list" role="radiogroup" aria-label="Kategori">${[{ id: "", name: "Semua kategori" }, ...cats].map((c) =>
+          `<button type="button" class="kf-opt" role="radio" aria-checked="${st.cat === c.id}" data-cat="${esc(c.id)}"><span>${esc(c.name)}</span>${st.cat === c.id ? CHECK : ""}</button>`).join("")}</div>`
+      : `<p style="margin:0;font-size:14px;color:rgba(43,33,28,.7)">Belum ada kategori.</p>`;
+    const dlg = openDialog({ title: "Filter kategori", node });
+    node.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-cat]"); if (!b) return;
+      st.cat = b.dataset.cat; st.shown = PAGE;
+      syncUrl(); paintChips(); paint(); dlg.close();
+    });
+  }
+  window.addEventListener("tk:filter", openFilter);
+
   if (await ensure()) start();
+  return () => { window.removeEventListener("tk:filter", openFilter); fbtn?.classList.remove("is-on"); };
 }
