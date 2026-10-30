@@ -6,6 +6,7 @@ import { esc } from "./panel-kit.js";
 
 const CSS = `
 .ap{position:relative}
+.ap [hidden]{display:none!important}
 .ap-selected{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--sand);background:var(--paper);border-radius:12px;padding:8px 8px 8px 14px;min-height:48px}
 .ap-sel-label{font-weight:500;font-size:14px;overflow-wrap:anywhere}
 .ap-link{background:none;border:0;padding:0 8px;font:inherit;font-size:13px;color:var(--marsala);text-decoration:underline;text-underline-offset:4px;cursor:pointer;min-height:44px;flex:none}

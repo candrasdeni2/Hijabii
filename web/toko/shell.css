@@ -13,7 +13,7 @@ img{display:block;max-width:100%}
 .tk-wrap{width:100%;max-width:72rem;margin:0 auto;padding:0 16px}
 .tk-skip{position:absolute;left:-999px;top:8px;z-index:200;background:var(--ink);color:var(--cream);padding:8px 14px;border-radius:999px}
 .tk-skip:focus{left:8px}
-.tk-sr{position:absolute;left:-999px}
+.tk-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}   /* teks untuk pembaca layar saja */
 .tk-boot{min-height:60vh;display:grid;place-items:center;color:rgba(43,33,28,.7)}
 a.btn{text-decoration:none}
 .tk-btn-light{background:var(--cream);color:var(--ink)}.tk-btn-light:hover:not(:disabled){background:var(--sand)}
@@ -55,8 +55,6 @@ a.btn{text-decoration:none}
 .tk-search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:17px;height:17px;fill:none;stroke:var(--mocha);stroke-width:1.8;stroke-linecap:round}
 @media(min-width:768px){.tk-search{flex:none}.tk-search input{width:220px;font-size:14px}}
 @media(min-width:1024px){.tk-search input{width:240px}}
-/* Ikon cari + baris cari di bawah header (pola lama) sudah tidak dipakai; markup-nya masih ada di shell.js, jadi disembunyikan */
-.tk-only-search-m,.tk-searchbar{display:none!important}
 
 /* Tombol Masuk/Daftar untuk tamu */
 .tk-login{display:inline-flex;align-items:center;gap:6px}
@@ -101,9 +99,9 @@ a.btn{text-decoration:none}
 .tk-main{padding:20px 0 calc(var(--tk-nav-h) + 56px);outline:none}   /* bawah: ruang untuk bottom nav */
 @media(min-width:768px){.tk-main{padding-top:32px}}
 @media(min-width:1024px){.tk-main{padding-bottom:64px}}
-.tk-h1{font-size:24px;line-height:1.15;font-weight:600}
+.tk-h1{font-size:34px;line-height:1.15;font-weight:600}
 @media(min-width:768px){.tk-h1{font-size:44px}}
-.tk-h2{font-size:24px;line-height:1.2;font-weight:600}
+.tk-h2{font-size:26px;line-height:1.2;font-weight:600}
 .tk-sub{margin:6px 0 0;color:rgba(43,33,28,.75);font-size:15px}
 .tk-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:20px}
 .tk-back{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:rgba(43,33,28,.75);text-decoration:none;font-size:14px;background:none;border:0;padding:0;cursor:pointer;font-family:inherit}
@@ -266,17 +264,6 @@ a.btn{text-decoration:none}
 .tk-it-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap}
 .tk-it-row .tk-link{min-height:44px;padding:0 6px}
 .tk-it-warn{margin-top:8px;font-size:13px;color:var(--error)}
-/* Keranjang: checkbox pilih produk + "Pilih semua" di atas pojok kanan card */
-.tk-cart-main{position:relative}
-.tk-selrow{position:absolute;right:0;bottom:100%;margin-bottom:16px}   /* melayang tepat di atas pojok kanan card, tidak menambah tinggi kolom (Ringkasan tetap sejajar card pertama) */
-.tk-selall,.tk-pick{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;color:rgba(43,33,28,.85)}
-.tk-selall{min-height:36px}
-.tk-selall[hidden]{display:none}
-.tk-selall input,.tk-pick input{width:20px;height:20px;margin:0;flex:none;accent-color:var(--marsala);cursor:pointer}
-.tk-selall input:disabled,.tk-pick input:disabled{cursor:not-allowed}
-.tk-it.has-ck{grid-template-columns:20px 80px minmax(0,1fr);gap:12px}
-.tk-it.has-ck .tk-pick{align-self:center;padding:10px;margin:-10px}   /* padding+margin: area sentuh 40px tanpa menambah lebar kolom */
-.tk-it.is-off .tk-it-img{opacity:.55}
 .tk-sum{position:sticky;top:84px}
 .tk-sum-row{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:6px 0}
 .tk-sum-row.is-total{border-top:1px solid var(--sand);margin-top:8px;padding-top:14px;font-size:17px;font-weight:600}
@@ -432,5 +419,3 @@ body[data-route="produk"] .tk-wa,body[data-route="keranjang"] .tk-wa,body[data-r
   body[data-route="katalog"] .tk-filter-btn{display:grid}
   body[data-route="katalog"] .tk-bell{display:none}
 }
-
-.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}

@@ -1,7 +1,8 @@
 // Detail produk: galeri per warna, pemilih warna (foto), ukuran (sesuai warna terpilih), jumlah, stok per varian, rating + ulasan.
-// Validasi stok saat tambah ke keranjang (addToCart). Tombol Pesan = tambah ke keranjang lalu buka checkout.
+// Validasi stok saat tambah ke keranjang (addToCart). Tombol Pesan = beli langsung: hanya produk ini yang di-checkout, keranjang tidak diubah.
 import { loadProductBySlug, loadReviews, getSettings, waLink, addToCart, me, isCustomer, goLogin, goBack, fail, UserError,
   rupiah, esc, img, hexOk, stars, toast, withLoading, copyText, emptyState, errorBox, dateWIB, ICON } from "../tk-lib.js";
+import { setBuyNow } from "../buy-now.js";
 
 const LOW = 5, REV_PAGE = 10;
 
@@ -141,9 +142,15 @@ export async function init({ root, parts, isStale }) {
       const v = variant(); if (!v) return;
       const buy = act.dataset.act === "buy";
       try {
-        await withLoading(act, () => addToCart(v.id, st.qty), buy ? "Menyiapkan…" : "Menambahkan…");
-        if (buy) location.hash = "#/checkout";
-        else { toast(`${p.name} (${col().name}, ${v.size}) masuk keranjang.`, "success"); st.qty = 1; paintQty(); }
+        if (buy) {   // beli langsung: item dibawa ke checkout tanpa menyentuh keranjang (stok dicek ulang di checkout)
+          if (v.stock <= 0) throw new UserError("Stok varian ini habis.");
+          if (st.qty > v.stock) throw new UserError(`Stok tinggal ${v.stock}.`);
+          setBuyNow(v.id, st.qty);
+          location.hash = "#/checkout?beli=1";
+          return;
+        }
+        await withLoading(act, () => addToCart(v.id, st.qty), "Menambahkan…");
+        toast(`${p.name} (${col().name}, ${v.size}) masuk keranjang.`, "success"); st.qty = 1; paintQty();
       } catch (err) { fail(err, "Gagal menambahkan ke keranjang."); }
     }
   }, { signal: ac.signal });

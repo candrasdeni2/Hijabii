@@ -40,8 +40,8 @@ function paintShell() {
   const p = me.profile, customer = isCustomer();
   const menu = [["#/", "Home", "home"], ["#/katalog", "Katalog", "katalog"], ["#/lookbook", "Lookbook", "lookbook"], ["#/faq", "FAQ", "faq"], ["#/pesanan", "Pesanan", "pesanan"]]
     .map(([h, t, k]) => `<a href="${h}" data-menu="${k}">${t}</a>`).join("");
-  const searchForm = (id, cls) => `<form class="${cls}" role="search" data-search><label class="sr-only" for="${id}">Cari produk</label>
-    ${cls === "tk-search" ? ICON.search : ""}<input id="${id}" type="search" placeholder="Cari produk…" autocomplete="off" enterkeyhint="search" maxlength="60"></form>`;
+  const searchForm = `<form class="tk-search" role="search" data-search><label class="tk-sr" for="tkQ">Cari produk</label>
+    ${ICON.search}<input id="tkQ" type="search" placeholder="Cari produk…" autocomplete="off" enterkeyhint="search" maxlength="60"></form>`;
   document.getElementById("tkTop").innerHTML = p && !customer
     ? `<div class="tk-strip">Anda masuk sebagai ${esc(ROLE[p.role] ?? p.role)}. Akun ini tidak bisa berbelanja. <a href="${esc(roleHome(p.role))}">Buka panel</a></div>` : "";
   // Ikon di samping kolom cari: lonceng (semua ukuran, hanya customer), keranjang dan akun (≥1024px; di bawah itu ada di bottom nav).
@@ -51,15 +51,13 @@ function paintShell() {
       <a class="tk-logo" href="#/" aria-label="Hijabii, ke beranda">Hijabii</a>
       <nav class="tk-menu" aria-label="Menu utama">${menu}</nav>
       <div class="tk-actions">
-        ${searchForm("tkQ", "tk-search")}
-        <button type="button" class="tk-ico tk-only-search-m" id="tkSearchBtn" aria-label="Cari produk" aria-expanded="false">${ICON.search}</button>
+        ${searchForm}
         <button type="button" class="tk-ico tk-filter-btn" id="tkFilterBtn" aria-label="Filter kategori">${FILTER_ICON}</button>
         ${customer ? `<span class="tk-bell" id="tkBell"></span>` : ""}
         <a class="tk-ico tk-cart-ico tk-only-d" href="#/keranjang" id="tkCartLink" aria-label="Keranjang">${ICON.bag}<span class="tk-nbadge" id="tkCartN" hidden>0</span></a>
         ${p ? `<a class="tk-ico tk-only-d" href="#/akun" aria-label="Akun">${ICON.user}</a>` : `<span class="tk-login"><a href="${esc(ROUTES.login)}?next=${encodeURIComponent(location.pathname)}">Masuk</a><a class="is-fill tk-reg" href="${esc(ROUTES.login.replace("login.html", "daftar.html"))}">Daftar</a></span>`}
       </div>
     </div>
-    <div class="tk-searchbar" id="tkSearchbar">${searchForm("tkQm", "tk-sbf")}</div>
   </div></header>`;
   document.getElementById("tkFootSlot").innerHTML = `
   <a class="tk-wa" id="tkWa" href="#" target="_blank" rel="noopener" hidden aria-label="Chat WhatsApp admin">${ICON.chat}<span>Chat admin</span></a>
@@ -70,19 +68,12 @@ function paintShell() {
     <a href="#/akun" data-nav="akun">${ICON.user}<span>Akun</span></a>
   </nav>`;
 
-  // pencarian: desktop + baris di bawah header (mobile)
-  const sb = document.getElementById("tkSearchbar"), btn = document.getElementById("tkSearchBtn");
-  btn.addEventListener("click", () => {
-    const open = !sb.classList.contains("is-open");
-    sb.classList.toggle("is-open", open); btn.setAttribute("aria-expanded", String(open));
-    if (open) document.getElementById("tkQm").focus();
-  });
-  document.querySelectorAll("[data-search]").forEach((f) => f.addEventListener("submit", (e) => {
+  // pencarian: kolom cari di header (semua ukuran layar)
+  document.querySelector("[data-search]").addEventListener("submit", (e) => {
     e.preventDefault();
-    const q = f.querySelector("input").value.trim().slice(0, 60);
-    sb.classList.remove("is-open"); btn.setAttribute("aria-expanded", "false");
+    const q = e.currentTarget.querySelector("input").value.trim().slice(0, 60);
     location.hash = q ? `#/katalog?q=${encodeURIComponent(q)}` : "#/katalog";
-  }));
+  });
   document.getElementById("tkFilterBtn").addEventListener("click", () => window.dispatchEvent(new CustomEvent("tk:filter")));   // dipasang oleh pages/katalog.js
   window.addEventListener("tk:cart", (e) => {
     const n = Number(e.detail) || 0, t = n > 99 ? "99+" : String(n);
