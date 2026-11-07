@@ -123,7 +123,7 @@ const CSS = `
 .rp-stat--wide{grid-column:1/-1}
 @media(min-width:1024px){.rp-stat--wide{grid-column:auto}}
 .rp-lbl{font-size:12px;font-weight:600;color:rgba(43,33,28,.7)}
-.rp-val{margin-top:4px;font-family:var(--font-serif);font-size:38px;font-weight:500;line-height:1.1}
+.rp-val{margin-top:4px;font-family:var(--font-sans);font-size:38px;font-weight:500;line-height:1.1}
 .rp-sub{margin-top:2px;font-size:14px;color:rgba(43,33,28,.8);overflow-wrap:anywhere}
 .rp-stat.is-off{background:transparent;box-shadow:none}
 .rp-stat.is-off .rp-val,.rp-stat.is-off .rp-sub{color:rgba(43,33,28,.5)}
@@ -226,6 +226,7 @@ export async function renderReport({ root, prefix: p = "ad", isStale = () => fal
     ["placeholder", "min", "max", "step", "inputmode"].forEach((a) => el.date.removeAttribute(a));
     spec.extra.replace(/(\w+)="([^"]*)"/g, (_, k, v) => { el.date.setAttribute(k, v); return ""; });
     el.range.textContent = rangeLabel(state.period, state.ref);
+    el.range.hidden = state.period === "bulan" || state.period === "tahun"; 
     el.next.disabled = rangeOf(state.period, state.ref).to >= today; // tidak ada laporan untuk masa depan
   }
   function fillProducts() {

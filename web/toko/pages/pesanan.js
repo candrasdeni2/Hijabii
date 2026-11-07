@@ -78,6 +78,7 @@ const CSS = `
 const backLink = (href, label) => `<a class="po-back" href="${href}">${ICON.back}${esc(label)}</a>`;
 const CHECK = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></svg>`;
 const TRACK_URL = "https://cekresi.com/";   // situs pelacakan pihak ketiga; ganti di sini kalau suatu saat berubah
+let scrollRevFor = null;   // id pesanan yang baru dikonfirmasi diterima: setelah render ulang, gulir ke bagian Ulasan
 const EXT = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5"/></svg>`;
 
 export async function init({ root, parts, query, profile, isStale }) {
@@ -164,6 +165,7 @@ async function renderDetail({ root, id, baru, isStale }) {
   const revBy = new Map(reviews.map((r) => [r.product_id, r]));
 
   const actions = `<div class="po-acts">
+    ${o.status === "dikirim" && o.customer_id ? `<button class="btn btn-accent" type="button" id="poDone">Pesanan Diterima</button>` : ""}
     ${wa && pending ? `<a class="btn btn-accent" href="${esc(wa)}" target="_blank" rel="noopener">Kirim Bukti Pembayaran</a>` : ""}
     ${latest ? `<a class="btn btn-secondary" href="#/pesanan/${esc(o.id)}/invoice">Lihat Invoice</a>` : ""}
   </div>${pending && !wa ? `<p class="po-sub">Nomor WhatsApp admin belum diatur. Hubungi admin lewat tombol chat.</p>` : ""}`;
@@ -221,11 +223,12 @@ async function renderDetail({ root, id, baru, isStale }) {
     catch (err) { fail(err, "Resi gagal disalin. Salin manual lewat tombol Salin."); }
   }, { signal: ac.signal });
   root.querySelector("#poCancel")?.addEventListener("click", () => openCancel(o), { signal: ac.signal });
+  root.querySelector("#poDone")?.addEventListener("click", () => openReceived(o), { signal: ac.signal });
 
   // ---- Ulasan ----
   const paintReviews = () => {
     const box = root.querySelector("#poRev"); if (!box) return;
-    box.innerHTML = `<h2 id="poRevT">Ulasan</h2><p class="po-sub" style="margin:0 0 8px">Ceritakan pengalamanmu supaya pembeli lain terbantu.</p>`
+    box.innerHTML = `<h2 id="poRevT" tabindex="-1">Ulasan</h2><p class="po-sub" style="margin:0 0 8px">Ceritakan pengalamanmu supaya pembeli lain terbantu.</p>`
       + revProds.map(([pid, name]) => {
         const r = revBy.get(pid);
         return `<div class="po-rv"><div class="po-rv-main"><b>${esc(name)}</b>
@@ -236,6 +239,14 @@ async function renderDetail({ root, id, baru, isStale }) {
       }).join("");
   };
   paintReviews();
+  if (scrollRevFor === o.id) {   // baru konfirmasi diterima: tunjukkan bagian Ulasan, form tidak dibuka otomatis
+    scrollRevFor = null;
+    const box = root.querySelector("#poRev");
+    if (box) {
+      box.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+      box.querySelector("#poRevT")?.focus({ preventScroll: true });
+    }
+  }
   root.addEventListener("click", (e) => {
     const edit = e.target.closest("[data-rev]"), del = e.target.closest("[data-rev-del]");
     const pid = (edit ?? del)?.dataset[edit ? "rev" : "revDel"]; if (!pid) return;
@@ -320,6 +331,25 @@ function openReviewDelete({ review, name, onDone }) {
     if (error) { fail(error, "Ulasan gagal dihapus. Coba lagi."); return; }
     dlg.close(); toast("Ulasan dihapus.", "success"); onDone();
   }, "Menghapus…"));
+}
+
+/* ================= PESANAN DITERIMA ================= */
+function openReceived(o) {
+  const node = document.createElement("div");
+  node.innerHTML = `<p style="margin:0 0 10px;font-size:14px;line-height:1.5">Pastikan paket <b>${esc(o.order_no)}</b> sudah ada di tanganmu. Setelah dikonfirmasi, status pesanan menjadi Selesai.</p>
+    <p class="po-sub" style="margin:0">Kalau ada masalah dengan paket, hubungi admin dalam 2×24 jam sejak konfirmasi.</p>
+    <div class="po-acts" style="margin-top:14px"><button class="btn btn-accent" type="button" id="poRcvYes">Ya, pesanan sudah diterima</button><button class="btn btn-secondary" type="button" id="poRcvNo">Belum, kembali</button></div>`;
+  const dlg = openDialog({ title: "Pesanan sudah diterima?", node });
+  node.querySelector("#poRcvNo").addEventListener("click", dlg.close);
+  node.querySelector("#poRcvYes").addEventListener("click", (e) => withLoading(e.currentTarget, async () => {
+    const { error } = await supabase.rpc("complete_my_order", { p_order: o.id });
+    if (error) { fail(error, "Pesanan gagal dikonfirmasi. Coba lagi."); return; }
+    dlg.close();
+    toast("Terima kasih! Pesanan selesai.", "success");
+    scrollRevFor = o.id;
+    history.replaceState(null, "", `#/pesanan/${o.id}`);                 // buang ?baru=1 bila ada
+    window.dispatchEvent(new HashChangeEvent("hashchange"));            // render ulang lewat shell (pembersihan ikut berjalan)
+  }, "Mengonfirmasi…"));
 }
 
 /* ================= BATALKAN PESANAN ================= */
