@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /admin
+Disallow: /login
+Disallow: /superadmin
+Sitemap: https://hijabiibyintan.vercel.app/sitemap.xml
